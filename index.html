@@ -2632,7 +2632,7 @@ function renderTs(){
       }).join('');
       return '<tr id="er-'+week.id+'-'+emp.id+'">'+
         '<td class="ts-emp-cell">'+
-          '<input class="ts-emp-name-inp" value="'+escHtml(emp.name)+'" placeholder="Name…" onchange="updateEmpName('+emp.id+',this.value)">'+
+          '<input class="ts-emp-name-inp" value="'+escHtml(emp.name)+'" placeholder="Type Name" onchange="updateEmpName('+emp.id+',this.value)">'+
           '<button class="ts-rm-emp-btn" onclick="removeEmployee('+emp.id+')" title="Remove">✕</button>'+
         '</td>'+
         cells+
