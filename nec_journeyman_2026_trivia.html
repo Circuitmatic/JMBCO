@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2026 NEC Journeyman's Exam Prep Trivia</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --accent-2: #38bdf8;
+      --bad: #ef4444;
+      --good: #22c55e;
+      --warn: #f59e0b;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #020617 0%, #0f172a 100%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .hero {
+      background: rgba(17, 24, 39, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+    }
+    .sub {
+      color: var(--muted);
+      margin: 0;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    button {
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    button:hover { filter: brightness(1.08); }
+    .primary { background: #14532d; border-color: #166534; }
+    .secondary { background: #0c4a6e; border-color: #075985; }
+    .danger { background: #7f1d1d; border-color: #991b1b; }
+    .scoreboard {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .stat {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+    .stat .label { color: var(--muted); font-size: 0.9rem; }
+    .stat .value { font-size: 1.3rem; font-weight: 700; margin-top: 4px; }
+    .question {
+      background: rgba(17, 24, 39, 0.92);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin: 14px 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,.18);
+    }
+    .qnum {
+      color: var(--accent-2);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .qtext {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+    }
+    .choices {
+      display: grid;
+      gap: 10px;
+    }
+    label.choice {
+      display: block;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+    }
+    label.choice:hover {
+      transform: translateY(-1px);
+      border-color: #64748b;
+    }
+    input[type="radio"] {
+      margin-right: 10px;
+      transform: scale(1.1);
+    }
+    .correct {
+      border-color: rgba(34,197,94,.8) !important;
+      background: rgba(20, 83, 45, .45) !important;
+    }
+    .incorrect {
+      border-color: rgba(239,68,68,.8) !important;
+      background: rgba(127, 29, 29, .35) !important;
+    }
+    .explanation {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px dashed #475569;
+      background: rgba(2, 6, 23, .65);
+      color: #dbeafe;
+    }
+    .explanation.show { display: block; }
+    .footer-note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 20px;
+    }
+    .sticky-top {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+    @media print {
+      .controls { display: none; }
+      .hero { position: static; }
+      body { background: white; color: black; }
+      .question, .hero, .stat, label.choice, .explanation {
+        background: white !important;
+        color: black !important;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero sticky-top">
+      <h1>2026 NEC Journeyman's Exam Prep Trivia</h1>
+      <p class="sub">50 exam-style practice questions in a standalone HTML trivia format. This is unofficial study prep designed around common NEC journeyman-level topics.</p>
+      <div class="controls">
+        <button class="primary" onclick="gradeQuiz()">Grade Quiz</button>
+        <button class="secondary" onclick="toggleAnswers()">Show / Hide Explanations</button>
+        <button class="danger" onclick="resetQuiz()">Reset</button>
+      </div>
+      <div class="scoreboard">
+        <div class="stat"><div class="label">Questions</div><div class="value" id="totalQs">50</div></div>
+        <div class="stat"><div class="label">Answered</div><div class="value" id="answered">0</div></div>
+        <div class="stat"><div class="label">Correct</div><div class="value" id="correct">0</div></div>
+        <div class="stat"><div class="label">Score</div><div class="value" id="score">0%</div></div>
+      </div>
+    </div>
+
+    <div id="quiz"></div>
+
+    <p class="footer-note">Tip: Use this as a closed-book drill first, then retry open-book with your code book and tabs. Always verify local licensing rules and the code edition your jurisdiction is testing on.</p>
+  </div>
+
+  <script>
+    const questions = [
+      {q:"What is the minimum working space depth in front of 0-150V to ground equipment, where Condition 1 applies?", choices:["2 feet","3 feet","3.5 feet","4 feet"], answer:1, exp:"The standard minimum depth is 3 feet for equipment operating at 0-150 volts to ground under Condition 1 working clearances."},
+      {q:"A receptacle installed to serve a kitchen countertop in a dwelling must have which protection?", choices:["AFCI only","GFCI only","No protection required","Grounding electrode connection"], answer:1, exp:"Kitchen countertop receptacle outlets in dwellings require GFCI protection."},
+      {q:"How many 12 AWG copper THHN current-carrying conductors are generally permitted in a 3/4-inch EMT before adjustment factors are needed due to more than three current-carrying conductors?", choices:["3","4","6","9"], answer:0, exp:"Adjustment factors start when there are more than three current-carrying conductors in a raceway. Three does not require derating for that reason."},
+      {q:"What is the maximum overcurrent protection generally permitted for 14 AWG copper branch-circuit conductors in typical premises wiring?", choices:["10A","15A","20A","25A"], answer:1, exp:"14 AWG copper branch-circuit conductors are generally limited to 15 amperes."},
+      {q:"What is the maximum overcurrent protection generally permitted for 12 AWG copper branch-circuit conductors in typical premises wiring?", choices:["15A","20A","25A","30A"], answer:1, exp:"12 AWG copper branch-circuit conductors are generally limited to 20 amperes."},
+      {q:"What is the maximum overcurrent protection generally permitted for 10 AWG copper branch-circuit conductors in typical premises wiring?", choices:["20A","25A","30A","35A"], answer:2, exp:"10 AWG copper branch-circuit conductors are generally limited to 30 amperes."},
+      {q:"A neutral conductor that carries only the unbalanced current from other conductors of the same circuit is counted for adjustment of ampacity in a 120/240V single-phase system when?", choices:["Always","Never","Only if it is a current-carrying conductor under the specific system conditions","Only in PVC conduit"], answer:2, exp:"Whether the neutral counts depends on the system and harmonic/unbalanced loading conditions. It is not automatically counted in every case."},
+      {q:"What is the typical minimum number of small-appliance branch circuits required for a dwelling kitchen and dining area?", choices:["One","Two","Three","Four"], answer:1, exp:"A minimum of two small-appliance branch circuits is required for specified dwelling areas."},
+      {q:"For box fill calculations, a single yoke containing one device generally counts as how many conductor volumes?", choices:["One","Two","Three","Four"], answer:1, exp:"A single yoke or strap containing one device generally counts as two conductor volumes based on the largest conductor connected to that device."},
+      {q:"Equipment grounding conductors are sized primarily based on what?", choices:["Conduit size","Service voltage","Rating of the overcurrent device ahead of the circuit","Number of receptacles"], answer:2, exp:"Equipment grounding conductors are generally sized from the rating or setting of the overcurrent device ahead of the equipment."},
+      {q:"Which wiring method is permitted to be used as an equipment grounding conductor when installed with proper fittings and continuity?", choices:["EMT","Flexible cord","NM cable jacket","PVC conduit"], answer:0, exp:"EMT is recognized as an equipment grounding conductor when properly installed and electrically continuous."},
+      {q:"What is the general maximum conduit fill for more than two conductors in a raceway?", choices:["31%","40%","53%","60%"], answer:1, exp:"For more than two conductors, the general maximum raceway fill is 40 percent."},
+      {q:"What is the general maximum conduit fill for exactly one conductor in a raceway?", choices:["31%","40%","53%","60%"], answer:2, exp:"For one conductor, the raceway fill limit is generally 53 percent."},
+      {q:"What is the general maximum conduit fill for exactly two conductors in a raceway?", choices:["31%","40%","53%","60%"], answer:0, exp:"For two conductors, the raceway fill limit is generally 31 percent."},
+      {q:"In a dwelling unit, bathroom receptacle outlets require which type of protection?", choices:["No special protection","GFCI protection","Surge protection only","Dedicated grounding electrode"], answer:1, exp:"Bathroom receptacle outlets in dwellings require GFCI protection."},
+      {q:"What is the general rule for receptacle spacing in habitable rooms of a dwelling?", choices:["No point along the floor line can be more than 6 feet from a receptacle outlet","Receptacles only every 20 feet","One receptacle per wall","Only one receptacle is required per room"], answer:0, exp:"The 6/12 rule means no point along the floor line is more than 6 feet from a receptacle outlet."},
+      {q:"Which conductor is identified by white or gray insulation or by three continuous white stripes?", choices:["Ungrounded conductor","Equipment grounding conductor","Grounded conductor","Traveler conductor"], answer:2, exp:"The grounded conductor is identified by white or gray, or by three continuous white stripes on other than green insulation."},
+      {q:"What is the minimum cover requirement commonly associated with rigid metal conduit under a residential driveway, subject to typical conditions?", choices:["6 inches","12 inches","18 inches","24 inches"], answer:0, exp:"Rigid metal conduit often qualifies for the shallower burial depth category under common conditions. Always verify the exact installation table and use case."},
+      {q:"What is the minimum cover requirement commonly associated with direct-buried cable under many residential yard conditions?", choices:["6 inches","12 inches","18 inches","24 inches"], answer:3, exp:"Direct-buried cable commonly falls into the 24-inch cover category under many standard residential conditions."},
+      {q:"The grounded conductor and equipment grounding conductor are generally bonded together on the load side of the service disconnect where?", choices:["At every panelboard","Only at separately derived systems or service equipment where permitted/required","At every receptacle","Inside every junction box"], answer:1, exp:"Neutral-to-ground bonding is controlled and is generally made at service equipment or specific separately derived system points, not throughout downstream equipment."},
+      {q:"A 125V, single-phase, 15- or 20-amp receptacle installed outdoors at a dwelling generally requires which protection?", choices:["AFCI only","GFCI protection","No protection","Only tamper-resistant"], answer:1, exp:"Outdoor dwelling receptacles of this type generally require GFCI protection."},
+      {q:"What is one major purpose of AFCI protection in dwelling unit circuits?", choices:["Reduce voltage drop","Protect against arcing faults that may start fires","Increase available fault current","Eliminate need for grounding"], answer:1, exp:"AFCI protection is intended to mitigate dangerous arcing faults associated with fire hazards."},
+      {q:"For conductor ampacity terminations rated 100A or less, and marked for 60°C or 75°C conductors, what temperature column commonly applies to equipment rated 100A or less or conductors 14 AWG through 1 AWG unless otherwise listed?", choices:["60°C column","75°C column","90°C column","105°C column"], answer:0, exp:"The 60°C limitation commonly applies in this situation unless the equipment is listed and identified otherwise."},
+      {q:"THHN insulation is commonly associated with what dry-location temperature rating?", choices:["60°C","75°C","90°C","105°C"], answer:2, exp:"THHN conductors are commonly associated with a 90°C dry-location rating."},
+      {q:"What is the general rule for supporting NM cable near boxes, cabinets, or fittings?", choices:["Within 12 inches","Within 18 inches","Within 24 inches","Within 36 inches"], answer:0, exp:"NM cable is generally required to be secured within 12 inches of every box, cabinet, or fitting, with specific exceptions."},
+      {q:"What is the primary purpose of a grounding electrode system?", choices:["Provide a low-impedance fault-return path on branch circuits","Stabilize system voltage to earth and connect available electrodes","Increase breaker size","Replace equipment grounding conductors"], answer:1, exp:"The grounding electrode system connects the electrical system to earth and bonds available grounding electrodes together."},
+      {q:"Where is the main bonding jumper typically installed?", choices:["At a receptacle outlet","At the service disconnecting means or equivalent service bonding point","At the farthest panel","At every transformer secondary"], answer:1, exp:"The main bonding jumper is typically located at the service disconnecting means or its equivalent bonding location."},
+      {q:"What is the standard branch-circuit rating commonly used for a residential electric water heater, depending on nameplate load and installation design?", choices:["15A only","20A only","30A is common for many residential units","50A only"], answer:2, exp:"Many residential electric water heaters are commonly supplied by 30-amp circuits, though actual design must follow nameplate and code requirements."},
+      {q:"When a raceway contains current-carrying conductors of multiple circuits, conductor ampacity adjustment is generally based on what count?", choices:["Only the largest circuit","Only phase conductors of one circuit","The total number of current-carrying conductors in the raceway","The number of grounded conductors only"], answer:2, exp:"The total number of current-carrying conductors in the raceway is used to determine applicable adjustment factors."},
+      {q:"What is the minimum headroom generally required for working spaces about service equipment, switchboards, panelboards, or motor control centers rated 1000V or less?", choices:["5 feet","6 feet","6.5 feet","7 feet"], answer:2, exp:"The general minimum headroom in these working spaces is 6.5 feet."},
+      {q:"A panelboard located in a dwelling unit generally cannot be installed in which location?", choices:["Basement","Hallway","Bathroom","Garage"], answer:2, exp:"Overcurrent devices generally cannot be located in bathrooms."},
+      {q:"Which receptacles in dwelling units are generally required to be tamper-resistant?", choices:["Only garage receptacles","Most 125V, 15A and 20A receptacles in specified dwelling locations","Only kitchen countertop receptacles","No receptacles"], answer:1, exp:"Tamper-resistant requirements apply broadly to dwelling-unit receptacles in specified locations, not just one room."},
+      {q:"What does 'continuous load' mean in NEC usage?", choices:["A load expected to run for 30 minutes or more","A load expected to run for 1 hour or more","A load expected to run for 3 hours or more","A load that never shuts off"], answer:2, exp:"A continuous load is one where the maximum current is expected to continue for 3 hours or more."},
+      {q:"Branch-circuit conductors serving continuous loads generally must be sized to not less than what percentage of the continuous load?", choices:["100%","110%","125%","150%"], answer:2, exp:"Branch-circuit conductors serving continuous loads are typically sized at not less than 125 percent of the continuous load."},
+      {q:"What is the minimum number of 20A laundry branch circuits required for a dwelling unit?", choices:["Zero","One","Two","Three"], answer:1, exp:"A dwelling unit generally requires at least one 20-amp laundry branch circuit."},
+      {q:"What is the minimum number of 20A bathroom branch circuits required in a dwelling unit?", choices:["Zero","One","Two","Three"], answer:1, exp:"At least one 20-amp bathroom branch circuit is generally required in a dwelling unit."},
+      {q:"Which statement about flexible cords is most accurate?", choices:["They may be used as a substitute for the fixed wiring of a structure","They are always permitted to pass through walls","They are allowed only for uses specifically permitted and not as a substitute for fixed wiring","They never require strain relief"], answer:2, exp:"Flexible cords have limited permitted uses and cannot generally substitute for fixed wiring of a structure."},
+      {q:"What type of test instrument is commonly used to verify the absence of voltage before beginning work?", choices:["Clamp meter only","A properly rated voltage tester or meter used in accordance with safe work practices","Insulation tape","A continuity buzzer on an energized circuit"], answer:1, exp:"A properly rated tester or meter, used with safe work practices, is commonly used to verify absence of voltage."},
+      {q:"What is the general maximum number of disconnects historically associated with one service under the familiar 'six disconnect' rule framework, where applicable?", choices:["2","4","6","8"], answer:2, exp:"The long-familiar maximum number is six, though you should verify the exact service-disconnect rules in the code edition and installation involved."},
+      {q:"A receptacle outlet installed in a garage of a dwelling unit generally requires which protection?", choices:["No protection","GFCI protection","Only surge protection","Only lockable cover"], answer:1, exp:"Garage receptacle outlets in dwelling units generally require GFCI protection."},
+      {q:"For a 20-amp branch circuit supplying receptacles in general use, the minimum conductor size is typically what copper size?", choices:["14 AWG","12 AWG","10 AWG","8 AWG"], answer:1, exp:"A 20-amp general-use branch circuit typically requires at least 12 AWG copper conductors."},
+      {q:"How are conductors in a box counted for internal cable clamps in box fill calculations, when the clamps are internal and not part of the device?", choices:["Not counted","Count as one conductor total","Count as two conductors total","Count as four conductors total"], answer:1, exp:"One or more internal cable clamps are counted as a single conductor volume for box fill calculations."},
+      {q:"What is the usual identification color for an equipment grounding conductor that is insulated?", choices:["White","Gray","Green or green with yellow stripes","Black"], answer:2, exp:"An insulated equipment grounding conductor is typically identified by green or green with one or more yellow stripes."},
+      {q:"Which article topic is most closely associated with motors, motor circuits, and controllers?", choices:["Article 210","Article 250","Article 300","Article 430"], answer:3, exp:"Article 430 covers motors, motor circuits, and controllers."},
+      {q:"Which article topic is most closely associated with grounding and bonding?", choices:["Article 110","Article 220","Article 250","Article 310"], answer:2, exp:"Article 250 is the core grounding and bonding article."},
+      {q:"Which article topic is most closely associated with branch circuits?", choices:["Article 210","Article 240","Article 250","Article 430"], answer:0, exp:"Article 210 addresses branch circuits."},
+      {q:"Which article topic is most closely associated with overcurrent protection?", choices:["Article 220","Article 240","Article 300","Article 406"], answer:1, exp:"Article 240 addresses overcurrent protection."},
+      {q:"What is the primary purpose of bonding metal parts likely to become energized?", choices:["To raise system voltage","To create an effective fault current path","To eliminate voltage drop","To reduce conductor insulation thickness"], answer:1, exp:"Bonding joins conductive parts together to establish an effective fault-current path and facilitate operation of overcurrent devices."},
+      {q:"In general NEC use, an outlet is best described as what?", choices:["Any point where current is taken to supply utilization equipment","Only a duplex receptacle","Only a lighting outlet","A service disconnect"], answer:0, exp:"An outlet is a point on the wiring system where current is taken to supply utilization equipment."},
+      {q:"What is the usual maximum cord-and-plug connected fastened-in-place utilization equipment load permitted on a 20A, 120V branch circuit if it is a single utilization equipment item?", choices:["50% of circuit rating","80% of circuit rating","100% of circuit rating","125% of circuit rating"], answer:1, exp:"A single cord-and-plug connected fastened-in-place item is generally limited to 80 percent of the branch-circuit ampere rating."},
+      {q:"A receptacle replacement in a location now requiring GFCI protection will generally need what if grounding means is absent and no equipment grounding conductor exists?", choices:["Nothing at all","A standard ungrounded replacement only","A GFCI-type replacement and required marking where permitted","A larger box only"], answer:2, exp:"Where replacement is permitted without an equipment grounding conductor, GFCI-type protection and specific markings are commonly part of the compliant path."},
+      {q:"What is the best strategy for NEC exam success on calculation and lookup questions?", choices:["Memorize random answers","Use article familiarity, index speed, and careful reading of every qualifier","Skip all code tables","Answer based on jobsite habit only"], answer:1, exp:"Journeyman exam success usually comes from strong code-book navigation, article familiarity, and careful reading of qualifiers and exceptions."}
+    ];
+
+    const quiz = document.getElementById('quiz');
+
+    function renderQuiz() {
+      quiz.innerHTML = questions.map((item, idx) => `
+        <section class="question" data-index="${idx}">
+          <div class="qnum">Question ${idx + 1}</div>
+          <div class="qtext">${item.q}</div>
+          <div class="choices">
+            ${item.choices.map((choice, cidx) => `
+              <label class="choice">
+                <input type="radio" name="q${idx}" value="${cidx}" onchange="updateAnswered()" />
+                <strong>${String.fromCharCode(65 + cidx)}.</strong> ${choice}
+              </label>
+            `).join('')}
+          </div>
+          <div class="explanation" id="exp-${idx}"><strong>Answer:</strong> ${String.fromCharCode(65 + item.answer)}. ${item.choices[item.answer]}<br><strong>Why:</strong> ${item.exp}</div>
+        </section>
+      `).join('');
+      updateAnswered();
+    }
+
+    function updateAnswered() {
+      const answered = questions.filter((_, idx) => document.querySelector(`input[name="q${idx}"]:checked`)).length;
+      document.getElementById('answered').textContent = answered;
+    }
+
+    function gradeQuiz() {
+      let correct = 0;
+      questions.forEach((item, idx) => {
+        const selected = document.querySelector(`input[name="q${idx}"]:checked`);
+        const labels = [...document.querySelectorAll(`section[data-index="${idx}"] label.choice`)];
+        labels.forEach((label, i) => {
+          label.classList.remove('correct', 'incorrect');
+          if (i === item.answer) label.classList.add('correct');
+        });
+        if (selected) {
+          const val = Number(selected.value);
+          if (val === item.answer) {
+            correct++;
+          } else {
+            labels[val].classList.add('incorrect');
+          }
+        }
+      });
+      const answered = questions.filter((_, idx) => document.querySelector(`input[name="q${idx}"]:checked`)).length;
+      document.getElementById('answered').textContent = answered;
+      document.getElementById('correct').textContent = correct;
+      document.getElementById('score').textContent = Math.round((correct / questions.length) * 100) + '%';
+      document.querySelectorAll('.explanation').forEach(el => el.classList.add('show'));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleAnswers() {
+      document.querySelectorAll('.explanation').forEach(el => el.classList.toggle('show'));
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+      document.querySelectorAll('label.choice').forEach(l => l.classList.remove('correct', 'incorrect'));
+      document.querySelectorAll('.explanation').forEach(el => el.classList.remove('show'));
+      document.getElementById('answered').textContent = '0';
+      document.getElementById('correct').textContent = '0';
+      document.getElementById('score').textContent = '0%';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+  </script>
+</body>
+</html>
