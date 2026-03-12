@@ -408,7 +408,8 @@
   .dip-display { padding:12px 20px 13px; background:linear-gradient(135deg,#18181b 0%,#2d2d2d 100%); display:flex; align-items:baseline; justify-content:space-between; }
   .dip-disp-label { font-family:'Roboto Mono',monospace; font-size:9px; font-weight:500; letter-spacing:2px; text-transform:uppercase; color:#ffffff; }
   .dip-disp-val { font-family:'Inter',sans-serif; font-size:38px; font-weight:700; color:#ffffff; line-height:1; letter-spacing:-.5px; }
-  .dip-area { padding:18px 8px 18px; display:flex; justify-content:center; background:#ffffff; }
+  .dip-area { padding:36px 8px 0; display:flex; justify-content:center; background:#ffffff; }
+  .dip-inner { display:flex; flex-direction:column; align-items:stretch; gap:20px; padding-bottom:180px; }
   .dip-body { background:#2a2a2a; border-radius:8px; padding:10px 8px; display:flex; flex-direction:row; gap:4px; justify-content:center; box-shadow:0 2px 12px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.06); border:1px solid #404040; }
   .dip-sw { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; }
   .dip-bit-val { font-family:'Roboto Mono',monospace; font-size:10px; font-weight:500; color:#f0c020; line-height:1; min-height:11px; text-align:center; transition:color .15s; }
@@ -1796,10 +1797,10 @@ if('serviceWorker' in navigator){
       <div class="dip-disp-val" id="dip-result">0</div>
     </div>
     <div class="dip-area">
-      <div class="dip-body" id="dip-body"></div>
-    </div>
-    <div class="dip-reset-wrap">
-      <button class="btn btn-reset" style="width:100%;font-size:11px;letter-spacing:.5px;" onclick="dipReset()">RESET ALL</button>
+      <div class="dip-inner">
+        <div class="dip-body" id="dip-body"></div>
+        <button class="btn btn-reset" style="font-size:11px;letter-spacing:.5px;" onclick="dipReset()">RESET ALL</button>
+      </div>
     </div>
   </div>
 
