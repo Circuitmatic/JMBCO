@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Opserix | 2026 NEC Exam Sim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #080a10;
+            --card: #0e1117;
+            --accent: #facc15; 
+            --text: #dde6f0;
+            --text-dim: #94a3b8;
+            --success: #22c55e;
+            --error: #ef4444;
+            --border: #1e293b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header { width: 100%; max-width: 650px; text-align: center; margin-bottom: 25px; }
+        h1 { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; }
+        
+        .progress-container { width: 100%; height: 8px; background: var(--border); border-radius: 10px; margin-top: 15px; overflow: hidden; border: 1px solid #ffffff10; }
+        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent), #fff); transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .quiz-card {
+            background: var(--card);
+            width: 100%;
+            max-width: 650px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            position: relative;
+        }
+
+        .question-meta { font-size: 0.75rem; color: var(--accent); font-weight: 900; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; }
+        .question-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 25px; line-height: 1.5; color: #fff; }
+
+        .options-grid { display: grid; gap: 14px; }
+        .option-btn {
+            background: #13181f;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 18px;
+            border-radius: 12px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) { border-color: var(--accent); background: #1e2530; transform: translateY(-2px); }
+        .option-btn.correct { border-color: var(--success); background: rgba(34, 197, 94, 0.15); color: var(--success); box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); }
+        .option-btn.wrong { border-color: var(--error); background: rgba(239, 68, 68, 0.15); color: var(--error); }
+
+        .feedback-box { margin-top: 25px; padding: 20px; border-radius: 12px; background: #1a202c; border-left: 4px solid var(--accent); display: none; animation: fadeIn 0.4s ease; }
+        .ref-tag { display: inline-block; background: var(--accent); color: #000; padding: 3px 10px; border-radius: 4px; font-weight: 900; font-size: 0.8rem; margin-bottom: 10px; font-family: 'Orbitron'; }
+        
+        .next-btn {
+            margin-top: 25px; width: 100%; padding: 20px; background: var(--accent); color: #000; border: none; border-radius: 12px;
+            font-weight: 900; font-family: 'Orbitron', sans-serif; cursor: pointer; display: none; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .score-screen { text-align: center; display: none; padding: 40px 0; }
+        .score-num { font-size: 4.5rem; font-family: 'Orbitron', sans-serif; color: var(--accent); margin: 20px 0; text-shadow: 0 0 30px rgba(250, 204, 21, 0.4); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Opserix Exam Core</h1>
+        <div class="progress-container"><div id="progress-bar"></div></div>
+    </div>
+
+    <div class="quiz-card" id="quiz-card">
+        <div id="question-area">
+            <div class="question-meta" id="q-meta">Q1 of 50</div>
+            <div class="question-text" id="q-text">Loading...</div>
+            <div class="options-grid" id="options-container"></div>
+            
+            <div class="feedback-box" id="feedback">
+                <div class="ref-tag" id="f-ref">REF</div>
+                <div id="f-text" style="font-size: 0.95rem; color: #cbd5e1;"></div>
+            </div>
+
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Continue</button>
+        </div>
+
+        <div class="score-screen" id="score-screen">
+            <div class="question-text">Simulated Results</div>
+            <div class="score-num" id="final-score">0%</div>
+            <div id="score-msg" style="margin-bottom: 30px; font-size: 1.1rem;"></div>
+            <button class="next-btn" style="display:block" onclick="location.reload()">Reset Exam</button>
+        </div>
+    </div>
+
+<script>
+    const bank = [
+        { c: "LOAD CALC", q: "In the 2026 NEC, load calculation requirements for dwelling units have been relocated from Article 220 to which Article?", a: "Article 120", o: ["Article 210", "Article 220", "Article 120", "Article 130"], r: "Art. 120", t: "Major 2026 Restructure: Load calcs moved to Chapter 1." },
+        { c: "OPTIONAL METHOD", q: "Under the 2026 NEC Optional Method (120.82), what value is used for the 'First X kVA at 100%' calculation?", a: "8 kVA", o: ["3 kVA", "8 kVA", "10 kVA", "12 kVA"], r: "120.82(B)", t: "2026 Change: Reduced from 10kVA to 8kVA to account for modern efficiency." },
+        { c: "DWELLING UNIT", q: "What is the general lighting load per square foot for a dwelling unit in the 2026 NEC?", a: "2 VA", o: ["2 VA", "3 VA", "3.3 VA", "5 VA"], r: "Table 120.12", t: "2026 Change: Reduced from 3VA to 2VA due to LED lighting prevalence." },
+        { c: "GFCI", q: "Outdoor outlets at dwellings rated up to ___ amperes now require GFCI protection under 2026 NEC 210.8(F).", a: "60 Amps", o: ["20 Amps", "30 Amps", "50 Amps", "60 Amps"], r: "210.8(F)", t: "2026 Change: Increased the threshold from 50A to 60A." },
+        { c: "BOX FILL", q: "According to 314.16(B), do lever-actuated splicing connectors require a separate volume allowance?", a: "No", o: ["Yes, 1 allowance", "Yes, for each connector", "No", "Only if #10 or larger"], r: "314.16(B)", t: "2026 Clarification: Splicing connectors are small fittings like wire nuts; no allowance required." },
+        { c: "MOTORS", q: "What is the multiplier for an inverse time circuit breaker protecting a Design B polyphase motor?", a: "250%", o: ["125%", "175%", "250%", "300%"], r: "Table 430.52(C)(1)", t: "Standard motor branch-circuit protection calculation." },
+        { c: "GROUNDING", q: "A service has 400 kcmil Copper ungrounded conductors. What is the minimum size Copper GEC?", a: "1/0 AWG", o: ["#2 AWG", "1/0 AWG", "2/0 AWG", "3/0 AWG"], r: "Table 250.66", t: "Sized based on the largest ungrounded service conductor." },
+        { c: "LOAD CALC", q: "When calculating HVAC loads, conductors must be sized at ___% of the nameplate Minimum Circuit Ampacity (MCA).", a: "100%", o: ["100%", "125%", "150%", "250%"], r: "440.6(A)", t: "The 125% is already built into the MCA by the manufacturer." },
+        { c: "ARC FLASH", q: "The 2026 NEC requires arc-flash hazard markings on equipment to include which piece of information?", a: "Date of assessment", o: ["Contractor license #", "Date of assessment", "Room temperature", "Wire manufacturer"], r: "110.16(B)", t: "New mandate ensures assessment data remains current." },
+        { c: "GROUNDING", q: "Table 250.122 is used to size which type of conductor?", a: "Equipment Grounding Conductor", o: ["Grounding Electrode Conductor", "Equipment Grounding Conductor", "Main Bonding Jumper", "Neutral Conductor"], r: "Table 250.122", t: "EGC is sized based on the overcurrent protective device (breaker)." },
+        { c: "BOX FILL", q: "How many volume allowances are counted for a single internal cable clamp in a metal box?", a: "One", o: ["Zero", "One", "Two", "One per cable"], r: "314.16(B)(2)", t: "One or more internal clamps count as a single volume allowance." },
+        { c: "COMMERCIAL", q: "For a commercial kitchen, what is the demand factor for 6 or more pieces of kitchen equipment?", a: "65%", o: ["50%", "65%", "75%", "80%"], r: "Table 120.56", t: "Standard demand factor for kitchen equipment loads." },
+        { c: "VOLTAGE DROP", q: "The NEC recommends a maximum voltage drop of ___% for branch circuits to ensure efficiency.", a: "3%", o: ["2%", "3%", "5%", "8%"], r: "210.19(A) Note", t: "Informational note recommendation for operational performance." },
+        { c: "CONDUCTORS", q: "What is the ampacity of a #6 AWG THHN Copper conductor at 75°C?", a: "65 Amps", o: ["55 Amps", "65 Amps", "75 Amps", "85 Amps"], r: "Table 310.16", t: "Essential table for wire sizing." },
+        { c: "PARALLEL", q: "What is the minimum conductor size permitted to be run in parallel?", a: "1/0 AWG", o: ["#1 AWG", "1/0 AWG", "2/0 AWG", "250 kcmil"], r: "310.10(G)(1)", t: "Conductors smaller than 1/0 are not generally permitted in parallel." },
+        { c: "CONDUIT", q: "How many #12 THHN conductors are allowed in 3/4 inch EMT?", a: "16", o: ["9", "12", "16", "22"], r: "Annex C Table C.1", t: "Standard conduit fill lookup." },
+        { c: "MOTORS", q: "Motor disconnecting means must be in sight from the motor and have a rating of at least ___% of FLA.", a: "115%", o: ["100%", "115%", "125%", "150%"], r: "430.110(A)", t: "Safety requirement for local disconnects." },
+        { c: "SERVICE", q: "The overhead service drop must have a minimum clearance of ___ feet over a residential driveway.", a: "12 feet", o: ["10 feet", "12 feet", "15 feet", "18 feet"], r: "230.24(B)(2)", t: "Vertical clearance requirements for service conductors." },
+        { c: "GFCI", q: "Which of these locations in a dwelling does NOT require GFCI protection for 125V receptacles?", a: "Living Room", o: ["Kitchen", "Bathroom", "Living Room", "Garage"], r: "210.8(A)", t: "Common knowledge question with code-specific exceptions." },
+        { c: "BONDING", q: "The main bonding jumper in a service must be sized using which table?", a: "Table 250.66", o: ["Table 250.66", "Table 250.122", "Table 310.16", "Table 430.52"], r: "250.28(D)", t: "MBJ sizing follows the same logic as the GEC." }
+    ];
+
+    // Generate remaining 30 placeholder questions to reach 50 for the UI
+    for(let i=21; i<=50; i++){
+        bank.push({
+            c: "GENERAL CODE",
+            q: `Exam Question #${i}: Standard NEC 2026 Navigation/Theory Practice.`,
+            a: "Answer A",
+            o: ["Answer A", "Answer B", "Answer C", "Answer D"],
+            r: "NEC 2026",
+            t: "Always refer to the specific 2026 Article for updated tables."
+        });
+    }
+
+    let current = 0;
+    let score = 0;
+    let examSet = [];
+
+    function start() {
+        examSet = [...bank].sort(() => Math.random() - 0.5);
+        render();
+    }
+
+    function render() {
+        const q = examSet[current];
+        document.getElementById('q-meta').innerText = `Question ${current + 1} of 50 | ${q.c}`;
+        document.getElementById('q-text').innerText = q.q;
+        document.getElementById('progress-bar').style.width = `${((current + 1) / 50) * 100}%`;
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        
+        const shuffledOptions = [...q.o].sort(() => Math.random() - 0.5);
+        shuffledOptions.forEach(opt => {
+            const b = document.createElement('button');
+            b.className = 'option-btn';
+            b.innerText = opt;
+            b.onclick = () => handle(opt, b);
+            container.appendChild(b);
+        });
+
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('next-btn').style.display = 'none';
+    }
+
+    function handle(choice, btn) {
+        const q = examSet[current];
+        const all = document.querySelectorAll('.option-btn');
+        all.forEach(b => b.disabled = true);
+
+        if (choice === q.a) {
+            btn.classList.add('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+            all.forEach(b => { if(b.innerText === q.a) b.classList.add('correct'); });
+        }
+
+        document.getElementById('f-ref').innerText = q.r;
+        document.getElementById('f-text').innerText = q.t;
+        document.getElementById('feedback').style.display = 'block';
+        document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+        current++;
+        if (current < 50) render();
+        else finish();
+    }
+
+    function finish() {
+        document.getElementById('question-area').style.display = 'none';
+        document.getElementById('score-screen').style.display = 'block';
+        const pct = Math.round((score / 50) * 100);
+        document.getElementById('final-score').innerText = `${pct}%`;
+        document.getElementById('score-msg').innerText = pct >= 75 ? "EXAM PASSED. READY FOR LICENSURE." : "EXAM FAILED. REVIEW 2026 UPDATES.";
+    }
+
+    start();
+</script>
+</body>
+</html>
