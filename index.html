@@ -151,7 +151,7 @@
     transition: color .15s, border-color .15s, background .15s;
     white-space: nowrap;
     text-align: center;
-    -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+    -webkit-tap-highlight-color: transparent;
   }
   .tab-btn:last-child { border-right: none; }
   .tab-btn.active {
@@ -159,7 +159,7 @@
     border-bottom-color: transparent;
     background: rgba(255,255,255,.25);
   }
-  .tab-btn:hover:not(.active) { color: #fff; }
+  @media (hover: hover) { .tab-btn:hover:not(.active) { color: #fff; } }
 
   .tab-panel { display: none; }
   .tab-panel.active { display: block; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #ffffff; }
