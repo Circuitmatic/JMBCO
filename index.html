@@ -618,9 +618,11 @@
 .punch-photo-add{width:70px;height:70px;border:2px dashed #d1d5db;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#9ca3af;font-size:24px;background:#f9fafb;flex-shrink:0;}
 .punch-note-inp{width:100%;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:8px 10px;font-size:12px;font-family:'Inter',sans-serif;color:#374151;resize:none;outline:none;box-sizing:border-box;margin-bottom:8px;}
 .punch-note-inp:focus{border-color:#f0c020;}
+.punch-notes-ta{width:100%;box-sizing:border-box;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:8px 10px;font-size:13px;font-family:'Inter',sans-serif;color:#374151;resize:vertical;outline:none;min-height:72px;margin-bottom:8px;display:block;}
+.punch-notes-ta:focus{border-color:#f0c020;}
 .punch-actions{display:flex;gap:8px;}
 .punch-export-btn{flex:1;background:#f4f4f5;color:#374151;border:1px solid #d1d5db;border-radius:6px;padding:11px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
-.punch-status-sel{width:100%;background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:6px 8px;font-size:13px;font-family:'Inter',sans-serif;color:#374151;outline:none;margin-top:3px;appearance:none;-webkit-appearance:none;}
+.punch-status-sel{flex:1;background:#f4f4f5;border:1px solid #d1d5db;border-radius:6px;padding:11px 8px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;color:#374151;outline:none;appearance:none;-webkit-appearance:none;text-align:center;text-align-last:center;cursor:pointer;}
 .punch-cat-bubble{font-size:10px;font-weight:700;font-family:'Inter',sans-serif;border-radius:10px;padding:2px 8px;border-width:1.5px;border-style:solid;white-space:nowrap;flex-shrink:0;}
 /* Punch modal */
 .punch-modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:900;}
@@ -2927,14 +2929,14 @@ function renderPunch(){
         '<button onclick="deletePunchItem('+item.id+')" style="background:none;border:none;color:#d1d5db;font-size:13px;cursor:pointer;padding:0;line-height:1;" title="Delete">✕</button>'+
       '</div>'+
       '<div class="punch-item-bd">'+
-        '<div style="margin-bottom:8px;"><label style="font-size:11px;font-weight:600;color:#9ca3af;font-family:Inter,sans-serif;">Status</label>'+
-        '<select class="punch-status-sel" onchange="setPunchItemCat('+item.id+',this.value)">'+
-          '<option value="">— Pending —</option>'+
-          cats.map(function(c){return '<option value="'+c.id+'"'+(item.catId===c.id?' selected':'')+'>'+escHtml(c.name)+'</option>';}).join('')+
-        '</select></div>'+
+        '<label style="font-size:11px;font-weight:600;color:#9ca3af;font-family:Inter,sans-serif;display:block;margin-bottom:3px;">Comments</label>'+
+        '<textarea class="punch-notes-ta" placeholder="Add notes…" onchange="savePunchNotes('+item.id+',this.value)">'+escHtml(item.notes||'')+'</textarea>'+
         '<div class="punch-photo-row">'+photosHtml+'<label class="punch-photo-add" title="Add photo">+<input type="file" accept="image/*" capture="environment" style="display:none" onchange="addPunchPhoto('+item.id+',this)"></label></div>'+
-        '<textarea class="punch-notes-ta" placeholder="Notes…" onchange="savePunchNotes('+item.id+',this.value)">'+escHtml(item.notes||'')+'</textarea>'+
         '<div class="punch-item-actions">'+
+          '<select class="punch-status-sel" onchange="setPunchItemCat('+item.id+',this.value)">'+
+            '<option value="">Status…</option>'+
+            cats.map(function(c){return '<option value="'+c.id+'"'+(item.catId===c.id?' selected':'')+'>'+escHtml(c.name)+'</option>';}).join('')+
+          '</select>'+
           '<button class="punch-export-btn" onclick="exportPunchItem('+item.id+')">Export</button>'+
           '<button class="punch-export-btn" onclick="printPunchItem('+item.id+')">Print</button>'+
         '</div>'+
