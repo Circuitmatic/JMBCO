@@ -756,15 +756,15 @@ if('serviceWorker' in navigator){
   </div>
   <div class="calc-bolt-bar">
     <svg viewBox="0 0 400 48" width="100%" height="27" xmlns="http://www.w3.org/2000/svg">
-      <line class="wire-anim" id="wire-l" x1="174" y1="24" x2="0" y2="24" stroke="#1c2230" stroke-width="1.5"/>
+      <text x="4" y="24" font-family="Orbitron,sans-serif" font-size="14" font-weight="700" fill="#f0c020" letter-spacing="2" dominant-baseline="central" onclick="switchTab('vd',document.getElementById('tab-btn-vd'))" style="cursor:pointer;">HOME</text>
+      <line class="wire-anim" id="wire-l" x1="174" y1="24" x2="72" y2="24" stroke="#1c2230" stroke-width="1.5"/>
       <line class="wire-anim" id="wire-r" x1="226" y1="24" x2="400" y2="24" stroke="#1c2230" stroke-width="1.5"/>
-      <path class="trace-path" id="trace-path" d="M 200,24 L 197,24 L 184,2 L 205,24 L 189,24 L 212,46 L 197,24 L 174,24 L 0,24 M 200,24 L 226,24 L 400,24"/>
+      <path class="trace-path" id="trace-path" d="M 200,24 L 197,24 L 184,2 L 205,24 L 189,24 L 212,46 L 197,24 L 174,24 L 72,24 M 200,24 L 226,24 L 400,24"/>
       <polygon id="bolt-icon" points="184,2 197,24 189,24 212,46 197,24 205,24" fill="#f0c020"/>
     </svg>
   </div>
 
   <div class="code-year-bar">
-    <button class="home-inline-btn" onclick="switchTab('vd',document.getElementById('tab-btn-vd'))" aria-label="Home">HOME</button>
     <span class="code-year-label">Code</span>
     <button class="code-year-btn" id="cy-2020" onclick="setCodeYear('2020')">2020</button>
     <button class="code-year-btn" id="cy-2023" onclick="setCodeYear('2023')">2023</button>
