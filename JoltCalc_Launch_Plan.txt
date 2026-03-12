@@ -1,0 +1,367 @@
+================================================================================
+                         JOLTCALC — MASTER LAUNCH PLAN
+                              Final Version
+================================================================================
+
+Last updated: March 11, 2026
+App: JoltCalc
+Developer: Dom (sole proprietor, no LLC needed yet)
+Platforms: iOS (App Store) + Android (Google Play)
+Code edition: 2020, 2023, 2026
+
+================================================================================
+1. THE STRATEGY
+================================================================================
+
+Build EVERYTHING first. Every calculator, every table, every feature.
+Make it the most complete electrician tool on any app store by a wide
+margin. Then walk it back — decide what's Basic vs Pro. Launch.
+Collect passive income.
+
+================================================================================
+2. APP STORE IDENTITY
+================================================================================
+
+Name:           JoltCalc (TBD)
+Subtitle:       Electrician Master Calculator
+Category:       Utilities (primary), Business (secondary)
+Age Rating:     4+
+
+Keywords (100 chars): [VERIFY VERY IMPORTANT]
+electrician, NEC, voltage drop, ampacity, conduit, fill, box fill, wire size, motor, bend, calculator, 2026
+
+================================================================================
+3. BUSINESS STRUCTURE —
+================================================================================
+
+PUBLISH AS YOURSELF:
+- Apple Developer account: individual (your name)
+- Google Play: individual
+- Revenue deposits to your personal bank account
+- Report income on Schedule C (self-employment) on personal taxes
+- Deduct $99 Apple fee + $25 Google fee + dev expenses on Schedule C
+
+LIABILITY:
+- The disclaimer modal + Terms of Service cover you.
+- Every competing app operates the same way.
+
+================================================================================
+4. COSTS
+================================================================================
+
+LAUNCH COSTS (one-time):
+  Apple Developer Program          $99
+  Google Play Developer            $25
+  Domain (optional, only if cheap) $10-15
+  ─────────────────────────────────────
+  TOTAL:                           $124
+
+ANNUAL COSTS:
+  Apple Developer renewal          $99
+  ─────────────────────────────────────
+  TOTAL:                           $99/year
+
+No servers. No database. No hosting. No backend.
+App runs 100% on the user's device.
+Break-even: 24 downloads at $4.99. [Tax Write off]
+
+================================================================================
+5. PRICING [REVISIT]
+================================================================================
+
+BASIC: $4.99 one-time
+  - Every calculator and table in the app
+  - If it calculates something, it's in Basic. Always.
+  - 100% offline
+  - Copy to clipboard
+  - Share as text via native share sheet
+
+PRO: $14.99 one-time In-App Purchase
+  - Job folders (create, name, organize by job site)
+  - Save any calculation to a job folder
+  - PDF report export (single calc, branded)
+  - Batch PDF export (full job folder → one document)
+  - Custom letterhead (company name, license #, logo)
+  - Photo attach to saved calculations
+  - QR verification code on exports
+  - CSV/Excel export for estimators
+  - Apprentice mode (Code article citations on every result)
+
+RULES:
+  - Never lock a calculator behind Pro
+  - Never take away what was in Basic
+  - Pro = workflow/documentation tools ON TOP of the calculators
+  - No subscriptions until user base justifies it (1,000+ Pro users)
+
+FUTURE SUBSCRIPTION (only if/when justified): - Modest IDK
+  $29.99/year "Pro Teams"
+  - Cloud sync between devices
+  - Team sharing / multi-user job folders
+  - Only for users who need cross-device/team features
+  - Existing Pro one-time buyers keep everything they paid for
+
+================================================================================
+6. REVENUE PROJECTIONS (conservative)
+================================================================================
+
+Year 1:
+  ~1,200 Basic downloads × $4.99 × 85%              = ~$5,000
+  ~240 Pro conversions (20%) × $14.99 × 85%          = ~$3,050
+  TOTAL:                                               ~$8,000
+
+Year 2 (ranking builds, reviews compound):
+  ~2,500 Basic × $4.99 × 85%                         = ~$10,600
+  ~500 Pro (20%) × $14.99 × 85%                      = ~$6,400
+  TOTAL:                                               ~$17,000
+
+Year 3+ (with subscription tier):
+  Base + Pro:                                          ~$20,000
+  500 subscribers × $29.99 × 85%                      = ~$12,750
+  TOTAL:                                               ~$32,000
+
+================================================================================
+7. THE BUILD — EVERYTHING GOES IN FIRST
+================================================================================
+
+What's left to build:
+
+[ ] Grounding Electrode Conductor sizing (250.66)
+[ ] Equipment Grounding Conductor sizing (250.122)
+[ ] Article 220 load calculations — residential
+[ ] Article 220 load calculations — commercial
+[ ] Raceway derating quick-check (conductor count → factor)
+[ ] EV charger circuit sizing (625.41)
+[ ] Solar/PV conductor sizing
+[ ] Conduit run planner
+    - Build a full run: panel to destination
+    - Add segments with lengths
+    - Add bends, track cumulative degrees
+    - 360° limit per 358.26 — yellow at 270°, red at 360°
+    - Flag when pull box is needed
+[ ] Dwelling unit service sizing wizard (Article 220)
+    - THE #1 residential feature. Every panel upgrade, every
+      new construction permit needs this calculation.
+    - Step-by-step: sq ft → general lighting load → small
+      appliance circuits (2 min) → laundry → range/oven/cooktop
+      (demand table) → dryer → AC vs heat (largest wins) →
+      demand factors → minimum service size
+    - Standard method AND optional method (220.82/220.83)
+    - Output: minimum service amps, conductor size, GEC size
+    - If you nail this with a good UI, residential guys buy
+      the app for this feature alone
+[ ] GFCI / AFCI requirement lookup
+    - Input: room type + code year
+    - Output: GFCI required? AFCI required? Both?
+    - Covers: kitchen, bathroom, garage, basement, outdoor,
+      bedroom, laundry, crawl space, attic, etc.
+    - Rules change per code year — ties into code year toggle
+    - Common inspection fail. Electricians get this wrong constantly.
+[ ] Receptacle spacing calculator (210.52)
+    - Input room dimensions → minimum receptacle count + max spacing
+    - Countertop rules (210.52(C)) — island, peninsula, wall counter
+    - These rules are confusing and inspectors love flagging them
+    - Visual layout would crush here
+[ ] Kitchen circuit requirements
+    - Two 20A small appliance circuits (minimum)
+    - Dedicated dishwasher circuit
+    - Disposal circuit
+    - Refrigerator circuit (dedicated per 2026)
+    - Quick reference — common inspection fail
+[ ] Bathroom circuit requirements
+    - Dedicated 20A circuit rules
+    - Which bathrooms can share a circuit
+    - GFCI requirements
+    - Another common inspection fail
+[ ] Smoke / CO detector placement
+    - Where required per code
+    - How many per dwelling
+    - Interconnection requirements
+    - New construction vs renovation rules
+[ ] Generator sizing calculator
+    - Input loads to back up → minimum generator kW
+    - Hot market: storms, grid instability, whole-home backup
+    - Transfer switch requirements reference
+[ ] Burial depth table (300.5)
+    - Input wiring method → minimum cover depth
+    - Residential guys trench constantly: pools, sheds,
+      detached garages, landscape lighting, hot tubs
+    - Simple lookup, used all the time
+[ ] Outdoor / wet location rules
+    - In-use vs weatherproof cover requirements
+    - Outdoor receptacle requirements
+    - Wet vs damp location definitions
+[ ] Standard residential circuit reference
+    - Quick cheat sheet:
+      15A circuit = #14, 20A = #12
+      Kitchen = 20A dedicated
+      Bathroom = 20A GFCI
+      Laundry = 20A dedicated
+    - One-page reference for the apprentice doing first house
+[ ] Punch List - Total count per option (job specific)
+[ ] Job folders — create, name, organize
+[ ] PDF report export
+    - Branded, professional output
+    - "Calculated by JoltCalc | 2026 Code | [Date]"
+    - Company name, license #, logo (user-configured)
+[ ] Batch PDF export — full job folder → one document
+[ ] CSV/Excel export — for estimators and bid spreadsheets
+[ ] Share sheet — text format via iMessage, email, AirDrop
+[ ] Copy to clipboard
+[ ] Photo attach — camera photo linked to saved calculation
+[ ] Custom letterhead — user sets company info once in settings
+[ ] Apprentice mode / Exam prep
+
+================================================================================
+8. LEGAL PROTECTION
+================================================================================
+
+DISCLAIMER MODAL (build before launch):
+- Full-screen styled overlay matching dark/gold UI
+- NOT a browser confirm() dialog
+- NOT using localStorage
+- Session-level or show every fresh visit
+- Cannot interact with app until accepted
+- Text includes: professional reference only, verify with AHJ,
+  qualified professional acknowledgment
+
+IN-APP TERMS OF SERVICE:
+
+  "JoltCalc | Terms of Service & Disclaimer
+
+  For Professional Reference Only: JoltCalc is designed as a
+  supplementary tool for qualified electrical professionals.
+  Calculations are based on generalized interpretations of
+  electrical theory and standards.
+
+  No Liability: The developer of JoltCalc shall not be held
+  liable for any damages, injuries, or financial losses resulting
+  from the use or misuse of this application. Users are solely
+  responsible for verifying all calculations against the official
+  National Electrical Code® (NEC) and local amendments.
+
+  AHJ Approval: Final installation approval is strictly subject
+  to the Authority Having Jurisdiction (AHJ).
+
+  No Warranty: This software is provided 'As-Is' without warranty
+  of any kind. By using JoltCalc, you agree that you are a
+  qualified professional capable of identifying and correcting
+  any potential calculation discrepancies.
+
+  Calculations are for reference only. JoltCalc is not a substitute
+  for professional engineering or on-site inspections.
+
+  NEC® and National Electrical Code® are registered trademarks
+  of the National Fire Protection Association (NFPA). This app
+  is not affiliated with or endorsed by NFPA."
+
+================================================================================
+10. APP STORE LISTING [DEFINITELY FIX - LESS CALC]
+================================================================================
+
+FIRST THREE LINES (this is what shows before "more"):
+  "The all-in-one electrical code calculator built for electricians
+  in the field. Supports 2026, 2023, and 2020 code editions.
+  Residential service sizing, voltage drop, ampacity, conduit fill,
+  box fill, motor circuits, bending — 100% offline, no ads."
+
+FULL DESCRIPTION: See JoltCalc_AppStore_Listing.docx
+(Update with all new features before submitting)
+
+SCREENSHOTS (6-8, in this order):
+  1. "Voltage Drop in Seconds"
+  2. "2020 / 2023 / 2026 Code — Your Code, Your State"
+  3. "Residential Service Sizing"
+  4. "Conduit Bending Made Easy" ← saddle/offset illustration
+  5. "Conduit Fill — Any Raceway"
+  6. "GFCI / AFCI — Instant Lookup"
+  7. "Motor Circuit Sizing"
+  8. "Built for the Field — 100% Offline"
+
+The bend illustration + code year toggle + residential service
+sizing are the VISUAL DIFFERENTIATORS. They prove this isn't
+another wall-of-numbers app and that it serves BOTH commercial
+and residential electricians.
+
+================================================================================
+14. QA TESTING — VERIFY EVERY NUMBER
+================================================================================
+
+Your app's reputation lives or dies on accuracy. One wrong ampacity
+value = 1-star review = ranking death. Test once, test right.
+
+SOURCE OF TRUTH:
+  Your physical 2026 code book. Every number traces to a specific
+  table and article. No substitute.
+
+TEST CASES PER CALCULATOR (5 each):
+  1. Normal case — typical everyday values
+  2. Edge case low — smallest wire, shortest run
+  3. Edge case high — largest wire, longest run
+  4. Boundary case — right at a threshold where answer changes
+  5. Known gotcha — the tricky NEC exception that trips people up
+
+  ~8 tabs × 5 cases = 40 test cases. One afternoon with the book.
+
+SHORTCUT FOR TABLE LOOKUPS:
+  Photo the NEC table. Photo your app's output. Put them side by
+  side. Visually scan for mismatches. Eyes catch differences faster
+  than comparing numbers one at a time.
+
+================================================================================
+16. LAUNCH CHECKLIST
+================================================================================
+
+BUILD:
+[ ] All calculators and features built
+[ ] Both files (index.html + electricians_calculator.html) in sync
+
+TEST:
+[ ] QA spreadsheet completed — 5 test cases per calculator
+[ ] All table values spot-checked against physical 2026 code book
+[ ] Cross-referenced against ElectriCalc Pro / competing apps
+[ ] Field feedback from crew
+
+PREPARE:
+[ ] Decide Basic vs Pro feature split
+[ ] Legal disclaimer modal built and tested
+[ ] Terms of Service accessible in-app
+[ ] Icon: 1024x1024 PNG, solid black background
+[ ] Apple Developer account ($99)
+[ ] Google Play Developer account ($25)
+[ ] App wrapped in native container (Capacitor/PWABuilder)
+[ ] 6-8 screenshots at correct device resolutions
+[ ] App Store description finalized (update the .docx with new features)
+[ ] Tested on iPhone + Android device
+
+SUBMIT:
+[ ] Submit to App Store review
+[ ] Submit to Google Play review
+[ ] Set up support email
+
+================================================================================
+- Landscape view BIG!
+- polish up pipe bends or get 3d model views idk
+- Rename + LLC Name
+- share sms air dropcopyemail
+-export pdf csv excel photo overlay
+- codeprep / update
+- storage for photos
+- offline font and everything
+- export to what?
+ this thing isn't a calculator anymore change name!
+- maby labor tracker
+- menu tabs for like contact privacy or w.e and main directires for tiles
+- FA Voltage Drop
+- fiber color code 
+- RJ45 Pinout Visual
+- 12 Strand Fiber Color Sequence
+- Data conduit fill
+- Torque chart
+- Support chart (romex, mc, emt/imc,rmc,pvc, fmc)
+- Front end fix
+- calc-wrap max width isn't contrained 100dvb min? idk
+- field label fixed width of 124px can be ton on small screen 320px - see
+- tab panel height isn't contrained min 100dvh?
+- bottom safe area btn row has it but tab panel content not always account for it
+- Slide bar under tab for quick fix
+
