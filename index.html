@@ -715,6 +715,8 @@
 .ts-clr-week-btn:active{border-color:#ef4444;color:#ef4444;}
 .ts-actions{display:flex;gap:6px;margin-top:8px;}
 .ts-export-btn,.ts-print-btn{flex:1;background:#f4f4f5;color:#374151;border:1px solid #d1d5db;border-radius:6px;padding:8px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
+.ts-del-btn{flex:1;background:#fef2f2;color:#dc2626;border:1px solid #fecaca;border-radius:6px;padding:8px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
+.ts-del-btn:active{background:#fee2e2;}
 .ts-empty{text-align:center;padding:48px 20px;color:#9ca3af;font-size:13px;line-height:1.8;}
 .ts-info-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;}
 .ts-info-overlay.open{display:block;}
@@ -2664,7 +2666,6 @@ function renderTs(){
         '<div class="ts-week-title" onclick="toggleTsWeek('+week.id+')">'+tsFmtShort(mon)+' – '+tsFmtShort(endDay)+'</div>'+
         '<input class="ts-foreman-inp" value="'+escHtml(week.foreman||'')+'" placeholder="Foreman…" onchange="updateTsForeman('+week.id+',this.value)" onclick="event.stopPropagation()">'+
         '<input class="ts-po-inp" value="'+escHtml(week.po||'')+'" placeholder="PO #" onchange="updateTsPo('+week.id+',this.value)" onclick="event.stopPropagation()">'+
-        '<button class="ts-week-del" onclick="deleteTsWeek('+week.id+')" title="Delete week">✕</button>'+
         '<div class="note-chevron" onclick="toggleTsWeek('+week.id+')">▾</div>'+
       '</div>'+
       '<div class="ts-week-bd">'+
@@ -2673,6 +2674,7 @@ function renderTs(){
         '<div class="ts-actions">'+
           '<button class="ts-export-btn" onclick="exportTsWeek('+week.id+')">Export</button>'+
           '<button class="ts-print-btn" onclick="printTsWeek('+week.id+')">Print</button>'+
+          '<button class="ts-del-btn" onclick="deleteTsWeek('+week.id+')">Delete</button>'+
         '</div>'+
       '</div>'+
     '</div>';
