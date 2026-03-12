@@ -574,7 +574,7 @@
 .code-year-btn:not(.active):hover{border-color:rgba(240,192,32,0.4);color:#9ca3af;}
 .tab-scroll-track{height:6px;background:#080a10;box-shadow:inset 0 1px 2px rgba(0,0,0,0.6);}
 .tab-scroll-thumb{height:6px;background:#b8860b;border-radius:999px;width:22%;transition:margin-left .1s linear;box-shadow:0 0 4px rgba(184,134,11,0.4);}
-.menu-btn{background:none;border:none;color:#f0c020;font-size:30px;cursor:pointer;padding:4px 8px;line-height:1;position:absolute;right:0;top:50%;transform:translateY(-50%);}
+.menu-btn{background:none;border:none;color:#f0c020;font-size:30px;cursor:pointer;padding:4px 8px;line-height:1;position:absolute;right:0;top:calc(env(safe-area-inset-top) + 14px);transform:translateY(-50%);}
 .menu-btn:active{opacity:.7;}
 .jc-menu-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:899;}
 .jc-menu-overlay.open{display:block;}
@@ -746,11 +746,11 @@ if('serviceWorker' in navigator){
 
   <div class="calc-bolt-bar">
     <svg viewBox="0 0 400 48" width="100%" height="27" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <line class="wire-anim" id="wire-l" x1="174" y1="24" x2="75" y2="24" stroke="#1c2230" stroke-width="1.5"/>
+      <line class="wire-anim" id="wire-l" x1="174" y1="24" x2="58" y2="24" stroke="#1c2230" stroke-width="1.5"/>
       <line class="wire-anim" id="wire-r" x1="226" y1="24" x2="370" y2="24" stroke="#1c2230" stroke-width="1.5"/>
-      <path class="trace-path" id="trace-path" d="M 200,24 L 197,24 L 184,2 L 205,24 L 189,24 L 212,46 L 197,24 L 174,24 L 75,24 M 200,24 L 226,24 L 370,24"/>
+      <path class="trace-path" id="trace-path" d="M 200,24 L 197,24 L 184,2 L 205,24 L 189,24 L 212,46 L 197,24 L 174,24 L 58,24 M 200,24 L 226,24 L 370,24"/>
       <polygon id="bolt-icon" points="184,2 197,24 189,24 212,46 197,24 205,24" fill="#f0c020"/>
-      <text x="4" y="24" font-family="Inter,sans-serif" font-size="16" font-weight="800" fill="#f0c020" letter-spacing="3" dominant-baseline="central" onclick="switchTab('vd',document.getElementById('tab-btn-vd'))" style="cursor:pointer;">HOME</text>
+      <text x="4" y="24" font-family="Inter,sans-serif" font-size="12" font-weight="800" fill="#f0c020" letter-spacing="3" dominant-baseline="central" onclick="switchTab('vd',document.getElementById('tab-btn-vd'))" style="cursor:pointer;">HOME</text>
     </svg>
     <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">☰</button>
   </div>
