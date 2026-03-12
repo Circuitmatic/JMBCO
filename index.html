@@ -39,10 +39,17 @@
     --neutral-bdr:#d4d4d4;
   }
 
-  html, body {
-    min-height: 100%;
-    overscroll-behavior: none;
+  html {
+    height: 100%;
+    overflow-y: scroll;
     overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+  body {
+    min-height: 100%;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
     background: var(--bg);
     background-image: radial-gradient(ellipse 100% 60% at 70% 0%, #27272a 0%, transparent 55%);
     display: flex;
