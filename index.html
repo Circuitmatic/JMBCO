@@ -2644,7 +2644,7 @@ function renderTs(){
     var tfoot='<tfoot>'+
       '<tr>'+
         '<td class="ts-foot-lbl">Default 8h</td>'+
-        days.map(function(d){return '<td class="ts-cell" style="padding:3px;"><button class="ts-d8-btn" onclick="setDayDefault('+week.id+',\''+d+'\')">8h</button></td>';}).join('')+
+        days.map(function(d){return '<td class="ts-cell" style="padding:3px;background:#fff;"><button class="ts-d8-btn" onclick="setDayDefault('+week.id+',\''+d+'\')">8h</button></td>';}).join('')+
         '<td></td>'+
       '</tr>'+
       '<tr>'+
