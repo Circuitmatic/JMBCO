@@ -1809,7 +1809,7 @@ if('serviceWorker' in navigator){
       <div id="punch-status-bar" class="punch-status-bar"></div>
       <div class="punch-toolbar">
         <button class="punch-add-btn" onclick="openPunchModal()">+ Add</button>
-        <input class="punch-srch-inp" id="punch-srch" type="text" placeholder="Search items…" oninput="renderPunch()" autocomplete="off">
+        <input class="punch-srch-inp" id="punch-srch" type="text" placeholder="Search items & notes…" oninput="renderPunch()" autocomplete="off">
         <button class="punch-opts-btn" onclick="openPunchOpts()">Status</button>
         <button class="punch-export-all-btn" onclick="exportPunchAll()">Export All</button>
       </div>
@@ -2913,7 +2913,10 @@ function renderPunch(){
   var catMap={};cats.forEach(function(c){catMap[c.id]=c;});
   var q=(document.getElementById('punch-srch')||{}).value||'';
   q=q.trim().toLowerCase();
-  if(q)items=items.filter(function(it){return (it.title||'').toLowerCase().indexOf(q)>=0||(it.notes||'').toLowerCase().indexOf(q)>=0;});
+  if(q)items=items.filter(function(it){
+    var catName=it.catId&&catMap[it.catId]?catMap[it.catId].name:'';
+    return (it.title||'').toLowerCase().indexOf(q)>=0||(it.notes||'').toLowerCase().indexOf(q)>=0||catName.toLowerCase().indexOf(q)>=0;
+  });
   if(!items.length){el.innerHTML='<div style="text-align:center;padding:40px 20px;color:#9ca3af;font-size:13px;">'+(q?'No matches.':'No punch items yet.')+'</div>';return;}
   el.innerHTML=items.map(function(item){
     var ts=new Date(item.ts).toLocaleDateString('en-US',{month:'short',day:'numeric'});
