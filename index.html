@@ -802,6 +802,8 @@ body.light-mode body { background: var(--bg); }
 .co-logo-preview{width:64px;height:40px;object-fit:contain;border:1px solid #e5e7eb;border-radius:6px;display:none;}
 .co-logo-lbl{background:#f3f4f6;border:1px solid #d1d5db;border-radius:7px;padding:8px 14px;font-size:12px;font-family:'Inter',sans-serif;color:#374151;cursor:pointer;}
 .co-logo-clear{background:none;border:none;color:#9ca3af;font-size:12px;cursor:pointer;display:none;}
+.co-privacy-note{font-size:10px;color:#9ca3af;font-family:'Inter',sans-serif;line-height:1.6;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;margin-bottom:16px;}
+.co-privacy-note a{color:#6b7280;text-decoration:underline;cursor:pointer;}
 .co-save-btn{width:100%;background:#f0c020;color:#1a1200;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;margin-top:4px;}
 .co-cancel-btn{width:100%;background:#f3f4f6;color:#6b7280;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:8px;}
 /* About / Privacy modals */
@@ -6805,6 +6807,7 @@ window.addEventListener('load',function(){
     <input class="co-inp" id="co-website" type="url" placeholder="www.yourcompany.com">
     <div class="co-field-lbl">License # <span style="font-size:10px;color:#9ca3af;font-weight:400;text-transform:none;">(optional)</span></div>
     <input class="co-inp" id="co-license" type="text" placeholder="EC-000000">
+    <p class="co-privacy-note">🔒 The information you enter here is stored only on this device and is used exclusively to populate your exported reports and PDFs. It is never transmitted, shared, or accessed by anyone outside this app. See our <a onclick="closeCoModal();openPrivacyPolicy()">Privacy Policy</a> for full details.</p>
     <button class="co-save-btn" onclick="saveCoModal()">Save Branding</button>
     <button class="co-cancel-btn" onclick="closeCoModal()">Cancel</button>
   </div>
