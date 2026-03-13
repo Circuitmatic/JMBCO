@@ -851,6 +851,22 @@
   @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 <script>
+// Portrait orientation lock — attempt via Screen Orientation API on load and on any rotation
+(function(){
+  function lockPortrait(){
+    if(screen.orientation&&screen.orientation.lock){
+      screen.orientation.lock('portrait').catch(function(){});
+    }
+  }
+  lockPortrait();
+  window.addEventListener('orientationchange',function(){
+    lockPortrait();
+    // Scroll to top to prevent any residual layout offset after rotation
+    setTimeout(function(){window.scrollTo(0,0);},100);
+  });
+})();
+</script>
+<script>
 if('serviceWorker' in navigator){
   const CACHE='elec-calc-v1';
   navigator.serviceWorker.register('data:application/javascript;charset=utf-8,'+encodeURIComponent(`
