@@ -658,6 +658,17 @@
 .punch-opts-done{width:100%;margin-top:12px;background:#f0c020;color:#1a1200;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
 .punch-del-btn{background:none;border:1px solid #e5e7eb;border-radius:6px;padding:8px 12px;font-size:12px;color:#9ca3af;font-family:'Inter',sans-serif;cursor:pointer;}
 .punch-empty{text-align:center;padding:48px 20px;color:#9ca3af;font-size:13px;line-height:1.8;}
+.ts-aw-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:960;align-items:center;justify-content:center;}
+.ts-aw-ov.open{display:flex;}
+.ts-aw-modal{background:#fff;border-radius:14px;padding:22px 20px 18px;width:88%;max-width:340px;box-sizing:border-box;}
+.ts-aw-title{font-size:16px;font-weight:800;font-family:'Inter',sans-serif;color:#111827;margin-bottom:4px;}
+.ts-aw-sub{font-size:11px;color:#9ca3af;font-family:'Inter',sans-serif;margin-bottom:16px;}
+.ts-aw-label{font-size:11px;font-weight:700;color:#374151;font-family:'Inter',sans-serif;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.ts-aw-inp{width:100%;box-sizing:border-box;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;font-size:14px;font-family:'Inter',sans-serif;color:#111827;outline:none;margin-bottom:12px;}
+.ts-aw-inp:focus{border-color:#f0c020;}
+.ts-aw-btns{display:flex;gap:8px;margin-top:4px;}
+.ts-aw-cancel{flex:1;background:#f3f4f6;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;color:#6b7280;cursor:pointer;}
+.ts-aw-confirm{flex:2;background:#f0c020;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;color:#1a1200;cursor:pointer;}
 .export-sheet-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:950;align-items:flex-end;}
 .export-sheet-ov.open{display:flex;}
 .export-sheet{background:#fff;border-radius:16px 16px 0 0;padding:20px 18px 36px;width:100%;box-sizing:border-box;}
@@ -2627,13 +2638,23 @@ function tsFmtShort(d){return (d.getMonth()+1)+'/'+d.getDate()+'/'+String(d.getF
 function tsKey(empId,day){return empId+'_'+day;}
 function loadTs(){var sel=document.getElementById('ts-wkstart-sel');if(sel)sel.value=localStorage.getItem('jc_ts_wkstart')||'Mon';renderTs();}
 function addTsWeek(){
+  document.getElementById('ts-aw-foreman').value='';
+  document.getElementById('ts-aw-po').value='';
+  document.getElementById('ts-aw-ov').classList.add('open');
+  setTimeout(function(){document.getElementById('ts-aw-foreman').focus();},120);
+}
+function closeTsAwModal(){document.getElementById('ts-aw-ov').classList.remove('open');}
+function confirmTsAwModal(){
+  var foreman=document.getElementById('ts-aw-foreman').value.trim();
+  var po=document.getElementById('ts-aw-po').value.trim();
+  closeTsAwModal();
   var emps=tsGetEmps(),weeks=tsGetWeeks();
   var wsd=tsGetWeekStartDate(new Date());
   var used=weeks.map(function(w){return w.weekStart;});
   while(used.indexOf(wsd.toISOString().slice(0,10))>=0){wsd=new Date(wsd.getTime()+7*24*60*60*1000);}
   var entries={};
   emps.forEach(function(emp){TS_DAYS_BASE.forEach(function(day){entries[tsKey(emp.id,day)]={h:'',type:'ST'};});});
-  weeks.unshift({id:Date.now(),weekStart:wsd.toISOString().slice(0,10),po:'',foreman:'',showSat:false,showSun:false,entries:entries});
+  weeks.unshift({id:Date.now(),weekStart:wsd.toISOString().slice(0,10),po:po,foreman:foreman,showSat:false,showSun:false,entries:entries});
   tsSaveWeeks(weeks);renderTs();
   setTimeout(function(){var el=document.querySelector('.ts-week-card');if(el)el.classList.add('expanded');},60);
 }
@@ -5425,6 +5446,21 @@ setCodeYear(_codeYear);
   <img id="lightbox-img" src="" alt="Photo">
 </div>
 
+<!-- Add Week Modal -->
+<div class="ts-aw-ov" id="ts-aw-ov" onclick="closeTsAwModal()">
+  <div class="ts-aw-modal" onclick="event.stopPropagation()">
+    <div class="ts-aw-title">New Week</div>
+    <div class="ts-aw-sub">Fill in job details before adding</div>
+    <div class="ts-aw-label">Foreman</div>
+    <input class="ts-aw-inp" id="ts-aw-foreman" type="text" placeholder="Foreman name…" autocomplete="off">
+    <div class="ts-aw-label">PO Number</div>
+    <input class="ts-aw-inp" id="ts-aw-po" type="text" placeholder="PO #…" autocomplete="off" onkeydown="if(event.key==='Enter')confirmTsAwModal()">
+    <div class="ts-aw-btns">
+      <button class="ts-aw-cancel" onclick="closeTsAwModal()">Cancel</button>
+      <button class="ts-aw-confirm" onclick="confirmTsAwModal()">+ Add Week</button>
+    </div>
+  </div>
+</div>
 <!-- Export Sheet -->
 <div class="export-sheet-ov" id="export-sheet-ov" onclick="closeExportSheet()">
   <div class="export-sheet" onclick="event.stopPropagation()">
