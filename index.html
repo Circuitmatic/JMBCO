@@ -774,7 +774,7 @@
 .ts-th-day{padding:6px 1px;text-align:center;border-bottom:2px solid #374151;border-left:1px solid #4b5563;min-width:44px;vertical-align:middle;background:#374151;position:sticky;top:0;z-index:2;}
 .ts-th-day-txt{display:inline-block;font-size:11px;font-weight:700;color:#fff;white-space:nowrap;line-height:1.2;}
 .ts-th-tot{padding:6px 5px;text-align:right;font-size:10px;font-weight:700;color:#fff;background:#374151;border-bottom:2px solid #374151;white-space:nowrap;position:sticky;top:0;right:0;z-index:4;box-shadow:-2px 0 4px rgba(0,0,0,0.15);}
-.ts-emp-cell{padding:4px 5px 4px 5px;border-bottom:1.5px solid #d0d5de;position:sticky;left:0;background:#f3f4f6;z-index:1;vertical-align:middle;white-space:nowrap;position:relative;}
+.ts-emp-cell{padding:4px 5px 4px 5px;border-bottom:1.5px solid #d0d5de;position:sticky;left:0;z-index:1;vertical-align:middle;white-space:nowrap;position:relative;}
 .ts-emp-name-inp{border:none;border-bottom:1px solid #d1d5db;outline:none;font-size:11px;font-family:'Inter',sans-serif;color:#111827;font-weight:600;width:84px;background:transparent;padding:2px 0;}
 .ts-emp-inline-tot{font-size:9px;font-weight:700;font-family:'Roboto Mono',monospace;color:#6b7280;position:absolute;top:3px;right:3px;line-height:1;pointer-events:none;}
 @media (orientation:landscape){.ts-emp-inline-tot{display:none;}}
@@ -782,9 +782,8 @@
 .ts-rm-emp-btn{background:none;border:none;color:#ef4444;font-size:14px;cursor:pointer;padding:0 0 0 4px;line-height:1;vertical-align:middle;}
 .ts-rm-emp-btn:active{opacity:.6;}
 .ts-cell{padding:0;vertical-align:top;border-bottom:1.5px solid #d0d5de;border-left:1px solid #e8eaee;min-width:44px;}
-.ts-table tbody tr:nth-child(even) .ts-cell{background:#f8faff;}
-.ts-table tbody tr:nth-child(even) .ts-emp-cell{background:#eaecf0;}
-.ts-table tbody tr:nth-child(even) .ts-emp-tot-cell{background:#f8faff;}
+.ts-table tbody tr:nth-child(odd) .ts-cell,.ts-table tbody tr:nth-child(odd) .ts-emp-cell,.ts-table tbody tr:nth-child(odd) .ts-emp-tot-cell{background:#ffffff;}
+.ts-table tbody tr:nth-child(even) .ts-cell,.ts-table tbody tr:nth-child(even) .ts-emp-cell,.ts-table tbody tr:nth-child(even) .ts-emp-tot-cell{background:#f0f3fa;}
 .ts-cell-type{width:100%;font-size:8px;font-weight:700;font-family:'Roboto Mono',monospace;background:transparent;border:none;border-bottom:1px solid #e0e3e8;border-radius:0;padding:1px 0;color:#374151;cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;text-align:center;text-align-last:center;}
 .ts-cell-h{width:100%;font-size:12px;font-family:'Roboto Mono',monospace;border:none;border-top:1px solid #e0e3e8;border-radius:0;padding:3px 1px;text-align:center;color:#111827;background:transparent;outline:none;box-sizing:border-box;}
 .ts-cell-h:focus{background:#fffbeb;}
