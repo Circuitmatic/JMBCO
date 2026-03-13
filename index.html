@@ -671,12 +671,28 @@
 .proj-card-meta span{background:#f3f4f6;border-radius:6px;padding:2px 8px;}
 .proj-card-date{margin-left:auto!important;background:none!important;padding:0!important;}
 .proj-empty{text-align:center;padding:60px 20px;color:#9ca3af;font-size:13px;line-height:1.8;}
-.proj-detail-hd{display:flex;align-items:center;gap:10px;padding:10px 0 10px;border-bottom:2px solid #f0c020;margin-bottom:10px;}
-.proj-back-btn{background:none;border:none;color:#f0c020;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;padding:6px 12px 6px 0;white-space:nowrap;flex-shrink:0;}
-.proj-detail-info{min-width:0;}
-.proj-detail-name{font-size:16px;font-weight:800;font-family:'Inter',sans-serif;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.proj-detail-hd{display:flex;align-items:center;gap:8px;padding:6px 0 6px;border-bottom:2px solid #f0c020;margin-bottom:8px;}
+.proj-back-btn{background:none;border:none;color:#f0c020;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;padding:4px 10px 4px 0;white-space:nowrap;flex-shrink:0;}
+.proj-detail-info{min-width:0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;}
+.proj-detail-name{font-size:14px;font-weight:800;font-family:'Inter',sans-serif;color:#111827;}
 .proj-detail-po{font-size:11px;color:#9ca3af;font-family:'Roboto Mono',monospace;}
+.proj-detail-foreman{font-size:11px;color:#6b7280;font-family:'Inter',sans-serif;}
 .jc-save-proj-row{font-size:10px;font-weight:600;font-family:'Roboto Mono',monospace;color:#9ca3af;letter-spacing:.5px;margin-bottom:6px;}
+/* Company Branding Modal */
+.co-modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:970;align-items:flex-end;}
+.co-modal-ov.open{display:flex;}
+.co-modal{background:#fff;border-radius:16px 16px 0 0;padding:20px 18px 36px;width:100%;box-sizing:border-box;max-height:88vh;overflow-y:auto;}
+.co-modal-title{font-size:16px;font-weight:800;font-family:'Inter',sans-serif;color:#111827;margin-bottom:2px;}
+.co-modal-sub{font-size:11px;color:#9ca3af;font-family:'Inter',sans-serif;margin-bottom:16px;}
+.co-field-lbl{font-size:11px;font-weight:700;color:#374151;font-family:'Inter',sans-serif;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.co-inp{width:100%;box-sizing:border-box;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;font-size:14px;font-family:'Inter',sans-serif;color:#111827;outline:none;margin-bottom:12px;}
+.co-inp:focus{border-color:#f0c020;}
+.co-logo-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.co-logo-preview{width:64px;height:40px;object-fit:contain;border:1px solid #e5e7eb;border-radius:6px;display:none;}
+.co-logo-lbl{background:#f3f4f6;border:1px solid #d1d5db;border-radius:7px;padding:8px 14px;font-size:12px;font-family:'Inter',sans-serif;color:#374151;cursor:pointer;}
+.co-logo-clear{background:none;border:none;color:#9ca3af;font-size:12px;cursor:pointer;display:none;}
+.co-save-btn{width:100%;background:#f0c020;color:#1a1200;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;margin-top:4px;}
+.co-cancel-btn{width:100%;background:#f3f4f6;color:#6b7280;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:8px;}
 .ts-aw-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:960;align-items:center;justify-content:center;}
 .ts-aw-ov.open{display:flex;}
 .ts-aw-modal{background:#fff;border-radius:14px;padding:22px 20px 18px;width:88%;max-width:340px;box-sizing:border-box;}
@@ -1858,6 +1874,7 @@ if('serviceWorker' in navigator){
         <div class="proj-detail-info">
           <div class="proj-detail-name" id="proj-detail-name"></div>
           <div class="proj-detail-po" id="proj-detail-po"></div>
+          <div class="proj-detail-foreman" id="proj-detail-foreman"></div>
         </div>
       </div>
       <div class="res-subnav">
@@ -2447,6 +2464,49 @@ function jcUpdateAnnotation(id,val){
   notes.forEach(function(n){if(n.id===id)n.annotation=val;});
   localStorage.setItem('jc_notes',JSON.stringify(notes));
 }
+// ── Company Branding ──────────────────────────
+function getCompany(){return JSON.parse(localStorage.getItem('jc_company')||'{}');}
+function openCoModal(){
+  var co=getCompany();
+  document.getElementById('co-company').value=co.name||'';
+  document.getElementById('co-address').value=co.address||'';
+  document.getElementById('co-phone').value=co.phone||'';
+  document.getElementById('co-fax').value=co.fax||'';
+  document.getElementById('co-website').value=co.website||'';
+  var prev=document.getElementById('co-logo-preview');
+  var clr=document.getElementById('co-logo-clear');
+  if(co.logo){prev.src=co.logo;prev.style.display='';clr.style.display='';}
+  else{prev.style.display='none';clr.style.display='none';}
+  document.getElementById('co-modal-ov').classList.add('open');
+}
+function closeCoModal(){document.getElementById('co-modal-ov').classList.remove('open');}
+function coLogoChange(inp){
+  if(!inp.files||!inp.files[0])return;
+  resizePhoto(inp.files[0],function(data){
+    var prev=document.getElementById('co-logo-preview');
+    prev.src=data;prev.style.display='';
+    document.getElementById('co-logo-clear').style.display='';
+  });
+}
+function coClearLogo(){
+  document.getElementById('co-logo-preview').src='';
+  document.getElementById('co-logo-preview').style.display='none';
+  document.getElementById('co-logo-clear').style.display='none';
+}
+function saveCoModal(){
+  var co={
+    name:document.getElementById('co-company').value.trim(),
+    address:document.getElementById('co-address').value.trim(),
+    phone:document.getElementById('co-phone').value.trim(),
+    fax:document.getElementById('co-fax').value.trim(),
+    website:document.getElementById('co-website').value.trim(),
+    logo:document.getElementById('co-logo-preview').src||''
+  };
+  if(!co.logo||co.logo===window.location.href)co.logo='';
+  localStorage.setItem('jc_company',JSON.stringify(co));
+  closeCoModal();
+}
+// ──────────────────────────────────────────────
 // ── Projects ──────────────────────────────────
 var _activeProjectId=null;
 function getProjList(){return JSON.parse(localStorage.getItem('jc_projects')||'[]');}
@@ -2505,6 +2565,7 @@ function openProject(id){
   _activeProjectId=id;
   document.getElementById('proj-detail-name').textContent=p.name;
   document.getElementById('proj-detail-po').textContent=p.po?'PO: '+p.po:'';
+  document.getElementById('proj-detail-foreman').textContent=p.foreman?'Foreman: '+p.foreman:'';
   document.getElementById('proj-list-view').style.display='none';
   document.getElementById('proj-detail-view').style.display='';
   document.querySelectorAll('.res-sub').forEach(function(b){b.classList.remove('active');});
@@ -2521,6 +2582,7 @@ function closeProject(){
 }
 function openNewProjModal(){
   document.getElementById('np-name').value='';
+  document.getElementById('np-foreman').value='';
   document.getElementById('np-po').value='';
   document.getElementById('new-proj-ov').classList.add('open');
   setTimeout(function(){document.getElementById('np-name').focus();},120);
@@ -2529,10 +2591,11 @@ function closeNewProjModal(){document.getElementById('new-proj-ov').classList.re
 function confirmNewProj(){
   var name=document.getElementById('np-name').value.trim();
   if(!name){document.getElementById('np-name').focus();return;}
+  var foreman=document.getElementById('np-foreman').value.trim();
   var po=document.getElementById('np-po').value.trim();
   var id=Date.now();
   var projects=getProjList();
-  projects.unshift({id:id,name:name,po:po,created:id});
+  projects.unshift({id:id,name:name,foreman:foreman,po:po,created:id});
   saveProjList(projects);
   closeNewProjModal();
   openProject(id);
@@ -2662,16 +2725,27 @@ function _fmtDate(ms){var d=ms?new Date(ms):new Date();return (d.getMonth()+1)+'
 function _fmtDateShort(ms){var d=ms?new Date(ms):new Date();return (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear();}
 function buildPrintHTML(reportTitle,subtitle,bodyHTML){
   var now=_fmtDate();
+  var co=getCompany();
+  var proj=_activeProjectId?getProjList().find(function(x){return x.id===_activeProjectId;}):null;
+  var coLogoHtml=co.logo?'<img src="'+co.logo+'" style="height:40px;max-width:120px;object-fit:contain;margin-right:14px;">':'';
+  var coNameHtml=co.name?'<div style="font-size:15px;font-weight:800;color:#f0c020;letter-spacing:1px;">'+co.name+'</div>':'<div class="rpt-logo">⚡ JOLTCALC<span>Electricians Calculator</span></div>';
+  var coInfoLines=[];
+  if(co.address)coInfoLines.push(co.address);
+  if(co.phone)coInfoLines.push(co.phone+(co.fax?' &nbsp;|&nbsp; Fax: '+co.fax:''));
+  if(co.website)coInfoLines.push(co.website);
+  var coInfoHtml=coInfoLines.length?'<div style="font-size:10px;color:#9ca3af;line-height:1.6;margin-top:3px;">'+coInfoLines.join('<br>')+'</div>':'';
+  var projInfoHtml='';
+  if(proj){projInfoHtml='<div style="font-size:10px;color:#9ca3af;line-height:1.8;text-align:right;">'+escHtml(proj.name)+(proj.po?'<br>PO: '+escHtml(proj.po):'')+(proj.foreman?'<br>Foreman: '+escHtml(proj.foreman):'')+'</div>';}
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+reportTitle+'</title><style>'+
     '*{box-sizing:border-box;margin:0;padding:0;}'+
     'body{font-family:"Helvetica Neue",Arial,sans-serif;color:#1a1a1a;background:#fff;font-size:13px;}'+
-    '.rpt-header{background:#07090f;color:#f0c020;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;}'+
+    '.rpt-header{background:#07090f;color:#f0c020;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;}'+
     '.rpt-logo{font-size:20px;font-weight:900;letter-spacing:3px;}'+
     '.rpt-logo span{color:#fff;font-size:12px;display:block;font-weight:400;letter-spacing:1px;margin-top:2px;}'+
-    '.rpt-hd-right{text-align:right;font-size:11px;color:#9ca3af;line-height:1.6;}'+
-    '.rpt-body{padding:24px 28px;}'+
-    '.rpt-title{font-size:22px;font-weight:800;color:#111;margin-bottom:2px;}'+
-    '.rpt-subtitle{font-size:12px;color:#6b7280;margin-bottom:16px;padding-bottom:14px;border-bottom:3px solid #f0c020;}'+
+    '.rpt-hd-right{text-align:right;font-size:11px;color:#9ca3af;line-height:1.6;flex-shrink:0;}'+
+    '.rpt-body{padding:20px 24px;}'+
+    '.rpt-title{font-size:20px;font-weight:800;color:#111;margin-bottom:2px;}'+
+    '.rpt-subtitle{font-size:12px;color:#6b7280;margin-bottom:16px;padding-bottom:12px;border-bottom:3px solid #f0c020;}'+
     'table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:12px;}'+
     'thead tr{background:#1a1a1a;}'+
     'thead th{color:#f0c020;text-align:left;padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}'+
@@ -2689,8 +2763,8 @@ function buildPrintHTML(reportTitle,subtitle,bodyHTML){
     '@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}'+
   '</style></head><body>'+
   '<div class="rpt-header">'+
-    '<div class="rpt-logo">⚡ JOLTCALC<span>Electricians Calculator</span></div>'+
-    '<div class="rpt-hd-right">'+reportTitle+'<br>'+now+'</div>'+
+    '<div style="display:flex;align-items:center;">'+coLogoHtml+'<div>'+coNameHtml+coInfoHtml+'</div></div>'+
+    '<div class="rpt-hd-right">'+reportTitle+'<br>'+now+(projInfoHtml?'</div><div style="flex-shrink:0;">'+projInfoHtml:'')+'</div>'+
   '</div>'+
   '<div class="rpt-body">'+
     '<div class="rpt-title">'+reportTitle+'</div>'+
@@ -2775,23 +2849,13 @@ function tsFmtShort(d){return (d.getMonth()+1)+'/'+d.getDate()+'/'+String(d.getF
 function tsKey(empId,day){return empId+'_'+day;}
 function loadTs(){var sel=document.getElementById('ts-wkstart-sel');if(sel)sel.value=localStorage.getItem('jc_ts_wkstart')||'Mon';renderTs();}
 function addTsWeek(){
-  document.getElementById('ts-aw-foreman').value='';
-  document.getElementById('ts-aw-po').value='';
-  document.getElementById('ts-aw-ov').classList.add('open');
-  setTimeout(function(){document.getElementById('ts-aw-foreman').focus();},120);
-}
-function closeTsAwModal(){document.getElementById('ts-aw-ov').classList.remove('open');}
-function confirmTsAwModal(){
-  var foreman=document.getElementById('ts-aw-foreman').value.trim();
-  var po=document.getElementById('ts-aw-po').value.trim();
-  closeTsAwModal();
   var emps=tsGetEmps(),weeks=tsGetWeeks();
   var wsd=tsGetWeekStartDate(new Date());
   var used=weeks.map(function(w){return w.weekStart;});
   while(used.indexOf(wsd.toISOString().slice(0,10))>=0){wsd=new Date(wsd.getTime()+7*24*60*60*1000);}
   var entries={};
   emps.forEach(function(emp){TS_DAYS_BASE.forEach(function(day){entries[tsKey(emp.id,day)]={h:'',type:'ST'};});});
-  weeks.unshift({id:Date.now(),weekStart:wsd.toISOString().slice(0,10),po:po,foreman:foreman,showSat:false,showSun:false,entries:entries,projectId:_activeProjectId});
+  weeks.unshift({id:Date.now(),weekStart:wsd.toISOString().slice(0,10),showSat:false,showSun:false,entries:entries,projectId:_activeProjectId});
   tsSaveWeeks(weeks);renderTs();
   setTimeout(function(){var el=document.querySelector('.ts-week-card');if(el)el.classList.add('expanded');},60);
 }
@@ -2955,11 +3019,9 @@ function renderTs(){
       '<button class="ts-clr-week-btn" onclick="clearTsWeek('+week.id+')" title="Clear all hours for this week">Clear</button>'+
     '</div>';
     return '<div class="ts-week-card" id="tw-'+week.id+'">'+
-      '<div class="ts-week-hd-row">'+
-        '<div class="ts-week-title" onclick="toggleTsWeek('+week.id+')">'+tsFmtShort(mon)+' – '+tsFmtShort(endDay)+'</div>'+
-        '<input class="ts-foreman-inp" id="tsf-'+week.id+'" value="'+escHtml(week.foreman||'')+'" placeholder="Foreman…" onchange="updateTsForeman('+week.id+',this.value)" onclick="event.stopPropagation()">'+
-        '<input class="ts-po-inp" value="'+escHtml(week.po||'')+'" placeholder="PO #" onchange="updateTsPo('+week.id+',this.value)" onclick="event.stopPropagation()">'+
-        '<div class="note-chevron" onclick="toggleTsWeek('+week.id+')">▾</div>'+
+      '<div class="ts-week-hd-row" onclick="toggleTsWeek('+week.id+')">'+
+        '<div class="ts-week-title">'+tsFmtShort(mon)+' – '+tsFmtShort(endDay)+'</div>'+
+        '<div class="note-chevron">▾</div>'+
       '</div>'+
       '<div class="ts-week-bd">'+
         '<div class="ts-table-wrap"><table class="ts-table">'+thead+tbody+tfoot+'</table></div>'+
@@ -2979,7 +3041,8 @@ function tsBuildExport(week){
   var emps=tsGetEmps(),days=tsDays(week);
   var mon=new Date(week.weekStart+'T00:00:00');
   var endDay=new Date(mon.getTime()+6*24*60*60*1000);
-  var lines=['JOLTCALC — TIME SHEET','──────────────────────────────','Week: '+tsFmtDate(mon)+' – '+tsFmtDate(endDay)+(week.po?' · PO: '+week.po:'')+(week.foreman?' · Foreman: '+week.foreman:''),''];
+  var _tsproj=_activeProjectId?getProjList().find(function(x){return x.id===_activeProjectId;}):null;
+  var lines=['JOLTCALC — TIME SHEET','──────────────────────────────',(_tsproj?'Project: '+_tsproj.name+(_tsproj.po?' · PO: '+_tsproj.po:''):'')+(_tsproj&&_tsproj.foreman?' · Foreman: '+_tsproj.foreman:''),'Week: '+tsFmtDate(mon)+' – '+tsFmtDate(endDay),''];
   // Header row
   var hdr='Employee'.padEnd(16)+days.map(function(d){return d.padEnd(10);}).join('')+'Total';
   lines.push(hdr);lines.push('─'.repeat(hdr.length));
@@ -3039,7 +3102,8 @@ function exportTsWeek(weekId){
     rows+='<tr><td><strong>'+escHtml(emp.name||'Unnamed')+'</strong></td>'+cells+'<td style="text-align:right;font-weight:700;color:#111;">'+Math.round(tot)+'h</td></tr>';
   });
   rows+='<tr class="total-row"><td><strong>TOTAL</strong></td>'+days.map(function(day){var dt=0;emps.forEach(function(emp){var e=(w.entries||{})[tsKey(emp.id,day)];dt+=e&&e.h!==''?(parseFloat(e.h)||0):0;});return '<td style="text-align:center;font-weight:700;">'+(dt?Math.round(dt)+'h':'—')+'</td>';}).join('')+'<td style="text-align:right;font-weight:800;color:#f0c020;background:#1a1a1a!important;">'+Math.round(grandTot)+'h</td></tr>';
-  var meta='<div class="sec-hd">Week of '+escHtml(w.label||'')+(w.foreman?'  &nbsp;·&nbsp;  Foreman: '+escHtml(w.foreman):'')+(w.po?'  &nbsp;·&nbsp;  PO: '+escHtml(w.po):'')+'</div>';
+  var _tsproj2=_activeProjectId?getProjList().find(function(x){return x.id===_activeProjectId;}):null;
+  var meta='<div class="sec-hd">Week of '+escHtml(w.label||'')+(_tsproj2?'  &nbsp;·&nbsp;  '+escHtml(_tsproj2.name)+(_tsproj2.po?'  ·  PO: '+escHtml(_tsproj2.po):'')+(_tsproj2.foreman?'  ·  Foreman: '+escHtml(_tsproj2.foreman):''):'')+'</div>';
   var bodyHTML=meta+'<table><thead><tr><th>Employee</th>'+thDays+'<th style="text-align:right;">Total</th></tr></thead><tbody>'+rows+'</tbody></table>';
   var html=buildPrintHTML('Time Sheet',escHtml(w.label||'')+'  ·  '+now,bodyHTML);
   openExportSheet('JoltCalc Time Sheet',text,csvRows.join('\n'),html);
@@ -5586,6 +5650,31 @@ setCodeYear(_codeYear);
   <img id="lightbox-img" src="" alt="Photo">
 </div>
 
+<!-- Company Branding Modal -->
+<div class="co-modal-ov" id="co-modal-ov" onclick="closeCoModal()">
+  <div class="co-modal" onclick="event.stopPropagation()">
+    <div class="co-modal-title">Company Branding</div>
+    <div class="co-modal-sub">Appears in all exported PDFs &amp; reports</div>
+    <div class="co-field-lbl">Company Logo</div>
+    <div class="co-logo-row">
+      <img class="co-logo-preview" id="co-logo-preview" src="" alt="Logo">
+      <label class="co-logo-lbl">Upload Logo<input type="file" accept="image/*" style="display:none" onchange="coLogoChange(this)"></label>
+      <button class="co-logo-clear" id="co-logo-clear" onclick="coClearLogo()">Remove</button>
+    </div>
+    <div class="co-field-lbl">Company Name</div>
+    <input class="co-inp" id="co-company" type="text" placeholder="ABC Electric LLC">
+    <div class="co-field-lbl">Address</div>
+    <input class="co-inp" id="co-address" type="text" placeholder="123 Main St, City, ST 00000">
+    <div class="co-field-lbl">Phone / Cell</div>
+    <input class="co-inp" id="co-phone" type="tel" placeholder="(555) 000-0000">
+    <div class="co-field-lbl">Fax <span style="font-size:10px;color:#9ca3af;font-weight:400;text-transform:none;">(optional)</span></div>
+    <input class="co-inp" id="co-fax" type="tel" placeholder="(555) 000-0000">
+    <div class="co-field-lbl">Website <span style="font-size:10px;color:#9ca3af;font-weight:400;text-transform:none;">(optional)</span></div>
+    <input class="co-inp" id="co-website" type="url" placeholder="www.yourcompany.com">
+    <button class="co-save-btn" onclick="saveCoModal()">Save Branding</button>
+    <button class="co-cancel-btn" onclick="closeCoModal()">Cancel</button>
+  </div>
+</div>
 <!-- New Project Modal -->
 <div class="ts-aw-ov" id="new-proj-ov" onclick="closeNewProjModal()">
   <div class="ts-aw-modal" onclick="event.stopPropagation()">
@@ -5593,6 +5682,8 @@ setCodeYear(_codeYear);
     <div class="ts-aw-sub">Set up a new job project</div>
     <div class="ts-aw-label">Project Name</div>
     <input class="ts-aw-inp" id="np-name" type="text" placeholder="Project name…" autocomplete="off">
+    <div class="ts-aw-label">Foreman</div>
+    <input class="ts-aw-inp" id="np-foreman" type="text" placeholder="Foreman name…" autocomplete="off">
     <div class="ts-aw-label">PO Number</div>
     <input class="ts-aw-inp" id="np-po" type="text" placeholder="PO #…" autocomplete="off" onkeydown="if(event.key==='Enter')confirmNewProj()">
     <div class="ts-aw-btns">
@@ -5661,6 +5752,8 @@ setCodeYear(_codeYear);
     <div class="jc-menu-section-lbl">Projects</div>
     <div class="jc-menu-item" onclick="closeMenu();switchTab('notes',document.getElementById('tab-btn-notes'))"><span class="jc-menu-icon">📁</span>Projects</div>
     <div class="jc-menu-item" onclick="closeMenu();switchTab('notes',document.getElementById('tab-btn-notes'));openNewProjModal()"><span class="jc-menu-icon">➕</span>New Project</div>
+    <div class="jc-menu-section-lbl">Settings</div>
+    <div class="jc-menu-item" onclick="closeMenu();openCoModal()"><span class="jc-menu-icon">🏢</span>Company Branding</div>
     <div class="jc-menu-item" onclick="jcExportAllNotes();closeMenu()"><span class="jc-menu-icon">📤</span>Export All Notes</div>
     <div class="jc-menu-item" onclick="exportPunchAll();closeMenu()"><span class="jc-menu-icon">📤</span>Export Punch List</div>
   </div>
