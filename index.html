@@ -917,6 +917,35 @@
 .ts-wkstart-lbl{font-size:10px;font-weight:700;font-family:'Roboto Mono',monospace;color:#6b7280;white-space:nowrap;}
 .ts-wkstart-sel{background:#fff;border:1px solid #d1d5db;border-radius:6px;padding:6px 8px;font-size:11px;font-weight:700;font-family:'Roboto Mono',monospace;color:#374151;cursor:pointer;outline:none;}
 
+/* ── Settings Tab ── */
+.stg-inner{padding:16px 14px 60px;background:#f3f4f6;min-height:100%;}
+.stg-group{margin-bottom:20px;}
+.stg-group-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6b7280;font-family:'Roboto Mono',monospace;padding:0 4px 6px;}
+.stg-card{background:#fff;border-radius:12px;border:1px solid #e5e7eb;margin-bottom:8px;overflow:hidden;}
+.stg-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;}
+.stg-row-info{flex:1;min-width:0;}
+.stg-row-title{font-size:14px;font-weight:600;color:#111827;font-family:'Inter',sans-serif;}
+.stg-row-sub{font-size:11px;color:#9ca3af;font-family:'Inter',sans-serif;margin-top:2px;}
+.stg-tsz-btns{display:flex;gap:5px;}
+.stg-tsz-btn{width:38px;height:38px;background:#f3f4f6;border:1.5px solid #e5e7eb;border-radius:8px;cursor:pointer;color:#374151;font-family:'Inter',sans-serif;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0;flex-shrink:0;}
+.stg-tsz-btn:nth-child(1){font-size:11px;}
+.stg-tsz-btn:nth-child(2){font-size:15px;}
+.stg-tsz-btn:nth-child(3){font-size:19px;}
+.stg-tsz-btn:nth-child(4){font-size:23px;}
+.stg-tsz-btn.active{background:#f0c020;border-color:#d4a010;color:#1a1200;}
+.stg-cy-btns{display:flex;border:1.5px solid #e5e7eb;border-radius:8px;overflow:hidden;flex-shrink:0;}
+.stg-cy-btn{flex:1;background:#f3f4f6;border:none;border-right:1px solid #e5e7eb;padding:9px 6px;font-size:12px;font-weight:700;font-family:'Roboto Mono',monospace;color:#6b7280;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.stg-cy-btn:last-child{border-right:none;}
+.stg-cy-btn.active{background:#f0c020;color:#1a1200;}
+.stg-action-row{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.stg-action-row:active{background:#f9fafb;}
+.stg-action-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center;}
+.stg-action-arrow{font-size:20px;color:#d1d5db;flex-shrink:0;}
+.stg-danger-lbl{color:#dc2626 !important;}
+body.text-large{zoom:1.14;}
+body.text-xlarge{zoom:1.28;}
+body.text-xxlarge{zoom:1.45;}
+
 </style>
 <style>
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -994,6 +1023,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-dip" onclick="switchTab('dip',this)">Dip SW</button>
     <button class="tab-btn" id="tab-btn-wc" onclick="switchTab('wc',this)">Colors</button>
     <button class="tab-btn" id="tab-btn-notes" onclick="switchTab('notes',this)">Projects</button>
+    <button class="tab-btn" id="tab-btn-settings" onclick="switchTab('settings',this)">&#9881; Settings</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -2009,6 +2039,88 @@ if('serviceWorker' in navigator){
     </div>
   </div>
 
+
+  <div class="tab-panel" id="tab-settings">
+    <div class="stg-inner">
+
+      <div class="stg-group">
+        <div class="stg-group-lbl">Accessibility</div>
+        <div class="stg-card">
+          <div class="stg-row">
+            <div class="stg-row-info">
+              <div class="stg-row-title">Text Size</div>
+              <div class="stg-row-sub">Larger text for easier reading on site</div>
+            </div>
+            <div class="stg-tsz-btns">
+              <button class="stg-tsz-btn" data-size="normal" onclick="setTextSize('normal')" title="Normal">A</button>
+              <button class="stg-tsz-btn" data-size="large" onclick="setTextSize('large')" title="Large">A</button>
+              <button class="stg-tsz-btn" data-size="xlarge" onclick="setTextSize('xlarge')" title="X-Large">A</button>
+              <button class="stg-tsz-btn" data-size="xxlarge" onclick="setTextSize('xxlarge')" title="XX-Large">A</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stg-group">
+        <div class="stg-group-lbl">NEC Code Edition</div>
+        <div class="stg-card">
+          <div class="stg-row">
+            <div class="stg-row-info">
+              <div class="stg-row-title">Active Code Year</div>
+              <div class="stg-row-sub">Tables and ampacity calculations</div>
+            </div>
+            <div class="stg-cy-btns">
+              <button class="stg-cy-btn" id="stg-cy-2020" onclick="setCodeYear('2020')">2020</button>
+              <button class="stg-cy-btn" id="stg-cy-2023" onclick="setCodeYear('2023')">2023</button>
+              <button class="stg-cy-btn" id="stg-cy-2026" onclick="setCodeYear('2026')">2026</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stg-group">
+        <div class="stg-group-lbl">Company</div>
+        <div class="stg-card stg-action-row" onclick="openCoModal()">
+          <span class="stg-action-icon">&#127970;</span>
+          <div class="stg-row-info">
+            <div class="stg-row-title">Company Branding</div>
+            <div class="stg-row-sub">Logo, name and contact info for exports</div>
+          </div>
+          <span class="stg-action-arrow">&#8250;</span>
+        </div>
+      </div>
+
+      <div class="stg-group">
+        <div class="stg-group-lbl">App</div>
+        <div class="stg-card stg-action-row" onclick="openAbout()">
+          <span class="stg-action-icon">&#8505;&#65039;</span>
+          <div class="stg-row-info">
+            <div class="stg-row-title">About Circuitmatic</div>
+            <div class="stg-row-sub">Version, feedback and review</div>
+          </div>
+          <span class="stg-action-arrow">&#8250;</span>
+        </div>
+        <div class="stg-card stg-action-row" onclick="openPrivacyPolicy()">
+          <span class="stg-action-icon">&#128274;</span>
+          <div class="stg-row-info">
+            <div class="stg-row-title">Privacy Policy</div>
+            <div class="stg-row-sub">How your data is stored and used</div>
+          </div>
+          <span class="stg-action-arrow">&#8250;</span>
+        </div>
+        <div class="stg-card stg-action-row" onclick="clearAllAppData()">
+          <span class="stg-action-icon">&#128465;&#65039;</span>
+          <div class="stg-row-info">
+            <div class="stg-row-title stg-danger-lbl">Clear All Data</div>
+            <div class="stg-row-sub">Erase all saved notes, projects and punch items</div>
+          </div>
+          <span class="stg-action-arrow">&#8250;</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <div class="tab-panel" id="tab-notes" style="padding:14px 14px 80px;background:#f3f4f6;">
     <!-- Project List View -->
     <div id="proj-list-view">
@@ -2522,6 +2634,21 @@ document.addEventListener('click',function(e){
   var w=document.querySelector('.calc-srch-wrap');
   if(w&&!w.contains(e.target)){var dd=document.getElementById('calc-srch-dd');if(dd){dd.classList.remove('open');dd.innerHTML='';}}
 });
+// ── Text Size (Accessibility) ──
+var _textSize=localStorage.getItem('jc_text_size')||'normal';
+function setTextSize(size,init){
+  _textSize=size;
+  if(!init)localStorage.setItem('jc_text_size',size);
+  document.body.classList.remove('text-large','text-xlarge','text-xxlarge');
+  if(size!=='normal')document.body.classList.add('text-'+size);
+  document.querySelectorAll('.stg-tsz-btn').forEach(function(b){b.classList.toggle('active',b.dataset.size===size);});
+}
+// ── Clear All App Data ──
+function clearAllAppData(){
+  if(!confirm('This will permanently erase ALL saved notes, projects, punch items and settings. Continue?'))return;
+  localStorage.clear();
+  location.reload();
+}
 // ── Code Year ──
 var _codeYear=localStorage.getItem('jc_code_year')||'2026';
 function setCodeYear(year){
@@ -2530,6 +2657,9 @@ function setCodeYear(year){
   document.querySelectorAll('.code-year-btn').forEach(function(b){b.classList.remove('active');});
   var btn=document.getElementById('cy-'+year);
   if(btn)btn.classList.add('active');
+  document.querySelectorAll('.stg-cy-btn').forEach(function(b){b.classList.remove('active');});
+  var sb=document.getElementById('stg-cy-'+year);
+  if(sb)sb.classList.add('active');
 }
 // ── Save to Notes ──
 var _jcPending=null;
@@ -6217,6 +6347,13 @@ window.addEventListener('load',function(){
     var s=document.getElementById('jc-splash');
     if(s){s.classList.add('fade-out');setTimeout(function(){s.style.display='none';},650);}
   },1100);
+  // Init text size
+  setTextSize(localStorage.getItem('jc_text_size')||'normal',true);
+  // Init settings code year buttons
+  var _sy=localStorage.getItem('jc_code_year')||'2026';
+  document.querySelectorAll('.stg-cy-btn').forEach(function(b){b.classList.remove('active');});
+  var _sb=document.getElementById('stg-cy-'+_sy);
+  if(_sb)_sb.classList.add('active');
 });
 
 </script>
