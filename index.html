@@ -959,7 +959,11 @@ body.high-contrast .stg-card{background:#0a0e16;}
 .stg-material-btn{flex:1;background:#f3f4f6;border:none;border-right:1px solid #e5e7eb;padding:9px 16px;font-size:12px;font-weight:700;font-family:'Roboto Mono',monospace;color:#6b7280;cursor:pointer;transition:all .15s;}
 .stg-material-btn:last-child{border-right:none;}
 .stg-material-btn.active{background:#f0c020;color:#1a1200;}
-
+.stg-overlay{position:fixed;inset:0;background:#f3f4f6;z-index:800;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;}
+.stg-overlay.open{display:block;}
+.stg-overlay-head{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 14px) 16px 14px;background:#0d1018;border-bottom:1px solid rgba(240,192,32,.22);position:sticky;top:0;z-index:1;}
+.stg-overlay-title{font-family:'Orbitron',sans-serif;font-size:15px;color:#f0c020;letter-spacing:.04em;}
+.stg-overlay-close{background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;padding:4px 6px;line-height:1;}
 </style>
 <style>
   @keyframes spin{to{transform:rotate(360deg)}}
@@ -1037,7 +1041,6 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-dip" onclick="switchTab('dip',this)">Dip SW</button>
     <button class="tab-btn" id="tab-btn-wc" onclick="switchTab('wc',this)">Colors</button>
     <button class="tab-btn" id="tab-btn-notes" onclick="switchTab('notes',this)">Projects</button>
-    <button class="tab-btn" id="tab-btn-settings" onclick="switchTab('settings',this)">&#9881; Settings</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -2054,8 +2057,9 @@ if('serviceWorker' in navigator){
   </div>
 
 
-  <div class="tab-panel" id="tab-settings">
-    <div class="stg-inner">
+<div class="stg-overlay" id="stg-overlay">
+  <div class="stg-overlay-head"><span class="stg-overlay-title">&#9881; Settings</span><button class="stg-overlay-close" onclick="closeSettings()">&#x2715;</button></div>
+  <div class="stg-inner">
 
       <div class="stg-group">
         <div class="stg-group-lbl">Accessibility</div>
@@ -2148,23 +2152,7 @@ if('serviceWorker' in navigator){
       </div>
 
       <div class="stg-group">
-        <div class="stg-group-lbl">App</div>
-        <div class="stg-card stg-action-row" onclick="openAbout()">
-          <span class="stg-action-icon">&#8505;&#65039;</span>
-          <div class="stg-row-info">
-            <div class="stg-row-title">About Circuitmatic</div>
-            <div class="stg-row-sub">Version, feedback and review</div>
-          </div>
-          <span class="stg-action-arrow">&#8250;</span>
-        </div>
-        <div class="stg-card stg-action-row" onclick="openPrivacyPolicy()">
-          <span class="stg-action-icon">&#128274;</span>
-          <div class="stg-row-info">
-            <div class="stg-row-title">Privacy Policy</div>
-            <div class="stg-row-sub">How your data is stored and used</div>
-          </div>
-          <span class="stg-action-arrow">&#8250;</span>
-        </div>
+        <div class="stg-group-lbl">Data</div>
         <div class="stg-card stg-action-row" onclick="clearAllAppData()">
           <span class="stg-action-icon">&#128465;&#65039;</span>
           <div class="stg-row-info">
@@ -2175,8 +2163,8 @@ if('serviceWorker' in navigator){
         </div>
       </div>
 
-    </div>
   </div>
+</div>
 
   <div class="tab-panel" id="tab-notes" style="padding:14px 14px 80px;background:#f3f4f6;">
     <!-- Project List View -->
@@ -2878,6 +2866,8 @@ function fmtPhone(inp){
   inp.value=out;
 }
 // ── About & Privacy ───────────────────────────
+function openSettings(){document.getElementById('stg-overlay').classList.add('open');}
+function closeSettings(){document.getElementById('stg-overlay').classList.remove('open');}
 function openAbout(){document.getElementById('about-ov').classList.add('open');}
 function closeAbout(){document.getElementById('about-ov').classList.remove('open');}
 function openPrivacyPolicy(){document.getElementById('pp-ov').classList.add('open');}
@@ -6699,7 +6689,7 @@ window.addEventListener('load',function(){
     <div class="jc-menu-item" onclick="closeMenu();switchTab('notes',document.getElementById('tab-btn-notes'))"><span class="jc-menu-icon">📁</span>Projects</div>
     <div class="jc-menu-item" onclick="closeMenu();switchTab('notes',document.getElementById('tab-btn-notes'));openNewProjModal()"><span class="jc-menu-icon">➕</span>New Project</div>
     <div class="jc-menu-section-lbl">Settings</div>
-    <div class="jc-menu-item" onclick="closeMenu();switchTab('settings',document.getElementById('tab-btn-settings'))"><span class="jc-menu-icon">&#9881;&#65039;</span>Settings</div>
+    <div class="jc-menu-item" onclick="closeMenu();openSettings()"><span class="jc-menu-icon">&#9881;&#65039;</span>Settings</div>
     <div class="jc-menu-item" onclick="closeMenu();openCoModal()"><span class="jc-menu-icon">🏢</span>Company Branding</div>
     <div class="jc-menu-section-lbl">App</div>
     <div class="jc-menu-item" onclick="closeMenu();openAbout()"><span class="jc-menu-icon">ℹ️</span>About</div>
