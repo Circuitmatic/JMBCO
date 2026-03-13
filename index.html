@@ -661,7 +661,25 @@
 /* ── Projects ── */
 .proj-list-header{display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px;}
 .proj-list-title{font-size:18px;font-weight:800;font-family:'Inter',sans-serif;color:#111827;}
-.proj-create-btn{background:#f0c020;color:#1a1200;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
+.proj-hd-btns{display:flex;gap:6px;align-items:center;}
+.proj-create-btn{background:#f0c020;color:#1a1200;border:none;border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
+.proj-export-btn{background:#f3f4f6;color:#374151;border:1px solid #d1d5db;border-radius:7px;padding:7px 12px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
+.proj-export-btn:active{background:#e5e7eb;}
+/* Export Project Modal */
+.pe-modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:900;align-items:flex-end;}
+.pe-modal-ov.open{display:flex;}
+.pe-modal{background:#fff;border-radius:16px 16px 0 0;padding:22px 18px 36px;width:100%;box-sizing:border-box;}
+.pe-modal-title{font-size:15px;font-weight:700;font-family:'Inter',sans-serif;color:#111827;margin-bottom:3px;}
+.pe-modal-sub{font-size:12px;color:#9ca3af;font-family:'Inter',sans-serif;margin-bottom:16px;}
+.pe-field-lbl{font-size:10px;font-weight:700;font-family:'Inter',sans-serif;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
+.pe-select{width:100%;background:#f9fafb;border:1px solid #d1d5db;border-radius:8px;padding:10px 12px;font-size:13px;font-family:'Inter',sans-serif;color:#111827;outline:none;margin-bottom:16px;cursor:pointer;}
+.pe-select:focus{border-color:#f0c020;}
+.pe-fmt-btns{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.pe-fmt-btn{width:100%;display:flex;align-items:center;gap:12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:13px 16px;cursor:pointer;font-family:'Inter',sans-serif;text-align:left;}
+.pe-fmt-btn-icon{font-size:20px;flex-shrink:0;}
+.pe-fmt-btn-lbl{font-size:13px;font-weight:600;color:#111827;}
+.pe-fmt-btn-sub{font-size:11px;color:#9ca3af;margin-top:1px;}
+.pe-cancel{width:100%;background:none;border:none;padding:10px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;color:#9ca3af;cursor:pointer;}
 .proj-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.07);transition:box-shadow .15s;}
 .proj-card:active{box-shadow:0 0 0 2px #f0c020;}
 .proj-card-hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;}
@@ -1896,7 +1914,10 @@ if('serviceWorker' in navigator){
     <div id="proj-list-view">
       <div class="proj-list-header">
         <div class="proj-list-title">Projects</div>
-        <button class="proj-create-btn" onclick="openNewProjModal()">+ New Project</button>
+        <div class="proj-hd-btns">
+          <button class="proj-export-btn" onclick="openProjExportModal()">Export Project</button>
+          <button class="proj-create-btn" onclick="openNewProjModal()">+ New</button>
+        </div>
       </div>
       <div id="proj-list"></div>
     </div>
@@ -2560,6 +2581,130 @@ function saveCoModal(){
   if(!co.logo||co.logo===window.location.href)co.logo='';
   localStorage.setItem('jc_company',JSON.stringify(co));
   closeCoModal();
+}
+// ── Export Project ────────────────────────────
+function openProjExportModal(){
+  var projects=getProjList();
+  var sel=document.getElementById('pe-proj-sel');
+  if(!projects.length){alert('No projects to export.');return;}
+  sel.innerHTML=projects.map(function(p){return '<option value="'+p.id+'">'+escHtml(p.name)+'</option>';}).join('');
+  document.getElementById('pe-modal-ov').classList.add('open');
+}
+function closeProjExportModal(){document.getElementById('pe-modal-ov').classList.remove('open');}
+function _getProjData(projId){
+  var proj=getProjList().find(function(p){return p.id===projId;});
+  var notes=JSON.parse(localStorage.getItem('jc_notes')||'[]').filter(function(n){return n.projectId===projId;});
+  var punch=JSON.parse(localStorage.getItem('jc_punch')||'[]').filter(function(i){return i.projectId===projId;});
+  var weeks=JSON.parse(localStorage.getItem('jc_ts')||'[]').filter(function(w){return w.projectId===projId;});
+  return{proj:proj,notes:notes,punch:punch,weeks:weeks};
+}
+function doProjExport(fmt){
+  var sel=document.getElementById('pe-proj-sel');
+  var projId=parseInt(sel.value,10);
+  var d=_getProjData(projId);
+  if(!d.proj){closeProjExportModal();return;}
+  closeProjExportModal();
+  if(fmt==='json'){
+    var blob=new Blob([JSON.stringify({project:d.proj,notes:d.notes,punch:d.punch,timesheets:d.weeks},null,2)],{type:'application/json'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download=d.proj.name.replace(/[^a-z0-9]/gi,'_')+'.json';a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);},1000);
+    return;
+  }
+  var now=_fmtDate();
+  var emps=tsGetEmps();
+  if(fmt==='csv'){
+    var rows=['Project Export — '+escHtml(d.proj.name),'Generated: '+now,''];
+    rows.push('PROJECT INFO');
+    rows.push('"Field","Value"');
+    rows.push('"Project Name","'+d.proj.name.replace(/"/g,'""')+'"');
+    rows.push('"PO #","'+(d.proj.po||'').replace(/"/g,'""')+'"');
+    rows.push('"Foreman","'+(d.proj.foreman||'').replace(/"/g,'""')+'"');
+    rows.push('"Created","'+new Date(d.proj.created).toLocaleDateString()+'"');
+    if(d.notes.length){
+      rows.push('');rows.push('SAVED NOTES');
+      rows.push('"Title","Calculator","Date","Field","Value","Details"');
+      d.notes.forEach(function(n){
+        var base=['"'+n.title.replace(/"/g,'""')+'","'+(n.tabName||'').replace(/"/g,'""')+'","'+new Date(n.ts).toLocaleDateString()+'"'];
+        if(n.lines&&n.lines.length){n.lines.forEach(function(l){rows.push(base.join('')+',"'+(l.label||l.lbl||'').replace(/"/g,'""')+'","'+String(l.val||l.value||'').replace(/"/g,'""')+'","'+(l.sub||l.desc||'').replace(/"/g,'""')+'"');});}
+        else{rows.push(base.join('')+',"","",""');}
+      });
+    }
+    if(d.punch.length){
+      rows.push('');rows.push('PUNCH LIST');
+      rows.push('"Item","Status","Notes"');
+      d.punch.forEach(function(i){rows.push('"'+i.title.replace(/"/g,'""')+'","'+(i.done?'Done':'Open')+'","'+(i.notes||'').replace(/"/g,'""')+'"');});
+    }
+    if(d.weeks.length){
+      rows.push('');rows.push('TIMESHEETS');
+      var days=['Mon','Tue','Wed','Thu','Fri'];
+      rows.push('"Week","Employee",'+days.map(function(d){return '"'+d+'"';}).join(',')+',Sat,Sun,"Total"');
+      d.weeks.forEach(function(w){
+        var wLabel=new Date(w.weekStart+'T00:00:00').toLocaleDateString();
+        var allDays=days.concat(w.showSat?['Sat']:[]).concat(w.showSun?['Sun']:[]);
+        emps.forEach(function(emp){
+          var hrs=allDays.map(function(dy){var e=(w.entries||{})[emp.id+'_'+dy]||{};return e.h||0;});
+          var tot=hrs.reduce(function(a,b){return a+parseFloat(b||0);},0);
+          rows.push('"'+wLabel+'","'+emp.name.replace(/"/g,'""')+'",'+hrs.join(',')+','+(w.showSat?'':',')+(w.showSun?'':'')+'"'+tot+'"');
+        });
+      });
+    }
+    var blob=new Blob([rows.join('\n')],{type:'text/csv'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.href=url;a.download=d.proj.name.replace(/[^a-z0-9]/gi,'_')+'.csv';a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);},1000);
+    return;
+  }
+  // PDF
+  var body='';
+  // Project info block
+  body+='<div class="sec-hd">Project Information</div>';
+  body+='<table class="kv-table"><tbody>';
+  body+='<tr><td>Project Name</td><td><strong>'+escHtml(d.proj.name)+'</strong></td></tr>';
+  if(d.proj.po)body+='<tr><td>PO Number</td><td>'+escHtml(d.proj.po)+'</td></tr>';
+  if(d.proj.foreman)body+='<tr><td>Foreman</td><td>'+escHtml(d.proj.foreman)+'</td></tr>';
+  body+='<tr><td>Created</td><td>'+new Date(d.proj.created).toLocaleDateString()+'</td></tr>';
+  body+='</tbody></table>';
+  // Notes
+  if(d.notes.length){
+    body+='<div class="sec-hd">Saved Notes ('+d.notes.length+')</div>';
+    d.notes.forEach(function(n){
+      body+='<div style="margin-bottom:14px;"><div style="font-weight:700;font-size:13px;margin-bottom:4px;">'+escHtml(n.title)+'</div>';
+      body+='<div style="font-size:10px;color:#9ca3af;margin-bottom:6px;">'+escHtml(n.tabName||'')+'&nbsp;·&nbsp;'+new Date(n.ts).toLocaleDateString()+'</div>';
+      if(n.lines&&n.lines.length){
+        body+='<table class="kv-table"><thead><tr><th>Field</th><th>Value</th><th>Details</th></tr></thead><tbody>';
+        n.lines.forEach(function(l){body+='<tr><td>'+escHtml(l.label||l.lbl||'')+'</td><td><strong>'+escHtml(String(l.val||l.value||''))+'</strong></td><td style="color:#6b7280;font-size:11px;">'+escHtml(l.sub||l.desc||'')+'</td></tr>';});
+        body+='</tbody></table>';
+      }
+      body+='</div>';
+    });
+  }
+  // Punch list
+  if(d.punch.length){
+    body+='<div class="sec-hd">Punch List ('+d.punch.length+')</div>';
+    body+='<table class="kv-table"><thead><tr><th>Item</th><th>Status</th><th>Notes</th></tr></thead><tbody>';
+    d.punch.forEach(function(i){body+='<tr><td>'+escHtml(i.title)+'</td><td>'+(i.done?'✅ Done':'⬜ Open')+'</td><td style="color:#6b7280;font-size:11px;">'+escHtml(i.notes||'')+'</td></tr>';});
+    body+='</tbody></table>';
+  }
+  // Timesheets
+  if(d.weeks.length){
+    body+='<div class="sec-hd">Timesheets ('+d.weeks.length+' week'+(d.weeks.length>1?'s':'')+')</div>';
+    d.weeks.forEach(function(w){
+      var mon=new Date(w.weekStart+'T00:00:00');
+      var wDays=['Mon','Tue','Wed','Thu','Fri'].concat(w.showSat?['Sat']:[]).concat(w.showSun?['Sun']:[]);
+      body+='<div style="font-weight:700;font-size:12px;margin:10px 0 4px;">Week of '+mon.toLocaleDateString()+'</div>';
+      body+='<table class="kv-table"><thead><tr><th>Employee</th>'+wDays.map(function(dy){return '<th>'+dy+'</th>';}).join('')+'<th>Total</th></tr></thead><tbody>';
+      emps.forEach(function(emp){
+        var tot=0;
+        var cells=wDays.map(function(dy){var e=(w.entries||{})[emp.id+'_'+dy]||{};var h=parseFloat(e.h||0);tot+=h;return '<td style="text-align:center;">'+(h||'—')+(e.type&&e.type!=='ST'?'<br><span style="font-size:9px;color:#9ca3af;">'+e.type+'</span>':'')+'</td>';}).join('');
+        body+='<tr><td>'+escHtml(emp.name)+'</td>'+cells+'<td style="text-align:center;font-weight:700;">'+Math.round(tot*10)/10+'h</td></tr>';
+      });
+      body+='</tbody></table>';
+    });
+  }
+  var html=buildPrintHTML(d.proj.name,'Project Export &nbsp;·&nbsp; '+now,body);
+  var w2=window.open('','_blank');
+  if(w2){w2.document.write(html+'<scr'+'ipt>setTimeout(function(){window.print();},400);<\/scr'+'ipt>');w2.document.close();}
 }
 // ──────────────────────────────────────────────
 // ── Projects ──────────────────────────────────
@@ -5809,6 +5954,30 @@ setCodeYear(_codeYear);
     <input class="co-inp" id="co-license" type="text" placeholder="EC-000000">
     <button class="co-save-btn" onclick="saveCoModal()">Save Branding</button>
     <button class="co-cancel-btn" onclick="closeCoModal()">Cancel</button>
+  </div>
+</div>
+<!-- Export Project Modal -->
+<div class="pe-modal-ov" id="pe-modal-ov" onclick="closeProjExportModal()">
+  <div class="pe-modal" onclick="event.stopPropagation()">
+    <div class="pe-modal-title">Export Project</div>
+    <div class="pe-modal-sub">Choose a project and export format</div>
+    <div class="pe-field-lbl">Project</div>
+    <select class="pe-select" id="pe-proj-sel"></select>
+    <div class="pe-fmt-btns">
+      <button class="pe-fmt-btn" onclick="doProjExport('pdf')">
+        <span class="pe-fmt-btn-icon">📄</span>
+        <div><div class="pe-fmt-btn-lbl">PDF / Print</div><div class="pe-fmt-btn-sub">Full report — project info, notes, punch list, timesheets</div></div>
+      </button>
+      <button class="pe-fmt-btn" onclick="doProjExport('csv')">
+        <span class="pe-fmt-btn-icon">📊</span>
+        <div><div class="pe-fmt-btn-lbl">CSV</div><div class="pe-fmt-btn-sub">Spreadsheet-ready — one sheet per data type</div></div>
+      </button>
+      <button class="pe-fmt-btn" onclick="doProjExport('json')">
+        <span class="pe-fmt-btn-icon">🗂️</span>
+        <div><div class="pe-fmt-btn-lbl">JSON</div><div class="pe-fmt-btn-sub">Full data backup — all project records</div></div>
+      </button>
+    </div>
+    <button class="pe-cancel" onclick="closeProjExportModal()">Cancel</button>
   </div>
 </div>
 <!-- New Project Modal -->
