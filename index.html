@@ -42,6 +42,24 @@
     --neutral-bg:#fafafa;
     --neutral-bdr:#d4d4d4;
   }
+body.light-mode {
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --surface: #f8f9fb;
+  --surface2: #eef0f4;
+  --border: #d8dde6;
+  --border2: #c8cfd9;
+  --text: #0f1923;
+  --sub: #4a6070;
+  --muted: #7a8fa0;
+}
+body.light-mode .calc-wrap { background: var(--card); }
+body.light-mode .tab-bar { background: #ffffff; border-bottom: 1px solid #e0e4ea; }
+body.light-mode .tab-btn { color: #6b7280; }
+body.light-mode .tab-btn.active { color: #1a1200; background: #f0c020; border-radius: 8px; }
+body.light-mode .calc-home-lbl { color: #c9a010; }
+body.light-mode .menu-btn { color: #c9a010; }
+body.light-mode body { background: var(--bg); }
 
   html {
     height: 100%;
@@ -2062,11 +2080,20 @@ if('serviceWorker' in navigator){
   <div class="stg-inner">
 
       <div class="stg-group">
-        <div class="stg-group-lbl">Accessibility</div>
+        <div class="stg-group-lbl" data-i18n="stg-accessibility">Accessibility</div>
+        <div class="stg-card">
+          <div class="stg-toggle-row">
+            <div class="stg-toggle-info">
+              <div class="stg-row-title" data-i18n="stg-light-mode">&#9728; Light Mode</div>
+              <div class="stg-row-sub" data-i18n="stg-light-mode-sub">Switch to light background</div>
+            </div>
+            <label class="stg-toggle"><input type="checkbox" id="stg-light-mode-cb" onchange="setLightMode(this.checked)"><span class="stg-toggle-track"></span><span class="stg-toggle-thumb"></span></label>
+          </div>
+        </div>
         <div class="stg-card">
           <div class="stg-row">
             <div class="stg-row-info">
-              <div class="stg-row-title">Text Size</div>
+              <div class="stg-row-title" data-i18n="stg-text-size">Text Size</div>
               <div class="stg-row-sub">Larger text for easier reading on site</div>
             </div>
             <div class="stg-tsz-btns">
@@ -2080,7 +2107,7 @@ if('serviceWorker' in navigator){
         <div class="stg-card">
           <div class="stg-toggle-row">
             <div class="stg-toggle-info">
-              <div class="stg-row-title">&#128064; High Contrast</div>
+              <div class="stg-row-title" data-i18n="stg-high-contrast">&#128064; High Contrast</div>
               <div class="stg-row-sub">Brighter text for glare &amp; direct sunlight</div>
             </div>
             <label class="stg-toggle"><input type="checkbox" id="stg-high-contrast-cb" onchange="setHighContrast(this.checked)"><span class="stg-toggle-track"></span><span class="stg-toggle-thumb"></span></label>
@@ -2089,7 +2116,7 @@ if('serviceWorker' in navigator){
         <div class="stg-card">
           <div class="stg-toggle-row">
             <div class="stg-toggle-info">
-              <div class="stg-row-title">&#9728; Keep Screen Awake</div>
+              <div class="stg-row-title" data-i18n="stg-keep-awake">&#9728; Keep Screen Awake</div>
               <div class="stg-row-sub">Prevent phone from sleeping mid-calculation</div>
             </div>
             <label class="stg-toggle"><input type="checkbox" id="stg-keep-awake-cb" onchange="setKeepAwake(this.checked)"><span class="stg-toggle-track"></span><span class="stg-toggle-thumb"></span></label>
@@ -2098,7 +2125,7 @@ if('serviceWorker' in navigator){
         <div class="stg-card">
           <div class="stg-toggle-row">
             <div class="stg-toggle-info">
-              <div class="stg-row-title">&#128243; Haptic Feedback</div>
+              <div class="stg-row-title" data-i18n="stg-haptics">&#128243; Haptic Feedback</div>
               <div class="stg-row-sub">Vibration on button taps</div>
             </div>
             <label class="stg-toggle"><input type="checkbox" id="stg-haptics-cb" onchange="setHaptics(this.checked)"><span class="stg-toggle-track"></span><span class="stg-toggle-thumb"></span></label>
@@ -2107,11 +2134,11 @@ if('serviceWorker' in navigator){
       </div>
 
       <div class="stg-group">
-        <div class="stg-group-lbl">Field Defaults</div>
+        <div class="stg-group-lbl" data-i18n="stg-field-defaults">Field Defaults</div>
         <div class="stg-card">
           <div class="stg-row">
             <div class="stg-row-info">
-              <div class="stg-row-title">Default Wire Material</div>
+              <div class="stg-row-title" data-i18n="stg-wire-material">Default Wire Material</div>
               <div class="stg-row-sub">Pre-selects conductor type in calculators</div>
             </div>
             <div class="stg-material-btns">
@@ -2120,10 +2147,34 @@ if('serviceWorker' in navigator){
             </div>
           </div>
         </div>
+        <div class="stg-card">
+          <div class="stg-row">
+            <div class="stg-row-info">
+              <div class="stg-row-title" data-i18n="stg-distance-units">Distance Units</div>
+              <div class="stg-row-sub" data-i18n="stg-distance-units-sub">Used in voltage drop and conduit calculations</div>
+            </div>
+            <div class="stg-material-btns">
+              <button class="stg-material-btn stg-unit-btn" data-unit="ft" onclick="setUnits('ft')">ft</button>
+              <button class="stg-material-btn stg-unit-btn" data-unit="m" onclick="setUnits('m')">m</button>
+            </div>
+          </div>
+        </div>
+        <div class="stg-card">
+          <div class="stg-row">
+            <div class="stg-row-info">
+              <div class="stg-row-title" data-i18n="stg-language">Language</div>
+              <div class="stg-row-sub" data-i18n="stg-language-sub">App display language</div>
+            </div>
+            <div class="stg-material-btns">
+              <button class="stg-material-btn stg-lang-btn" data-lang="en" onclick="applyLang('en')">EN</button>
+              <button class="stg-material-btn stg-lang-btn" data-lang="es" onclick="applyLang('es')">ES</button>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="stg-group">
-        <div class="stg-group-lbl">NEC Code Edition</div>
+        <div class="stg-group-lbl" data-i18n="stg-nec">NEC Code Edition</div>
         <div class="stg-card">
           <div class="stg-row">
             <div class="stg-row-info">
@@ -2139,13 +2190,24 @@ if('serviceWorker' in navigator){
         </div>
       </div>
 
+      <div class="stg-group">
+        <div class="stg-group-lbl">Company</div>
+        <div class="stg-card stg-action-row" onclick="openCoModal()">
+          <span class="stg-action-icon">&#127970;</span>
+          <div class="stg-row-info">
+            <div class="stg-row-title">Company Branding</div>
+            <div class="stg-row-sub">Logo, name and contact info for exports</div>
+          </div>
+          <span class="stg-action-arrow">&#8250;</span>
+        </div>
+      </div>
 
       <div class="stg-group">
-        <div class="stg-group-lbl">Data</div>
+        <div class="stg-group-lbl" data-i18n="stg-data">Data</div>
         <div class="stg-card stg-action-row" onclick="clearAllAppData()">
           <span class="stg-action-icon">&#128465;&#65039;</span>
           <div class="stg-row-info">
-            <div class="stg-row-title stg-danger-lbl">Clear All Data</div>
+            <div class="stg-row-title stg-danger-lbl" data-i18n="stg-clear">Clear All Data</div>
             <div class="stg-row-sub">Erase all saved notes, projects and punch items</div>
           </div>
           <span class="stg-action-arrow">&#8250;</span>
@@ -2676,6 +2738,101 @@ function setTextSize(size,init){
   document.body.classList.remove('text-large','text-xlarge','text-xxlarge');
   if(size!=='normal')document.body.classList.add('text-'+size);
   document.querySelectorAll('.stg-tsz-btn').forEach(function(b){b.classList.toggle('active',b.dataset.size===size);});
+}
+// ── Dark / Light Mode ──
+var _lightMode = localStorage.getItem('jc_light_mode') === '1';
+function setLightMode(on, init) {
+  _lightMode = !!on;
+  if (!init) localStorage.setItem('jc_light_mode', on ? '1' : '0');
+  document.body.classList.toggle('light-mode', _lightMode);
+  var cb = document.getElementById('stg-light-mode-cb');
+  if (cb) cb.checked = _lightMode;
+}
+// ── Units ──
+var _units = localStorage.getItem('jc_units') || 'ft';
+function setUnits(u, init) {
+  _units = u;
+  if (!init) localStorage.setItem('jc_units', u);
+  document.querySelectorAll('.stg-unit-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.unit === u); });
+  document.querySelectorAll('.unit-label-dist').forEach(function(el) { el.textContent = u; });
+}
+// ── Language ──
+var _lang = localStorage.getItem('jc_lang') || 'en';
+var _i18n = {
+  en: {
+    'tab-vd': 'V.Drop', 'tab-amp': 'Amps', 'tab-cf': 'Conduit', 'tab-bf': 'Box Fill',
+    'tab-mc': 'Motor', 'tab-fr': 'Fracs', 'tab-dip': 'Dip SW', 'tab-wc': 'Colors',
+    'tab-notes': 'Projects',
+    'sec-objective': 'Objective', 'sec-config': 'Configuration', 'sec-results': 'Results',
+    'lbl-calculate': 'Calculate', 'lbl-type': 'Type', 'lbl-voltage': 'Voltage',
+    'lbl-phase': 'Phase', 'lbl-material': 'Material', 'lbl-size': 'Wire Size',
+    'lbl-length': 'One-Way Length', 'lbl-load': 'Load',
+    'btn-calculate': 'Calculate', 'btn-reset': 'Reset',
+    'menu-projects': 'Projects', 'menu-new-project': 'New Project',
+    'menu-settings': 'Settings', 'menu-company': 'Company Branding',
+    'menu-about': 'About', 'menu-privacy': 'Privacy Policy',
+    'menu-export-notes': 'Export All Notes', 'menu-export-punch': 'Export Punch List',
+    'stg-accessibility': 'Accessibility', 'stg-field-defaults': 'Field Defaults',
+    'stg-nec': 'NEC Code Edition', 'stg-data': 'Data',
+    'stg-light-mode': 'Light Mode', 'stg-light-mode-sub': 'Switch to light background',
+    'stg-text-size': 'Text Size', 'stg-text-size-sub': 'Larger text for easier reading on site',
+    'stg-high-contrast': 'High Contrast', 'stg-high-contrast-sub': 'Brighter text for glare & direct sunlight',
+    'stg-keep-awake': 'Keep Screen Awake', 'stg-keep-awake-sub': 'Prevent phone from sleeping mid-calculation',
+    'stg-haptics': 'Haptic Feedback', 'stg-haptics-sub': 'Vibration on button taps',
+    'stg-wire-material': 'Default Wire Material', 'stg-wire-material-sub': 'Pre-selects conductor type in calculators',
+    'stg-distance-units': 'Distance Units', 'stg-distance-units-sub': 'Used in voltage drop and conduit calculations',
+    'stg-code-year': 'Active Code Year', 'stg-code-year-sub': 'Tables and ampacity calculations',
+    'stg-clear': 'Clear All Data', 'stg-clear-sub': 'Erase all saved notes, projects and punch items',
+    'stg-language': 'Language', 'stg-language-sub': 'App display language'
+  },
+  es: {
+    'tab-vd': 'Caída V', 'tab-amp': 'Amperios', 'tab-cf': 'Conduit', 'tab-bf': 'Caja',
+    'tab-mc': 'Motor', 'tab-fr': 'Fracs', 'tab-dip': 'Dip SW', 'tab-wc': 'Colores',
+    'tab-notes': 'Proyectos',
+    'sec-objective': 'Objetivo', 'sec-config': 'Configuración', 'sec-results': 'Resultados',
+    'lbl-calculate': 'Calcular', 'lbl-type': 'Tipo', 'lbl-voltage': 'Voltaje',
+    'lbl-phase': 'Fase', 'lbl-material': 'Material', 'lbl-size': 'Calibre',
+    'lbl-length': 'Longitud (un sentido)', 'lbl-load': 'Carga',
+    'btn-calculate': 'Calcular', 'btn-reset': 'Reiniciar',
+    'menu-projects': 'Proyectos', 'menu-new-project': 'Nuevo Proyecto',
+    'menu-settings': 'Configuración', 'menu-company': 'Empresa',
+    'menu-about': 'Acerca de', 'menu-privacy': 'Privacidad',
+    'menu-export-notes': 'Exportar Notas', 'menu-export-punch': 'Exportar Lista',
+    'stg-accessibility': 'Accesibilidad', 'stg-field-defaults': 'Valores Predeterminados',
+    'stg-nec': 'Edición del Código NEC', 'stg-data': 'Datos',
+    'stg-light-mode': 'Modo Claro', 'stg-light-mode-sub': 'Cambiar a fondo claro',
+    'stg-text-size': 'Tamaño de Texto', 'stg-text-size-sub': 'Texto más grande para leer en obra',
+    'stg-high-contrast': 'Alto Contraste', 'stg-high-contrast-sub': 'Texto más brillante para luz solar directa',
+    'stg-keep-awake': 'Mantener Pantalla Activa', 'stg-keep-awake-sub': 'Evita que el teléfono se duerma al calcular',
+    'stg-haptics': 'Vibración', 'stg-haptics-sub': 'Vibración al tocar botones',
+    'stg-wire-material': 'Material de Conductor', 'stg-wire-material-sub': 'Preselecciona el tipo de conductor',
+    'stg-distance-units': 'Unidades de Distancia', 'stg-distance-units-sub': 'Usado en caída de voltaje y conduit',
+    'stg-code-year': 'Año de Código Activo', 'stg-code-year-sub': 'Tablas y cálculos de amperaje',
+    'stg-clear': 'Borrar Todos los Datos', 'stg-clear-sub': 'Eliminar notas, proyectos y listas',
+    'stg-language': 'Idioma', 'stg-language-sub': 'Idioma de la aplicación'
+  }
+};
+function applyLang(lang, init) {
+  _lang = lang;
+  if (!init) localStorage.setItem('jc_lang', lang);
+  var t = _i18n[lang] || _i18n['en'];
+  // Tab bar
+  var tabMap = {'tab-btn-vd':'tab-vd','tab-btn-amp':'tab-amp','tab-btn-cf':'tab-cf',
+    'tab-btn-bf':'tab-bf','tab-btn-mc':'tab-mc','tab-btn-fr':'tab-fr',
+    'tab-btn-dip':'tab-dip','tab-btn-wc':'tab-wc','tab-btn-notes':'tab-notes'};
+  Object.keys(tabMap).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && t[tabMap[id]]) el.textContent = t[tabMap[id]];
+  });
+  // Settings overlay labels via data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(function(el) {
+    var key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  // Language buttons
+  document.querySelectorAll('.stg-lang-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
 }
 // ── High Contrast ──
 var _highContrast=localStorage.getItem('jc_high_contrast')==='1';
@@ -6432,9 +6589,12 @@ window.addEventListener('load',function(){
   setTextSize(localStorage.getItem('jc_text_size')||'normal',true);
   // Init new settings
   setHighContrast(localStorage.getItem('jc_high_contrast')==='1',true);
+  setLightMode(localStorage.getItem('jc_light_mode') === '1', true);
   setKeepAwake(localStorage.getItem('jc_keep_awake')==='1',true);
   setHaptics(localStorage.getItem('jc_haptics')!=='0',true);
   setDefMaterial(localStorage.getItem('jc_def_material')||'CU',true);
+  setUnits(localStorage.getItem('jc_units') || 'ft', true);
+  applyLang(localStorage.getItem('jc_lang') || 'en', true);
   // Init settings code year buttons
   var _sy=localStorage.getItem('jc_code_year')||'2026';
   document.querySelectorAll('.stg-cy-btn').forEach(function(b){b.classList.remove('active');});
