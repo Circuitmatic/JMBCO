@@ -982,7 +982,24 @@ body.text-large{zoom:1.14;}
 body.text-xlarge{zoom:1.28;}
 body.text-xxlarge{zoom:1.45;}
 body.high-contrast{--text:#ffffff;--sub:#c0d8f0;--muted:#b0c8e0;--border:#2a3548;--border2:#384a60;}
-body.high-contrast .stg-card{background:#0a0e16;}
+body.high-contrast .stg-overlay,body.high-contrast .stg-inner{background:#080a10;}
+body.high-contrast .stg-card{background:#0d1118;border-color:#2a3548;}
+body.high-contrast .stg-group-lbl{color:#7a9fc0;}
+body.high-contrast .stg-row-title{color:#f0f4ff;}
+body.high-contrast .stg-row-sub{color:#7a9fc0;}
+body.high-contrast .stg-danger-lbl{color:#ff7070 !important;}
+body.high-contrast .stg-action-row:active{background:#13181f;}
+body.high-contrast .stg-action-arrow{color:#4a6a8a;}
+body.high-contrast .stg-tsz-btn{background:#1a2030;border-color:#2a3548;color:#c0d8f0;}
+body.high-contrast .stg-tsz-btn.active{background:#f0c020;border-color:#c9a010;color:#1a1200;}
+body.high-contrast .stg-cy-btns{border-color:#2a3548;}
+body.high-contrast .stg-cy-btn{background:#1a2030;border-color:#2a3548;color:#7a9fc0;}
+body.high-contrast .stg-cy-btn.active{background:#f0c020;color:#1a1200;}
+body.high-contrast .stg-material-btns{border-color:#2a3548;}
+body.high-contrast .stg-material-btn{background:#1a2030;border-color:#2a3548;color:#7a9fc0;}
+body.high-contrast .stg-material-btn.active{background:#f0c020;color:#1a1200;}
+body.high-contrast .stg-toggle-track{background:#2a3548;}
+body.high-contrast .stg-overlay-close{color:#7a9fc0;}
 .stg-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
 .stg-toggle-info{flex:1;min-width:0;padding-right:16px;}
 .stg-toggle{position:relative;width:48px;height:28px;flex-shrink:0;cursor:pointer;display:inline-block;}
@@ -2865,16 +2882,31 @@ function setHighContrast(on,init){
 var _wakeLock=null;
 var _keepAwake=localStorage.getItem('jc_keep_awake')==='1';
 function setKeepAwake(on,init){
+  if(!('wakeLock' in navigator)){
+    // Not supported — uncheck and bail
+    var cb=document.getElementById('stg-keep-awake-cb');
+    if(cb){cb.checked=false;cb.disabled=true;}
+    var sub=document.querySelector('#stg-keep-awake-cb');
+    var row=sub?sub.closest('.stg-card'):null;
+    if(row){var s=row.querySelector('.stg-row-sub');if(s)s.textContent='Not supported on this browser/device';}
+    if(!init)localStorage.removeItem('jc_keep_awake');
+    return;
+  }
   _keepAwake=!!on;
   if(!init)localStorage.setItem('jc_keep_awake',on?'1':'0');
   var cb=document.getElementById('stg-keep-awake-cb');
   if(cb)cb.checked=_keepAwake;
-  if(_keepAwake&&'wakeLock' in navigator){
+  if(_keepAwake){
     navigator.wakeLock.request('screen').then(function(wl){
       _wakeLock=wl;
       _wakeLock.addEventListener('release',function(){if(_keepAwake)setKeepAwake(true);});
-    }).catch(function(){});
-  } else if(!_keepAwake&&_wakeLock){
+    }).catch(function(e){
+      // Failed (e.g. battery saver mode) — uncheck
+      _keepAwake=false;
+      if(cb)cb.checked=false;
+      localStorage.setItem('jc_keep_awake','0');
+    });
+  } else if(_wakeLock){
     _wakeLock.release();_wakeLock=null;
   }
 }
@@ -2890,6 +2922,10 @@ function setHaptics(on,init){
   if(cb)cb.checked=_haptics;
 }
 function hapticTap(){if(_haptics&&navigator.vibrate)navigator.vibrate(10);}
+// Global haptic — fires on every button touchstart
+document.addEventListener('touchstart',function(e){
+  if(e.target.tagName==='BUTTON'||e.target.closest('button'))hapticTap();
+},{passive:true});
 // ── Default Wire Material ──
 var _defMaterial=localStorage.getItem('jc_def_material')||'CU';
 function setDefMaterial(mat,init){
