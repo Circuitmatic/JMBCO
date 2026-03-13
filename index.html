@@ -982,6 +982,68 @@ body.text-large{zoom:1.14;}
 body.text-xlarge{zoom:1.28;}
 body.text-xxlarge{zoom:1.45;}
 body.high-contrast{--text:#ffffff;--sub:#c0d8f0;--muted:#b0c8e0;--border:#2a3548;--border2:#384a60;}
+/* Calculator panels */
+body.high-contrast .fields{background:var(--surface);}
+body.high-contrast .field-label{color:#c0d8f0;}
+body.high-contrast .section-label{color:#f0c020;}
+body.high-contrast .fi{background:#13181f;color:#f0f4ff;border-color:#2a3548;}
+body.high-contrast .fi option{background:#13181f;color:#f0f4ff;}
+body.high-contrast .sel-wrap::after{color:#c0d8f0;}
+body.high-contrast .divider{border-color:#2a3548;}
+body.high-contrast .divider-label{color:#7a9fc0;background:var(--card);}
+/* Result cards */
+body.high-contrast .result-card{background:#0d1118;border-color:#2a3548;}
+body.high-contrast .result-label{color:#7a9fc0;}
+body.high-contrast .result-val{color:#f0f4ff;}
+body.high-contrast .result-unit{color:#c0d8f0;}
+body.high-contrast .result-note{color:#7a9fc0;}
+body.high-contrast .warn-msg{background:#1a1200;border-color:#6b3a00;color:#f0c020;}
+body.high-contrast .err-msg{background:#1a0000;border-color:#6b0000;color:#ff8080;}
+/* Engineering panel */
+body.high-contrast .eng-panel{background:#0d1118;border-color:#2a3548;}
+body.high-contrast .eng-panel-title{color:#7a9fc0;}
+body.high-contrast .eng-key{color:#7a9fc0;}
+body.high-contrast .eng-val{color:#f0f4ff;background:transparent;}
+body.high-contrast .disclaimer-title{color:#7a9fc0;}
+body.high-contrast .disclaimer-text{color:#7a9fc0;}
+body.high-contrast .nec-note{color:#7a9fc0;}
+/* Tab bar */
+body.high-contrast .tab-bar{background:#08090f;border-color:#2a3548;}
+body.high-contrast .tab-btn{color:#7a9fc0;}
+body.high-contrast .tab-btn.active{color:#1a1200;}
+body.high-contrast .tab-scroll-track{background:#13181f;}
+/* Header */
+body.high-contrast .calc-home-lbl{color:#f0c020;}
+body.high-contrast .menu-btn{color:#f0c020;}
+/* Notes / Projects tab */
+body.high-contrast .proj-list-title{color:#f0f4ff;}
+body.high-contrast .proj-list-header{border-color:#2a3548;}
+body.high-contrast .proj-card{background:#0d1118;border-color:#2a3548;}
+body.high-contrast .proj-name{color:#f0f4ff;}
+body.high-contrast .proj-meta{color:#7a9fc0;}
+body.high-contrast .notes-toolbar{background:#0d1118;border-color:#2a3548;}
+body.high-contrast .notes-toolbar-title{color:#f0f4ff;}
+body.high-contrast .notes-add-btn{background:#1a2030;color:#c0d8f0;border-color:#2a3548;}
+body.high-contrast .note-card{background:#0d1118;border-color:#2a3548;}
+body.high-contrast .note-title{color:#f0f4ff;}
+body.high-contrast .note-preview{color:#7a9fc0;}
+body.high-contrast .punch-add-btn{background:#1a2030;color:#c0d8f0;}
+body.high-contrast .punch-item{background:#0d1118;border-color:#2a3548;}
+body.high-contrast .punch-desc{color:#f0f4ff;}
+body.high-contrast .punch-srch-inp{background:#13181f;color:#f0f4ff;border-color:#2a3548;}
+body.high-contrast .res-subnav{background:#080a10;border-color:#2a3548;}
+body.high-contrast .res-sub{color:#7a9fc0;}
+body.high-contrast .res-sub.active{color:#f0f4ff;border-color:#f0c020;}
+/* Wire color table */
+body.high-contrast .wc-sys-head{background:#0d1118;color:#c0d8f0;border-color:#2a3548;}
+body.high-contrast .wc-label{color:#c0d8f0;}
+body.high-contrast .wc-name{color:#f0f4ff;}
+body.high-contrast .wc-nec-note{background:#0d1118;border-color:#2a3548;color:#7a9fc0;}
+body.high-contrast .wc-row{border-color:#2a3548;}
+/* Buttons */
+body.high-contrast .btn{filter:brightness(1.1);}
+body.high-contrast .btn-reset{background:#1a2030;color:#c0d8f0;border-color:#2a3548;}
+/* Settings overlay */
 body.high-contrast .stg-overlay,body.high-contrast .stg-inner{background:#080a10;}
 body.high-contrast .stg-card{background:#0d1118;border-color:#2a3548;}
 body.high-contrast .stg-group-lbl{color:#7a9fc0;}
@@ -1000,6 +1062,12 @@ body.high-contrast .stg-material-btn{background:#1a2030;border-color:#2a3548;col
 body.high-contrast .stg-material-btn.active{background:#f0c020;color:#1a1200;}
 body.high-contrast .stg-toggle-track{background:#2a3548;}
 body.high-contrast .stg-overlay-close{color:#7a9fc0;}
+/* Menu drawer */
+body.high-contrast .jc-menu-drawer{background:#04060c;border-color:#2a3548;}
+body.high-contrast .jc-menu-head{border-color:#2a3548;}
+body.high-contrast .jc-menu-item{color:#c0d8f0;border-color:rgba(255,255,255,0.08);}
+body.high-contrast .jc-menu-section-lbl{color:#4a6a8a;}
+body.high-contrast .jc-menu-foot{color:#4a6a8a;}
 .stg-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;}
 .stg-toggle-info{flex:1;min-width:0;padding-right:16px;}
 .stg-toggle{position:relative;width:48px;height:28px;flex-shrink:0;cursor:pointer;display:inline-block;}
@@ -2229,18 +2297,6 @@ if('serviceWorker' in navigator){
       </div>
 
       <div class="stg-group">
-        <div class="stg-group-lbl">Company</div>
-        <div class="stg-card stg-action-row" onclick="closeSettings();openCoModal()">
-          <span class="stg-action-icon">&#127970;</span>
-          <div class="stg-row-info">
-            <div class="stg-row-title">Company Branding</div>
-            <div class="stg-row-sub">Logo, name and contact info for exports</div>
-          </div>
-          <span class="stg-action-arrow">&#8250;</span>
-        </div>
-      </div>
-
-      <div class="stg-group">
         <div class="stg-group-lbl" data-i18n="stg-data">Data</div>
         <div class="stg-card stg-action-row" onclick="clearAllAppData()">
           <span class="stg-action-icon">&#128465;&#65039;</span>
@@ -2792,7 +2848,19 @@ function setUnits(u, init) {
   _units = u;
   if (!init) localStorage.setItem('jc_units', u);
   document.querySelectorAll('.stg-unit-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.unit === u); });
-  document.querySelectorAll('.unit-label-dist').forEach(function(el) { el.textContent = u; });
+  // Update all distance unit labels throughout the app
+  document.querySelectorAll('.unit-label-dist, [data-unit-label="dist"]').forEach(function(el) { el.textContent = u; });
+  // Update any field labels that say "One-Way Length (ft)" or similar
+  document.querySelectorAll('.field-label').forEach(function(el) {
+    var text = el.getAttribute('data-orig') || el.textContent;
+    if (!el.getAttribute('data-orig')) el.setAttribute('data-orig', text);
+    var orig = el.getAttribute('data-orig');
+    // Replace ft/m unit in parentheses
+    el.textContent = orig.replace(/\((ft|m)\)/g, '(' + u + ')');
+    // Also handle if the orig itself has the other unit
+    if (u === 'm') el.textContent = el.textContent.replace(/\(ft\)/g, '(m)');
+    else el.textContent = el.textContent.replace(/\(m\)/g, '(ft)');
+  });
 }
 // ── Language ──
 var _lang = localStorage.getItem('jc_lang') || 'en';
@@ -2801,11 +2869,6 @@ var _i18n = {
     'tab-vd': 'V.Drop', 'tab-amp': 'Amps', 'tab-cf': 'Conduit', 'tab-bf': 'Box Fill',
     'tab-mc': 'Motor', 'tab-fr': 'Fracs', 'tab-dip': 'Dip SW', 'tab-wc': 'Colors',
     'tab-notes': 'Projects',
-    'sec-objective': 'Objective', 'sec-config': 'Configuration', 'sec-results': 'Results',
-    'lbl-calculate': 'Calculate', 'lbl-type': 'Type', 'lbl-voltage': 'Voltage',
-    'lbl-phase': 'Phase', 'lbl-material': 'Material', 'lbl-size': 'Wire Size',
-    'lbl-length': 'One-Way Length', 'lbl-load': 'Load',
-    'btn-calculate': 'Calculate', 'btn-reset': 'Reset',
     'menu-projects': 'Projects', 'menu-new-project': 'New Project',
     'menu-settings': 'Settings', 'menu-company': 'Company Branding',
     'menu-about': 'About', 'menu-privacy': 'Privacy Policy',
@@ -2816,7 +2879,6 @@ var _i18n = {
     'stg-text-size': 'Text Size', 'stg-text-size-sub': 'Larger text for easier reading on site',
     'stg-high-contrast': 'High Contrast', 'stg-high-contrast-sub': 'Brighter text for glare & direct sunlight',
     'stg-keep-awake': 'Keep Screen Awake', 'stg-keep-awake-sub': 'Prevent phone from sleeping mid-calculation',
-    'stg-haptics': 'Haptic Feedback', 'stg-haptics-sub': 'Vibration on button taps',
     'stg-wire-material': 'Default Wire Material', 'stg-wire-material-sub': 'Pre-selects conductor type in calculators',
     'stg-distance-units': 'Distance Units', 'stg-distance-units-sub': 'Used in voltage drop and conduit calculations',
     'stg-code-year': 'Active Code Year', 'stg-code-year-sub': 'Tables and ampacity calculations',
@@ -2827,11 +2889,6 @@ var _i18n = {
     'tab-vd': 'Caída V', 'tab-amp': 'Amperios', 'tab-cf': 'Conduit', 'tab-bf': 'Caja',
     'tab-mc': 'Motor', 'tab-fr': 'Fracs', 'tab-dip': 'Dip SW', 'tab-wc': 'Colores',
     'tab-notes': 'Proyectos',
-    'sec-objective': 'Objetivo', 'sec-config': 'Configuración', 'sec-results': 'Resultados',
-    'lbl-calculate': 'Calcular', 'lbl-type': 'Tipo', 'lbl-voltage': 'Voltaje',
-    'lbl-phase': 'Fase', 'lbl-material': 'Material', 'lbl-size': 'Calibre',
-    'lbl-length': 'Longitud (un sentido)', 'lbl-load': 'Carga',
-    'btn-calculate': 'Calcular', 'btn-reset': 'Reiniciar',
     'menu-projects': 'Proyectos', 'menu-new-project': 'Nuevo Proyecto',
     'menu-settings': 'Configuración', 'menu-company': 'Empresa',
     'menu-about': 'Acerca de', 'menu-privacy': 'Privacidad',
@@ -2841,20 +2898,101 @@ var _i18n = {
     'stg-light-mode': 'Modo Claro', 'stg-light-mode-sub': 'Cambiar a fondo claro',
     'stg-text-size': 'Tamaño de Texto', 'stg-text-size-sub': 'Texto más grande para leer en obra',
     'stg-high-contrast': 'Alto Contraste', 'stg-high-contrast-sub': 'Texto más brillante para luz solar directa',
-    'stg-keep-awake': 'Mantener Pantalla Activa', 'stg-keep-awake-sub': 'Evita que el teléfono se duerma al calcular',
-    'stg-haptics': 'Vibración', 'stg-haptics-sub': 'Vibración al tocar botones',
+    'stg-keep-awake': 'Mantener Pantalla Activa', 'stg-keep-awake-sub': 'Evita que el teléfono se duerma',
     'stg-wire-material': 'Material de Conductor', 'stg-wire-material-sub': 'Preselecciona el tipo de conductor',
     'stg-distance-units': 'Unidades de Distancia', 'stg-distance-units-sub': 'Usado en caída de voltaje y conduit',
     'stg-code-year': 'Año de Código Activo', 'stg-code-year-sub': 'Tablas y cálculos de amperaje',
     'stg-clear': 'Borrar Todos los Datos', 'stg-clear-sub': 'Eliminar notas, proyectos y listas',
-    'stg-language': 'Idioma', 'stg-language-sub': 'Idioma de la aplicación'
+    'stg-language': 'Idioma', 'stg-language-sub': 'Idioma de la aplicación',
+
+    // auto: translations — section labels, field labels throughout app
+    'auto:Objective': 'Objetivo',
+    'auto:Configuration': 'Configuración',
+    'auto:Results': 'Resultados',
+    'auto:Calculate': 'Calcular',
+    'auto:Type': 'Tipo',
+    'auto:Voltage': 'Voltaje',
+    'auto:Phase': 'Fase',
+    'auto:Material': 'Material',
+    'auto:Wire Size': 'Calibre',
+    'auto:One-Way Length': 'Longitud (un sentido)',
+    'auto:Load': 'Carga',
+    'auto:Load (Amps)': 'Carga (Amp)',
+    'auto:Power Factor': 'Factor de Potencia',
+    'auto:Ambient Temp': 'Temp Ambiente',
+    'auto:Conduit Type': 'Tipo de Conduit',
+    'auto:Wire Count': 'Núm. Conductores',
+    'auto:Conductor': 'Conductor',
+    'auto:Conductors': 'Conductores',
+    'auto:Trade Size': 'Tamaño Nominal',
+    'auto:Fill %': 'Llenado %',
+    'auto:Box Type': 'Tipo de Caja',
+    'auto:Box Size': 'Tamaño de Caja',
+    'auto:Motor Type': 'Tipo de Motor',
+    'auto:Horsepower': 'Caballos de Fuerza',
+    'auto:Service Factor': 'Factor de Servicio',
+    'auto:Breaker Size': 'Tamaño del Breaker',
+    'auto:Starter Size': 'Tamaño del Arrancador',
+    'auto:Conductors in Raceway': 'Conductores en Canaleta',
+    'auto:Derating Factor': 'Factor de Reducción',
+    'auto:Derated Ampacity': 'Amperaje Reducido',
+    'auto:Voltage Drop': 'Caída de Voltaje',
+    'auto:Voltage Drop %': 'Caída de Voltaje %',
+    'auto:Receiving End Voltage': 'Voltaje en el Extremo Receptor',
+    'auto:Minimum Wire Size': 'Calibre Mínimo',
+    'auto:Maximum Distance': 'Distancia Máxima',
+    'auto:Ampacity': 'Amperaje',
+    'auto:Ampacity (Amps)': 'Amperaje (Amp)',
+    'auto:Correction Factor': 'Factor de Corrección',
+    'auto:Temperature Rating': 'Clasificación de Temperatura',
+    'auto:Insulation': 'Aislamiento',
+    'auto:Notes': 'Notas',
+    'auto:Projects': 'Proyectos',
+    'auto:Saved Notes': 'Notas Guardadas',
+    'auto:Punch List': 'Lista de Correcciones',
+    'auto:Time Sheet': 'Hoja de Tiempo',
+    'auto:Add Note': '+ Agregar Nota',
+    'auto:New Project': 'Nuevo Proyecto',
+    'auto:Export Project': 'Exportar Proyecto',
+    'auto:Color Code': 'Código de Colores',
+    'auto:System': 'Sistema',
+    'auto:Ground': 'Tierra',
+    'auto:Neutral': 'Neutro',
+    'auto:Hot': 'Fase',
+    'auto:Reference': 'Referencia',
+    'auto:NEC Table': 'Tabla NEC',
+    'auto:Verify with AHJ before installation.': 'Verifique con la AHJ antes de instalar.',
+    'auto:Design guidance only.': 'Solo referencia de diseño.',
+
+    // Select option translations for key dropdowns
+    'selects': {
+      'f-objective': {
+        'Voltage Drop': 'Caída de Voltaje',
+        'Minimum Conductor Size': 'Calibre Mínimo del Conductor',
+        'Maximum Circuit Distance': 'Distancia Máxima del Circuito'
+      },
+      'f-type': {
+        'Single Phase': 'Monofásico',
+        'Three Phase': 'Trifásico',
+        'DC': 'CC'
+      },
+      'f-material': {
+        'Copper': 'Cobre',
+        'Aluminum': 'Aluminio'
+      },
+      'f-phase': {
+        'Single Phase (1Ø)': 'Monofásico (1Ø)',
+        'Three Phase (3Ø)': 'Trifásico (3Ø)'
+      }
+    }
   }
 };
 function applyLang(lang, init) {
   _lang = lang;
   if (!init) localStorage.setItem('jc_lang', lang);
   var t = _i18n[lang] || _i18n['en'];
-  // Tab bar
+
+  // Tab bar buttons
   var tabMap = {'tab-btn-vd':'tab-vd','tab-btn-amp':'tab-amp','tab-btn-cf':'tab-cf',
     'tab-btn-bf':'tab-bf','tab-btn-mc':'tab-mc','tab-btn-fr':'tab-fr',
     'tab-btn-dip':'tab-dip','tab-btn-wc':'tab-wc','tab-btn-notes':'tab-notes'};
@@ -2862,14 +3000,97 @@ function applyLang(lang, init) {
     var el = document.getElementById(id);
     if (el && t[tabMap[id]]) el.textContent = t[tabMap[id]];
   });
-  // Settings overlay labels via data-i18n
+
+  // data-i18n elements (settings overlay)
   document.querySelectorAll('[data-i18n]').forEach(function(el) {
     var key = el.getAttribute('data-i18n');
     if (t[key]) el.textContent = t[key];
   });
+
+  // Auto-translate section labels, field labels, buttons, result labels, section group headers
+  // These selectors cover all calculators and the notes tab
+  var autoSelectors = [
+    '.section-label',
+    '.field-label',
+    '.divider-label',
+    '.result-label',
+    '.result-note',
+    '.eng-panel-title',
+    '.disclaimer-title',
+    '.nec-note',
+    '.pf-hint',
+    '.warn-msg',
+    '.calc-home-lbl',
+    '.proj-list-title',
+    '.notes-toolbar-title',
+    '.punch-toolbar .punch-opts-btn',
+    '.wc-sys-head',
+    '.wc-label',
+    '.wc-nec-note',
+    '.stg-cy-btns',
+  ];
+
+  autoSelectors.forEach(function(sel) {
+    document.querySelectorAll(sel).forEach(function(el) {
+      // Skip elements with children (only translate leaf text nodes)
+      var hasElementChildren = Array.from(el.childNodes).some(function(n){ return n.nodeType === 1; });
+      if (hasElementChildren) return;
+      // Store original on first call
+      if (!el.hasAttribute('data-orig')) el.setAttribute('data-orig', el.textContent.trim());
+      var orig = el.getAttribute('data-orig');
+      if (lang === 'en') {
+        el.textContent = orig;
+      } else {
+        var translated = t['auto:' + orig];
+        if (translated) el.textContent = translated;
+      }
+    });
+  });
+
+  // Translate select option text for key selects
+  var selectTranslations = t['selects'] || {};
+  Object.keys(selectTranslations).forEach(function(selectId) {
+    var sel = document.getElementById(selectId);
+    if (!sel) return;
+    var opts = selectTranslations[selectId];
+    Array.from(sel.options).forEach(function(opt) {
+      if (!opt.hasAttribute('data-orig')) opt.setAttribute('data-orig', opt.text);
+      var orig = opt.getAttribute('data-orig');
+      if (lang === 'en') opt.text = orig;
+      else if (opts[orig]) opt.text = opts[orig];
+    });
+  });
+
   // Language buttons
   document.querySelectorAll('.stg-lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.dataset.lang === lang);
+  });
+
+  // Menu items
+  var menuTranslations = {
+    'Projects': t['menu-projects'],
+    'New Project': t['menu-new-project'],
+    'Settings': t['menu-settings'],
+    'About': t['menu-about'],
+    'Export All Notes': t['menu-export-notes'],
+    'Export Punch List': t['menu-export-punch'],
+    'Company Branding': t['menu-company']
+  };
+  document.querySelectorAll('.jc-menu-item').forEach(function(item) {
+    if (!item.hasAttribute('data-orig')) {
+      var icon = item.querySelector('.jc-menu-icon');
+      var text = item.textContent.replace(icon ? icon.textContent : '', '').trim();
+      item.setAttribute('data-orig', text);
+    }
+    var orig = item.getAttribute('data-orig');
+    var icon = item.querySelector('.jc-menu-icon');
+    var newText = (lang === 'en') ? orig : (menuTranslations[orig] || orig);
+    if (icon) {
+      // Replace text node after icon
+      Array.from(item.childNodes).forEach(function(n) {
+        if (n.nodeType === 3) n.textContent = newText;
+      });
+    }
   });
 }
 // ── High Contrast ──
@@ -6947,6 +7168,7 @@ window.addEventListener('load',function(){
     <div class="jc-menu-item" onclick="closeMenu();switchTab('notes',document.getElementById('tab-btn-notes'));openNewProjModal()"><span class="jc-menu-icon">➕</span>New Project</div>
     <div class="jc-menu-section-lbl">Settings</div>
     <div class="jc-menu-item" onclick="closeMenu();openSettings()"><span class="jc-menu-icon">&#9881;&#65039;</span>Settings</div>
+    <div class="jc-menu-item" onclick="closeMenu();openCoModal()"><span class="jc-menu-icon">🏢</span>Company Branding</div>
     <div class="jc-menu-section-lbl">App</div>
     <div class="jc-menu-item" onclick="closeMenu();openAbout()"><span class="jc-menu-icon">ℹ️</span>About</div>
     <div class="jc-menu-item" onclick="jcExportAllNotes();closeMenu()"><span class="jc-menu-icon">📤</span>Export All Notes</div>
