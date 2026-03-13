@@ -2526,6 +2526,7 @@ function openCoModal(){
   document.getElementById('co-phone').value=co.phone||'';
   document.getElementById('co-fax').value=co.fax||'';
   document.getElementById('co-website').value=co.website||'';
+  document.getElementById('co-license').value=co.license||'';
   var prev=document.getElementById('co-logo-preview');
   var clr=document.getElementById('co-logo-clear');
   if(co.logo){prev.src=co.logo;prev.style.display='';clr.style.display='';}
@@ -2553,6 +2554,7 @@ function saveCoModal(){
     phone:document.getElementById('co-phone').value.trim(),
     fax:document.getElementById('co-fax').value.trim(),
     website:document.getElementById('co-website').value.trim(),
+    license:document.getElementById('co-license').value.trim(),
     logo:document.getElementById('co-logo-preview').src||''
   };
   if(!co.logo||co.logo===window.location.href)co.logo='';
@@ -2786,6 +2788,7 @@ function buildPrintHTML(reportTitle,subtitle,bodyHTML){
   if(co.address)coInfoLines.push(co.address);
   if(co.phone)coInfoLines.push(co.phone+(co.fax?' &nbsp;|&nbsp; Fax: '+co.fax:''));
   if(co.website)coInfoLines.push(co.website);
+  if(co.license)coInfoLines.push('Lic# '+co.license);
   var coInfoHtml=coInfoLines.length?'<div style="font-size:10px;color:#9ca3af;line-height:1.6;margin-top:3px;">'+coInfoLines.join('<br>')+'</div>':'';
   var projInfoHtml='';
   if(proj){projInfoHtml='<div style="font-size:10px;color:#9ca3af;line-height:1.8;text-align:right;">'+escHtml(proj.name)+(proj.po?'<br>PO: '+escHtml(proj.po):'')+(proj.foreman?'<br>Foreman: '+escHtml(proj.foreman):'')+'</div>';}
@@ -5802,6 +5805,8 @@ setCodeYear(_codeYear);
     <input class="co-inp" id="co-fax" type="tel" placeholder="(555) 000-0000" oninput="fmtPhone(this)">
     <div class="co-field-lbl">Website <span style="font-size:10px;color:#9ca3af;font-weight:400;text-transform:none;">(optional)</span></div>
     <input class="co-inp" id="co-website" type="url" placeholder="www.yourcompany.com">
+    <div class="co-field-lbl">License # <span style="font-size:10px;color:#9ca3af;font-weight:400;text-transform:none;">(optional)</span></div>
+    <input class="co-inp" id="co-license" type="text" placeholder="EC-000000">
     <button class="co-save-btn" onclick="saveCoModal()">Save Branding</button>
     <button class="co-cancel-btn" onclick="closeCoModal()">Cancel</button>
   </div>
