@@ -656,7 +656,7 @@ body.light-mode body { background: var(--bg); }
 .calc-srch-inp{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:3px 10px;font-size:11px;font-family:'Inter',sans-serif;color:#e5e7eb;outline:none;width:130px;transition:width .2s,border-color .2s;}
 .calc-srch-inp::placeholder{color:#4b5563;}
 .calc-srch-inp:focus{width:170px;border-color:rgba(240,192,32,0.4);}
-.calc-srch-dd{display:none;position:absolute;top:calc(100% + 4px);right:0;background:#1a1f2e;border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:4px 0;min-width:150px;z-index:400;box-shadow:0 4px 20px rgba(0,0,0,0.4);}
+.calc-srch-dd{display:none;position:absolute;top:calc(100% + 4px);right:0;background:#1a1f2e;border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:4px 0;min-width:230px;max-width:290px;z-index:400;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
 .calc-srch-dd.open{display:block;}
 .calc-srch-item{padding:8px 14px;font-size:12px;font-family:'Inter',sans-serif;color:#e5e7eb;cursor:pointer;white-space:nowrap;}
 .calc-srch-item:hover,.calc-srch-item:active{background:rgba(240,192,32,0.15);color:#f0c020;}
@@ -2781,49 +2781,101 @@ function checkPar(s,par){return par>1&&BELOW1_0.indexOf(s)!==-1;}
 function makeBlock(st,lbl,badge,val,sub){return'<div class="result-block '+st+'"><div class="result-head"><span class="result-lbl">'+lbl+'</span>'+(badge?'<span class="result-badge">'+badge+'</span>':'')+'</div><div class="result-val">'+val+'</div>'+(sub?'<div class="result-sub">'+sub+'</div>':'')+'</div>';}
 
 var _SRCH_IDX=[
-  {tab:'vd',label:'V.Drop — Min Wire Size',kw:['min wire','wire size','voltage drop','vdrop','conductor size','minimum conductor']},
-  {tab:'vd',label:'V.Drop — Max Distance',kw:['max distance','maximum run','longest run','how far','distance']},
-  {tab:'vd',label:'V.Drop — Actual Drop %',kw:['actual drop','voltage drop percent','percent drop','vd percent']},
-  {tab:'amp',label:'Amps — Table 310.16 (Conduit)',kw:['ampacity','ampere','310.16','conduit ampacity','raceway','wire rating']},
-  {tab:'amp',label:'Amps — Table 310.17 (Free Air)',kw:['free air','310.17','open air ampacity','air ampacity']},
-  {tab:'cf',label:'Conduit Fill %',kw:['conduit fill','fill percent','how many wires','wire count','fill']},
-  {tab:'cf',label:'Conduit Bend — 90° / Offset / 3-Point',kw:['bend','bending','offset','90 degree','three point','saddle','kick','stub up']},
-  {tab:'bf',label:'Box Fill — 314.16',kw:['box fill','box volume','junction box','device box','cubic inches','314']},
-  {tab:'mc',label:'Motor — FLC / Conductor / OCPD',kw:['motor','flc','full load current','horsepower','hp','overload','ocpd','breaker','430']},
-  {tab:'fr',label:'Fractions Calculator',kw:['fractions','fraction','fracs','tape measure','inches','add fractions','subtract fractions']},
-  {tab:'dip',label:'DIP Switch — Address / Binary',kw:['dip','dip switch','address','binary','decimal','rocker switch','setting']},
-  {tab:'notes',label:'Notes — Saved Results',kw:['notes','saved','save','memo','job note','calculation note']},
-  {tab:'notes',label:'Punch List',kw:['punch','punch list','todo','to do','task','deficiency','punch item']},
-  {tab:'notes',label:'Time Sheet — Payroll',kw:['time sheet','timesheet','payroll','hours','employee','week','foreman']}
+  // ── Voltage Drop ──
+  {tab:'vd',label:'Voltage Drop — Calculate Drop %',kw:['voltage drop','vdrop','vd','drop percent','percent drop','drop %','volts lost']},
+  {tab:'vd',label:'Voltage Drop — Minimum Conductor Size',kw:['min wire','minimum wire','min conductor','conductor size','wire size','what size wire','minimum conductor']},
+  {tab:'vd',label:'Voltage Drop — Maximum Circuit Distance',kw:['max distance','max run','maximum distance','how far','max circuit','longest run','max length','circuit distance']},
+  // ── Ampacity ──
+  {tab:'amp',label:'Ampacity — Table 310.16 (In Conduit)',kw:['ampacity','amps','ampere','310.16','conduit ampacity','raceway','wire rating','current capacity','in conduit','derating','how many amps']},
+  {tab:'amp',label:'Ampacity — Table 310.17 (Free Air)',kw:['free air','310.17','open air','air ampacity','overhead','aerial','free air ampacity']},
+  {tab:'amp',label:'Ampacity — Temperature Derating',kw:['temperature','temp','derating','correction factor','ambient','hot','warm','derate','temp correction']},
+  // ── Conduit Fill ──
+  {tab:'cf',label:'Conduit Fill — Wire Count & Fill %',kw:['conduit fill','fill percent','how many wires','wire count','fill','wires in conduit','conduit capacity','fill calculation','chapter 9','table 4','table 5']},
+  // ── Conduit Bending ──
+  {tab:'cf',label:'Conduit Bend — 90° Stub Up',kw:['bend','bending','90','stub up','stub','90 degree bend','conduit bend','emt bend','imc bend','rigid bend']},
+  {tab:'cf',label:'Conduit Bend — Offset',kw:['offset','offset bend','rolling offset','two shot','obstacle','two bend offset','conduit offset']},
+  {tab:'cf',label:'Conduit Bend — 3-Point Saddle',kw:['saddle','3 point','three point','3pt','saddle bend','three bend saddle','obstruction']},
+  {tab:'cf',label:'Conduit Bend — 4-Point Saddle',kw:['4 point','four point','4pt','four bend','box saddle']},
+  {tab:'cf',label:'Conduit Bend — Back to Back',kw:['back to back','b2b','parallel bend','u bend']},
+  {tab:'cf',label:'Conduit Bend — Kick',kw:['kick','small kick','slight angle','kick bend']},
+  // ── Box Fill ──
+  {tab:'bf',label:'Box Fill — 314.16 Calculation',kw:['box fill','box volume','junction box','device box','cubic inches','314','box calculation','wire fill','clamp fill','yoke','device fill','conductor fill']},
+  // ── Motor ──
+  {tab:'mc',label:'Motor — Full Load Current (FLC)',kw:['motor','flc','full load current','full load amps','fla','horsepower','hp','430','motor current','three phase motor','single phase motor']},
+  {tab:'mc',label:'Motor — Conductor Sizing',kw:['motor wire','motor conductor','motor cable','430.22','motor ampacity']},
+  {tab:'mc',label:'Motor — Breaker / OCPD Sizing',kw:['motor breaker','motor fuse','ocpd','overload protection','430.52','motor protection','inverse time','dual element']},
+  {tab:'mc',label:'Motor — Overload Sizing',kw:['overload','motor overload','thermal overload','430.32','heater','motor starter']},
+  // ── Wire Colors ──
+  {tab:'wc',label:'Wire Colors — 120/208V Color Code',kw:['wire color','wire colours','color code','120v','208v','phase color','black red blue','120 208','single phase color','three phase color']},
+  {tab:'wc',label:'Wire Colors — 277/480V Color Code',kw:['wire color','480v','277v','480 color','brown orange yellow','high voltage color','480 wire']},
+  {tab:'wc',label:'Wire Colors — Neutral & Ground',kw:['neutral','ground','green','bare','white','gray','grey','ground wire','neutral color','equipment ground']},
+  {tab:'wc',label:'Phase Chart — Voltage Reference',kw:['phase chart','phase voltage','system voltage','208','240','277','480','120','line voltage','phase to phase','phase to neutral']},
+  {tab:'wc',label:'Resistor Color Code',kw:['resistor','resistor color','color bands','ohm','resistance','band color','4 band','5 band','resistor code','tolerance band']},
+  // ── Fractions ──
+  {tab:'fr',label:'Fraction Calculator — Tape Measure Math',kw:['fraction','fractions','fracs','tape measure','inches','1/2','1/4','3/4','1/8','16th','add fractions','subtract fractions','multiply fractions','divide fractions','imperial math']},
+  // ── DIP Switch ──
+  {tab:'dip',label:'DIP Switch — Binary Address Calculator',kw:['dip','dip switch','address','binary','decimal','rocker switch','setting','controller address','panel address','binary to decimal','dip address','dip calc']},
+  // ── Projects / Notes ──
+  {tab:'notes',label:'Projects — Saved Calculations',kw:['projects','project','notes','saved','save','memo','job note','job folder','calculation note','my projects']},
+  {tab:'notes',label:'Punch List — Deficiency Tracker',kw:['punch','punch list','todo','to do','task','deficiency','punch item','snag list','corrections']},
+  {tab:'notes',label:'Time Sheet — Hours & Payroll',kw:['time sheet','timesheet','payroll','hours','employee','week','foreman','labor hours','time tracking','clock']},
+  // ── Settings ──
+  {tab:'__settings__',label:'Settings — Text Size / Font',kw:['text size','font size','big text','larger text','small text','old man','accessibility','font','text']},
+  {tab:'__settings__',label:'Settings — Light / Dark Mode',kw:['light mode','dark mode','light dark','theme','background color','bright','white background']},
+  {tab:'__settings__',label:'Settings — High Contrast',kw:['high contrast','contrast','glare','sunlight','bright screen','visibility','readability']},
+  {tab:'__settings__',label:'Settings — Keep Screen Awake',kw:['screen awake','keep awake','sleep','screen timeout','screen lock','wake','prevent sleep']},
+  {tab:'__settings__',label:'Settings — Default Wire Material',kw:['default material','copper default','aluminum default','wire material','conductor material','cu al default']},
+  {tab:'__settings__',label:'Settings — Distance Units (ft / m)',kw:['units','feet','meters','ft','metric','imperial','distance units','unit toggle']},
+  {tab:'__settings__',label:'Settings — NEC Code Year',kw:['code year','2020','2023','2026','nec edition','code edition','which code','active code']},
+  {tab:'__settings__',label:'Settings — Language (EN / ES)',kw:['language','spanish','english','espanol','idioma','lang','translation']},
+  {tab:'__settings__',label:'Settings — Company Branding',kw:['company','branding','logo','company name','letterhead','export branding','license number','company info']},
+  {tab:'__settings__',label:'Settings — Clear All Data',kw:['clear data','erase','reset app','delete all','wipe','clear all','start over']},
 ];
+
 function calcSrch(q){
   var dd=document.getElementById('calc-srch-dd');
   if(!dd)return;
   q=(q||'').trim().toLowerCase();
-  if(!q){dd.classList.remove('open');dd.innerHTML='';return;}
+  if(q.length<2){dd.classList.remove('open');dd.innerHTML='';return;}
   var seen={};
   var hits=_SRCH_IDX.filter(function(item){
-    var match=item.kw.some(function(k){return k.indexOf(q)>=0||q.indexOf(k)>=0;});
-    if(!match)return false;
+    var labelMatch=item.label.toLowerCase().indexOf(q)>=0;
+    var kwMatch=item.kw.some(function(k){return k.indexOf(q)>=0;});
+    if(!labelMatch&&!kwMatch)return false;
     if(seen[item.label])return false;
     seen[item.label]=true;
     return true;
   });
+  hits=hits.slice(0,8);
   if(!hits.length){dd.classList.remove('open');dd.innerHTML='';return;}
-  dd.innerHTML=hits.map(function(m){return '<div class="calc-srch-item" onclick="calcSrchGo(\''+m.tab+'\')">'+m.label+'</div>';}).join('');
+  dd.innerHTML=hits.map(function(m){
+    var icon=m.tab==='__settings__'?'&#9881; ':
+              m.tab==='notes'?'&#128193; ':
+              m.tab==='wc'?'&#127744; ':
+              m.tab==='fr'?'&#128290; ':
+              m.tab==='dip'?'&#128421; ':
+              m.tab==='vd'?'&#9889; ':
+              m.tab==='amp'?'&#126; ':
+              m.tab==='cf'?'&#11044; ':
+              m.tab==='bf'?'&#9632; ':
+              m.tab==='mc'?'&#9881; ':'';
+    return '<div class="calc-srch-item" onclick="calcSrchGo(\''+m.tab+'\')">'+icon+m.label+'</div>';
+  }).join('');
   dd.classList.add('open');
 }
 function calcSrchGo(tab){
-  var btn=document.getElementById('tab-btn-'+tab);
-  if(btn)btn.click();
   var dd=document.getElementById('calc-srch-dd'),inp=document.getElementById('calc-srch');
   if(dd){dd.classList.remove('open');dd.innerHTML='';}
   if(inp)inp.value='';
+  if(tab==='__settings__'){openSettings();return;}
+  var btn=document.getElementById('tab-btn-'+tab);
+  if(btn)btn.click();
 }
 document.addEventListener('click',function(e){
   var w=document.querySelector('.calc-srch-wrap');
   if(w&&!w.contains(e.target)){var dd=document.getElementById('calc-srch-dd');if(dd){dd.classList.remove('open');dd.innerHTML='';}}
 });
+
 // ── Text Size (Accessibility) ──
 var _textSize=localStorage.getItem('jc_text_size')||'normal';
 function setTextSize(size,init){
