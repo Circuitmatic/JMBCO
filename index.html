@@ -148,8 +148,8 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #ffffff; border-ra
 .quiz-stat-row{display:flex;gap:8px;width:100%;max-width:600px;margin-bottom:10px;}
 .quiz-stat{flex:1;background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:8px 10px;text-align:center;}
 .quiz-stat-lbl{font-size:0.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;}
-.quiz-stat-val{font-size:1rem;font-weight:700;color:#f0c020;margin-top:2px;font-family:'Roboto Mono',monospace;}
-.quiz-stat-val.sm{font-size:0.7rem;}
+.quiz-stat-val{font-size:0.9rem;font-weight:700;color:#f0c020;margin-top:2px;font-family:'Roboto Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.quiz-stat-val.sm{font-size:0.65rem;}
 .quiz-card{width:100%;max-width:600px;background:#111827;border:1px solid #1e293b;border-radius:14px;padding:18px;}
 .quiz-q-text{font-size:0.97rem;font-weight:600;color:#f1f5f9;margin-bottom:16px;line-height:1.55;}
 .quiz-opts{display:grid;gap:8px;}
@@ -163,9 +163,11 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #ffffff; border-ra
 .quiz-next-btn{margin-top:14px;width:100%;padding:14px;background:#f0c020;color:#1a1200;border:none;border-radius:9px;font-weight:900;font-family:'Roboto Mono',monospace;cursor:pointer;display:none;text-transform:uppercase;letter-spacing:1px;font-size:0.82rem;}
 .quiz-next-btn:hover{background:#ffe066;}
 .quiz-score-screen{display:none;text-align:center;padding:16px 0;}
-.quiz-score-num{font-size:3.2rem;font-family:'Roboto Mono',monospace;color:#f0c020;margin:12px 0;text-shadow:0 0 20px rgba(240,192,32,0.35);}
-.quiz-score-label{font-size:0.9rem;color:#94a3b8;margin-bottom:8px;}
-.quiz-score-msg{margin-bottom:20px;font-size:0.9rem;line-height:1.5;}
+.quiz-end-title{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;color:#f0c020;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 16px rgba(240,192,32,0.4);margin-bottom:14px;}
+.quiz-score-sublbl{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:2px;}
+.quiz-score-num{font-size:3.2rem;font-family:'Roboto Mono',monospace;color:#f0c020;margin:4px 0 6px;text-shadow:0 0 20px rgba(240,192,32,0.35);}
+.quiz-score-label{font-size:0.85rem;color:#94a3b8;margin-bottom:10px;}
+.quiz-score-msg{margin-bottom:16px;font-size:0.88rem;line-height:1.5;}
 .quiz-score-pass{color:#4ade80;}
 .quiz-score-fail{color:#f87171;}
 .quiz-restart{width:100%;padding:14px;background:#f0c020;color:#1a1200;border:none;border-radius:9px;font-weight:900;font-family:'Roboto Mono',monospace;cursor:pointer;text-transform:uppercase;letter-spacing:1px;font-size:0.82rem;margin-top:8px;}
@@ -3643,7 +3645,7 @@ if('serviceWorker' in navigator){
   <div class="tab-panel" id="tab-quiz">
     <div class="quiz-wrap">
       <div class="quiz-header">
-        <div class="quiz-title">⚡ NEC 2026 — Exam Prep</div>
+        <div class="quiz-title">⚡ CODE 2026 — EXAM PREP</div>
         <div class="quiz-prog-wrap"><div class="quiz-prog" id="qz-prog"></div></div>
       </div>
       <div class="quiz-stat-row">
@@ -3663,7 +3665,8 @@ if('serviceWorker' in navigator){
           <button class="quiz-next-btn" id="qz-next" onclick="qzNext()">Next Question →</button>
         </div>
         <div class="quiz-score-screen" id="qz-end">
-          <div class="quiz-q-text">Exam Complete</div>
+          <div class="quiz-end-title">EXAM COMPLETE</div>
+          <div class="quiz-score-sublbl">YOUR SCORE</div>
           <div class="quiz-score-num" id="qz-pct">0%</div>
           <div class="quiz-score-label" id="qz-fraction"></div>
           <div class="quiz-score-msg" id="qz-msg"></div>
@@ -8664,9 +8667,11 @@ function qzFinish(){
   document.getElementById('qz-correct').textContent=_qzScore;
   document.getElementById('qz-score').textContent=pct+'%';
   var msg=document.getElementById('qz-msg');
-  if(pct>=80){msg.innerHTML='<span class="quiz-score-pass">★ EXCELLENT — Exam ready!</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score ≥ 80% — Strong command of 2026 NEC. Keep it up.</span>';}
-  else if(pct>=70){msg.innerHTML='<span class="quiz-score-pass">PASSING — Keep studying.</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score 70–79% — Solid foundation. Review weak categories before exam day.</span>';}
-  else{msg.innerHTML='<span class="quiz-score-fail">BELOW PASSING — More review needed.</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score &lt; 70% — Focus on GFCI, Grounding, Box Fill, and 2026 changes.</span>';}
+  var vetNote='<br><span style="font-size:0.75rem;color:#64748b;margin-top:6px;display:inline-block;">★ Veterans: 65% may qualify with 5% preference credit — verify with your state licensing board.</span>';
+  if(pct>=80){msg.innerHTML='<span class="quiz-score-pass">★ EXCELLENT — Exam Ready!</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score ≥ 80% — Strong command of 2026 NEC code. Keep it up.</span>'+vetNote;}
+  else if(pct>=70){msg.innerHTML='<span class="quiz-score-pass">PASSING — Good Standing.</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score 70–79% — Solid foundation. Review weak categories before exam day.</span>'+vetNote;}
+  else if(pct>=65){msg.innerHTML='<span style="color:#f0c020;">BORDERLINE — Veterans May Qualify.</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score 65–69% — Below standard passing. Veterans with 5% preference may qualify — confirm with your board.</span>'+vetNote;}
+  else{msg.innerHTML='<span class="quiz-score-fail">BELOW PASSING — More Review Needed.</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score &lt; 65% — Focus on GFCI, Grounding, Box Fill, and 2026 code changes.</span>'+vetNote;}
 }
 
 // ── PDF Scanner ──────────────────────────────────────────────────
