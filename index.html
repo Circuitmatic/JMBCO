@@ -566,15 +566,15 @@ body { background: var(--bg); }
   .dip-num-lbl { font-family:'Roboto Mono',monospace; font-size:13px; font-weight:600; color:#f0c020; line-height:1; }
   .dip-reset-wrap { padding:12px 20px 180px; background:var(--bg); border-top:1px solid var(--border); }
   /* ── Wire Color Chart ── */
-  .wc-system { margin: 0 20px 10px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--border); }
-  .wc-sys-head { background: var(--surface); padding: 9px 14px; font-family: 'Roboto Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--sub); border-bottom: 1px solid var(--border); }
-  .wc-row { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border); gap: 12px; background: var(--card); }
+  .wc-system { margin: 0 12px 6px; border-radius: 8px; overflow: hidden; border: 1.5px solid var(--border); }
+  .wc-sys-head { background: var(--surface); padding: 5px 10px; font-family: 'Roboto Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--sub); border-bottom: 1px solid var(--border); }
+  .wc-row { display: flex; align-items: center; padding: 5px 10px; border-bottom: 1px solid var(--border); gap: 8px; background: var(--card); }
   .wc-row:last-child { border-bottom: none; }
-  .wc-label { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--text); width: 110px; flex-shrink: 0; }
-  .wc-swatch { width: 38px; height: 24px; border-radius: 5px; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
-  .wc-name { font-family: 'Roboto Mono', monospace; font-size: 13px; color: var(--text); flex: 1; }
-  .wc-badge { display: inline-block; font-family: 'Roboto Mono', monospace; font-size: 8px; font-weight: 600; letter-spacing: 1px; padding: 2px 6px; border-radius: 10px; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; margin-left: 8px; vertical-align: middle; }
-  .wc-code-note { margin: 0 20px 16px; padding: 10px 13px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; font-size: 12px; color: var(--sub); line-height: 1.6; font-family: 'Inter', sans-serif; }
+  .wc-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; color: var(--text); width: 95px; flex-shrink: 0; }
+  .wc-swatch { width: 28px; height: 16px; border-radius: 3px; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+  .wc-name { font-family: 'Roboto Mono', monospace; font-size: 11px; color: var(--text); flex: 1; }
+  .wc-badge { display: inline-block; font-family: 'Roboto Mono', monospace; font-size: 7px; font-weight: 600; letter-spacing: 1px; padding: 1px 5px; border-radius: 10px; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; margin-left: 6px; vertical-align: middle; }
+  .wc-code-note { margin: 0 12px 10px; padding: 7px 10px; background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; font-size: 10px; color: var(--sub); line-height: 1.5; font-family: 'Inter', sans-serif; }
   .wc-code-note strong { color: #374151; font-weight: 600; }
 
   /* ── Colors Tab — Sub-tabs ── */
@@ -2435,7 +2435,7 @@ if('serviceWorker' in navigator){
       <button class="wc-sub" onclick="wcSub('resistor',this)">Resistor</button>
     </div>
     <div class="wc-sub-panel active" id="wc-wire">
-    <div class="section-label" style="padding-top:16px;">AC Systems</div>
+    <div class="section-label" style="padding-top:8px;">AC Systems</div>
 
     <div class="wc-system">
       <div class="wc-sys-head">120 / 208V · Single &amp; Three Phase</div>
