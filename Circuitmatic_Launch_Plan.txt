@@ -252,12 +252,9 @@ SUBMIT:
 FRONT END:
 
 - posthog [event tracking], [sentry] crash reporting, [plausible] traffic   monitoring. all free
-- polish up pipe bends or get 3d model views idk
+- polish up pipe bends
 - Front end UI Pro
-- cloud sync
-- labor tracker
-- estimate/change order
-- OLD EYES SMALL TEXT
+- estimate/change order/labor tracker (maby)
 
 TO BUILD:
 
