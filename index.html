@@ -3190,14 +3190,12 @@ function jcSaveNote(){
   notes.unshift({id:Date.now(),ts:Date.now(),tab:_jcPending.tab,tabName:_jcPending.tabName,title:title,lines:_jcPending.lines,svg:_jcPending.svg||null,annotation:'',projectId:projId});
   if(notes.length>100)notes=notes.slice(0,100);
   localStorage.setItem('jc_notes',JSON.stringify(notes));
-  _jcPending=null;
   var btn=document.getElementById('jc-save-btn');
   btn.textContent='Saved ✓';
   setTimeout(function(){document.getElementById('jc-save-bar').classList.remove('visible');btn.textContent='Save';},1400);
   renderNotes();
 }
 function jcDismissSave(){
-  _jcPending=null;
   var bar=document.getElementById('jc-save-bar');
   if(bar)bar.classList.remove('visible');
 }
@@ -5915,7 +5913,7 @@ function calculateBend(){
   document.getElementById('bend-results-label').style.display='block';
   document.getElementById('bend-results').innerHTML=blocks.join('');
   document.getElementById('bend-disclaimer').style.display='block';
-  var _bsvg=document.getElementById('bend-svg');jcResultsReady('bend','Conduit Bend',_bsvg?'<svg viewBox="'+(_bsvg.getAttribute('viewBox')||'0 0 280 96')+'" width="100%" style="max-height:120px">'+_bsvg.innerHTML+'</svg>':null);
+  var _bsvg=document.getElementById('bend-svg');jcResultsReady('cf','Conduit Bend',_bsvg?'<svg viewBox="'+(_bsvg.getAttribute('viewBox')||'0 0 280 96')+'" width="100%" style="max-height:120px">'+_bsvg.innerHTML+'</svg>':null);
 }
 
 function resetBend(){
