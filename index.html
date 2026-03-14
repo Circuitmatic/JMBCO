@@ -95,7 +95,7 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #ffffff; border-ra
 .fiber-name{font-size:10px;font-weight:600;color:var(--text);font-family:'Inter',sans-serif;line-height:1;}
 .rj45-wrap{padding:12px 14px;}
 .rj45-std-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:'Roboto Mono',monospace;margin-bottom:8px;}
-.rj45-diagrams{display:flex;gap:12px;}
+.rj45-diagrams{display:flex;flex-direction:column;gap:12px;}
 .rj45-blk{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;}
 .rj45-title{font-size:11px;font-weight:700;color:var(--text);font-family:'Inter',sans-serif;text-align:center;margin-bottom:8px;}
 .rj45-connector{background:#2a2a2a;border-radius:0 0 8px 8px;border:2px solid #555;border-top:none;padding:6px 4px 10px;margin-bottom:6px;width:100%;box-sizing:border-box;}
@@ -8069,6 +8069,8 @@ window.addEventListener('load',function(){
   setDefMaterial(localStorage.getItem('jc_def_material')||'CU',true);
   setUnits(localStorage.getItem('jc_units') || 'ft', true);
   applyLang(localStorage.getItem('jc_lang') || 'en', true);
+  // Load scan pages
+  scanLoad();
   // Init settings code year buttons
   var _sy=localStorage.getItem('jc_code_year')||'2026';
   document.querySelectorAll('.stg-cy-btn').forEach(function(b){b.classList.remove('active');});
@@ -8433,6 +8435,13 @@ window.addEventListener('load',function(){
 
 // ── PDF Scanner ──────────────────────────────────────────────────
 var _scanPages=[];
+function scanSave(){
+  try{localStorage.setItem('jc_scan_pages',JSON.stringify(_scanPages));}catch(e){}
+}
+function scanLoad(){
+  try{var d=localStorage.getItem('jc_scan_pages');if(d){_scanPages=JSON.parse(d)||[];}}catch(e){_scanPages=[];}
+  scanRender();
+}
 function scanAddPage(input){
   var files=input.files;
   if(!files||!files.length)return;
@@ -8449,7 +8458,7 @@ function scanAddPage(input){
       canvas.getContext('2d').drawImage(img,0,0,w,h);
       var dataUrl=canvas.toDataURL('image/jpeg',0.88);
       _scanPages.push({id:Date.now()+Math.floor(Math.random()*1000),dataUrl:dataUrl,w:w,h:h});
-      scanRender();
+      scanSave();scanRender();
     };
     img.src=e.target.result;
   };
@@ -8481,7 +8490,7 @@ function scanRender(){
 }
 function scanDelete(id){
   _scanPages=_scanPages.filter(function(p){return p.id!==id;});
-  scanRender();
+  scanSave();scanRender();
 }
 function scanMove(id,dir){
   var idx=_scanPages.findIndex(function(p){return p.id===id;});
@@ -8489,12 +8498,12 @@ function scanMove(id,dir){
   var ni=idx+dir;
   if(ni<0||ni>=_scanPages.length)return;
   var tmp=_scanPages[idx];_scanPages[idx]=_scanPages[ni];_scanPages[ni]=tmp;
-  scanRender();
+  scanSave();scanRender();
 }
 function scanClearAll(){
   if(!_scanPages.length)return;
   if(!confirm('Remove all '+_scanPages.length+' page'+(_scanPages.length>1?'s':'')+' and start over?'))return;
-  _scanPages=[];scanRender();
+  _scanPages=[];scanSave();scanRender();
 }
 function scanGeneratePDF(){
   if(!_scanPages.length)return;
