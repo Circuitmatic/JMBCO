@@ -10,6 +10,7 @@
 <link rel="icon" type="image/png" href="icon.png"/>
 <link rel="manifest" href="manifest.json"/>
 <title>Circuitmatic</title>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&family=Orbitron:wght@700;900&display=swap" rel="stylesheet"/>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -111,6 +112,34 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #f0c020; border-ra
 .cht-2col{display:grid;grid-template-columns:1fr 1fr;gap:0;}
 .cht-2col .cht-tbl{min-width:0;}
 .cht-section-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:10px 14px 4px;font-family:'Roboto Mono',monospace;}
+/* ── PDF Scanner ── */
+.scan-wrap{display:flex;flex-direction:column;flex:1;overflow-y:auto;background:var(--bg);}
+.scan-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:48px 24px;gap:14px;text-align:center;}
+.scan-empty-icon{font-size:72px;line-height:1;}
+.scan-empty-title{font-size:20px;font-weight:700;color:var(--text);font-family:'Inter',sans-serif;}
+.scan-empty-sub{font-size:13px;color:var(--muted);font-family:'Inter',sans-serif;line-height:1.6;max-width:260px;}
+.scan-capture-btn{background:#f0c020;color:#1a1200;border:none;border-radius:14px;padding:18px 36px;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent;margin-top:8px;}
+.scan-capture-btn:active{opacity:.85;transform:scale(.97);}
+.scan-pages-wrap{padding:12px 14px 0;flex:1;}
+.scan-pages-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+.scan-page-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:relative;}
+.scan-page-img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;background:#111;}
+.scan-page-num{position:absolute;top:7px;left:7px;background:rgba(0,0,0,.65);color:#fff;font-size:11px;font-weight:700;font-family:'Roboto Mono',monospace;padding:3px 8px;border-radius:6px;}
+.scan-page-del{position:absolute;top:7px;right:7px;background:rgba(220,38,38,.9);color:#fff;border:none;border-radius:6px;width:28px;height:28px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
+.scan-page-move{position:absolute;bottom:7px;right:7px;display:flex;gap:4px;}
+.scan-mv-btn{background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:5px;width:26px;height:26px;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
+.scan-bar{background:var(--surface);border-top:1px solid var(--border);padding:10px 14px;padding-bottom:calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:center;}
+.scan-count{font-size:12px;font-weight:700;color:var(--muted);font-family:'Roboto Mono',monospace;flex-shrink:0;min-width:52px;}
+.scan-bar-btn{flex:1;border:none;border-radius:9px;padding:12px 8px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.scan-bar-btn:active{opacity:.85;}
+.scan-bar-add{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.scan-bar-pdf{background:#f0c020;color:#1a1200;}
+.scan-bar-clear{flex:0 0 auto;background:none;color:var(--muted);border:1px solid var(--border);padding:12px 14px;font-size:12px;border-radius:9px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
+.scan-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1100;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;}
+.scan-overlay.visible{display:flex;}
+.scan-overlay-lbl{color:#fff;font-size:15px;font-weight:600;font-family:'Inter',sans-serif;}
+.scan-prog-wrap{width:220px;height:7px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden;}
+.scan-prog-bar{height:100%;background:#f0c020;border-radius:4px;transition:width .15s;width:0%;}
 body.light-mode .calc-home-lbl { color: #c9a010; }
 body.light-mode .menu-btn { color: #c9a010; }
 body { background: var(--bg); }
@@ -1155,6 +1184,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-wc" onclick="switchTab('wc',this)">Colors</button>
     <button class="tab-btn" id="tab-btn-notes" onclick="switchTab('notes',this)">Projects</button>
     <button class="tab-btn" id="tab-btn-charts" onclick="switchTab('charts',this)">Charts</button>
+    <button class="tab-btn" id="tab-btn-scan" onclick="switchTab('scan',this)">Scan</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -8346,6 +8376,36 @@ window.addEventListener('load',function(){
 
   <div class="cht-spacer"></div>
 </div>
+<div class="tab-panel" id="tab-scan" style="display:none;">
+  <div class="scan-wrap">
+    <!-- Empty state -->
+    <div class="scan-empty" id="scan-empty">
+      <div class="scan-empty-icon">📄</div>
+      <div class="scan-empty-title">PDF Scanner</div>
+      <div class="scan-empty-sub">Photograph pages one at a time to build a multi-page PDF you can share or save.</div>
+      <button class="scan-capture-btn" onclick="document.getElementById('scan-input').click()">
+        📷 Scan First Page
+      </button>
+    </div>
+    <!-- Pages grid -->
+    <div class="scan-pages-wrap" id="scan-pages-wrap" style="display:none;" id="scan-pages-wrap"></div>
+    <!-- Bottom bar -->
+    <div class="scan-bar" id="scan-bar" style="display:none;">
+      <span class="scan-count" id="scan-count">0 pages</span>
+      <button class="scan-bar-btn scan-bar-add" onclick="document.getElementById('scan-input').click()">+ Add Page</button>
+      <button class="scan-bar-btn scan-bar-pdf" onclick="scanGeneratePDF()">Create PDF</button>
+      <button class="scan-bar-clear" onclick="scanClearAll()">Clear</button>
+    </div>
+  </div>
+  <!-- Hidden file input -->
+  <input type="file" id="scan-input" accept="image/*" capture="environment" style="display:none" onchange="scanAddPage(this)">
+  <!-- Progress overlay -->
+  <div class="scan-overlay" id="scan-overlay">
+    <div class="scan-overlay-lbl" id="scan-overlay-lbl">Building PDF…</div>
+    <div class="scan-prog-wrap"><div class="scan-prog-bar" id="scan-prog-bar"></div></div>
+  </div>
+</div>
+
 <!-- Save as Template Sheet -->
 <div class="note-save-tpl-ov" id="note-save-tpl-ov" onclick="closeSaveAsTemplateSheet()">
   <div class="note-save-tpl-sheet" id="note-save-tpl-sheet" onclick="event.stopPropagation()">
@@ -8363,5 +8423,117 @@ window.addEventListener('load',function(){
     <button class="ts-del-yes-btn" onclick="tsDelYes()">Yes, Remove</button>
   </div>
 </div>
+
+// ── PDF Scanner ──────────────────────────────────────────────────
+var _scanPages=[];
+function scanAddPage(input){
+  var files=input.files;
+  if(!files||!files.length)return;
+  var file=files[0];
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var maxW=1600,maxH=2200,w=img.width,h=img.height;
+      if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+      if(h>maxH){w=Math.round(w*maxH/h);h=maxH;}
+      var canvas=document.createElement('canvas');
+      canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      var dataUrl=canvas.toDataURL('image/jpeg',0.88);
+      _scanPages.push({id:Date.now()+Math.floor(Math.random()*1000),dataUrl:dataUrl,w:w,h:h});
+      scanRender();
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+  input.value='';
+}
+function scanRender(){
+  var empty=document.getElementById('scan-empty');
+  var wrap=document.getElementById('scan-pages-wrap');
+  var bar=document.getElementById('scan-bar');
+  var count=document.getElementById('scan-count');
+  if(!empty)return;
+  if(!_scanPages.length){
+    empty.style.display='';wrap.style.display='none';bar.style.display='none';return;
+  }
+  empty.style.display='none';wrap.style.display='';bar.style.display='';
+  count.textContent=_scanPages.length+' page'+(_scanPages.length>1?'s':'');
+  wrap.innerHTML='<div class="scan-pages-grid">'+_scanPages.map(function(p,i){
+    return '<div class="scan-page-card">'+
+      '<img class="scan-page-img" src="'+p.dataUrl+'">'+
+      '<div class="scan-page-num">'+(i+1)+'</div>'+
+      '<button class="scan-page-del" onclick="scanDelete('+p.id+')">✕</button>'+
+      '<div class="scan-page-move">'+
+        (i>0?'<button class="scan-mv-btn" onclick="scanMove('+p.id+',-1)">\u2191</button>':'')+
+        (i<_scanPages.length-1?'<button class="scan-mv-btn" onclick="scanMove('+p.id+',1)">\u2193</button>':'')+
+      '</div>'+
+    '</div>';
+  }).join('')+'</div>';
+}
+function scanDelete(id){
+  _scanPages=_scanPages.filter(function(p){return p.id!==id;});
+  scanRender();
+}
+function scanMove(id,dir){
+  var idx=_scanPages.findIndex(function(p){return p.id===id;});
+  if(idx<0)return;
+  var ni=idx+dir;
+  if(ni<0||ni>=_scanPages.length)return;
+  var tmp=_scanPages[idx];_scanPages[idx]=_scanPages[ni];_scanPages[ni]=tmp;
+  scanRender();
+}
+function scanClearAll(){
+  if(!_scanPages.length)return;
+  if(!confirm('Remove all '+_scanPages.length+' page'+(_scanPages.length>1?'s':'')+' and start over?'))return;
+  _scanPages=[];scanRender();
+}
+function scanGeneratePDF(){
+  if(!_scanPages.length)return;
+  var jspdfLib=window.jspdf;
+  if(!jspdfLib||!jspdfLib.jsPDF){
+    alert('PDF library is still loading — please wait a moment and try again.');
+    return;
+  }
+  var overlay=document.getElementById('scan-overlay');
+  var bar=document.getElementById('scan-prog-bar');
+  var lbl=document.getElementById('scan-overlay-lbl');
+  if(overlay)overlay.classList.add('visible');
+  if(bar)bar.style.width='0%';
+  if(lbl)lbl.textContent='Building PDF\u2026';
+  setTimeout(function(){
+    try{
+      var jsPDF=jspdfLib.jsPDF;
+      var first=_scanPages[0];
+      var pw=612, ph=Math.round(612*first.h/first.w);
+      var doc=new jsPDF({unit:'pt',format:[pw,ph],compress:true});
+      _scanPages.forEach(function(p,i){
+        var w2=612,h2=Math.round(612*p.h/p.w);
+        if(i>0)doc.addPage([w2,h2]);
+        doc.addImage(p.dataUrl,'JPEG',0,0,w2,h2,undefined,'FAST');
+        if(bar)bar.style.width=Math.round((i+1)/_scanPages.length*100)+'%';
+      });
+      if(lbl)lbl.textContent='Saving\u2026';
+      var slug='scan_'+new Date().toLocaleDateString('en-US').replace(/\//g,'-');
+      var fname=slug+'.pdf';
+      var blob=doc.output('blob');
+      if(overlay)overlay.classList.remove('visible');
+      var shareFile=new File([blob],fname,{type:'application/pdf'});
+      if(navigator.canShare&&navigator.canShare({files:[shareFile]})){
+        navigator.share({files:[shareFile],title:fname}).catch(function(){scanDownload(blob,fname);});
+      }else{scanDownload(blob,fname);}
+    }catch(err){
+      if(overlay)overlay.classList.remove('visible');
+      alert('Error creating PDF: '+err.message);
+    }
+  },80);
+}
+function scanDownload(blob,fname){
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=fname;a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);},2000);
+}
+
 </body>
 </html>
