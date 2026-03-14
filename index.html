@@ -8426,6 +8426,7 @@ window.addEventListener('load',function(){
   </div>
 </div>
 
+<script>
 // ── PDF Scanner ──────────────────────────────────────────────────
 var _scanPages=[];
 function scanAddPage(input){
@@ -8536,6 +8537,7 @@ function scanDownload(blob,fname){
   var a=document.createElement('a');a.href=url;a.download=fname;a.click();
   setTimeout(function(){URL.revokeObjectURL(url);},2000);
 }
+</script>
 
 </body>
 </html>
