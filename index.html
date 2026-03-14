@@ -687,8 +687,8 @@ body { background: var(--bg); }
 .note-copy-btn{background:none;border:1px solid #e5e7eb;border-radius:6px;color:#9ca3af;font-size:11px;padding:6px 12px;cursor:pointer;font-family:'Inter',sans-serif;}
 .note-copy-btn:active{border-color:#16a34a;color:#16a34a;}
 /* Flagged / pinned card indicators */
-.manual-note-card.note-flagged{border-left:3px solid #dc2626;}
-.manual-note-card.note-pinned{border-left:3px solid #f0c020;}
+.manual-note-card.note-flagged,.note-card.note-flagged{border-left:3px solid #dc2626;}
+.manual-note-card.note-pinned,.note-card.note-pinned{border-left:3px solid #f0c020;}
 /* Template picker sheet */
 .note-tpl-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:920;align-items:flex-end;}
 .note-tpl-ov.open{display:flex;}
@@ -4698,12 +4698,15 @@ function renderNotes(){
     var svgHtml=n.svg?'<div class="note-svg">'+n.svg+'</div>':'';
     var photosHtml='<div class="note-photo-row">'+(n.photos&&n.photos.length?n.photos.map(function(p){return '<img class="note-photo-thumb" src="'+p+'" onclick="openLightbox(this.src)">';}).join(''):'')+'<label class="note-photo-add" title="Add photo">+<input type="file" accept="image/*" capture="environment" style="display:none" onchange="addNotePhoto('+n.id+',this)"></label></div>';
     var noteLabel=escHtml(n.title||n.tabName||'');
-    return '<div class="note-card" id="nc-'+n.id+'">'+
+    return '<div class="note-card'+(n.pinned?' note-pinned':'')+(n.flagged?' note-flagged':'')+'" id="nc-'+n.id+'">'+
+      (n.pinned?'<div class="note-pinned-bar">Pinned</div>':'')+
       '<div class="note-card-hd" onclick="jcToggleNote('+n.id+')">'+
         '<div class="note-hd-left">'+
           '<span class="note-title-txt'+(noteLabel?'':' placeholder')+'">'+( noteLabel||'Tap to expand…')+'</span>'+
           '<div class="note-hd-meta"><span class="note-src-badge">'+n.tabName+'</span><span class="note-ts">'+ts+'</span></div>'+
         '</div>'+
+        '<button class="note-pin-btn'+(n.pinned?' pinned':'')+'" onclick="event.stopPropagation();toggleNotePin('+n.id+')" title="Pin">'+(n.pinned?'★':'☆')+'</button>'+
+        '<button class="note-flag-btn'+(n.flagged?' flagged':'')+'" onclick="event.stopPropagation();toggleNoteFlag('+n.id+')" title="Flag">⚑</button>'+
         '<div class="note-chevron" style="padding:4px 0 4px 4px;">▾</div>'+
       '</div>'+
       '<div class="note-card-bd">'+
