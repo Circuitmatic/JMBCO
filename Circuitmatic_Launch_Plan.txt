@@ -261,6 +261,7 @@ FRONT END:
 
 TO BUILD:
 
+Storage Bar in projects
 Grounding Electrode Conductor sizing (250.66)
 Equipment Grounding Conductor sizing (250.122)
 Article 220 load calculations — residential
