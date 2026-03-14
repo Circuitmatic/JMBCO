@@ -3827,10 +3827,10 @@ function renderNotes(){
     return '<div class="note-card" id="nc-'+n.id+'">'+
       '<div class="note-card-hd" onclick="jcToggleNote('+n.id+')">'+
         '<div class="note-hd-left">'+
-          '<span class="note-title-txt'+(noteLabel?'':' placeholder')+'">'+( noteLabel||'Tap ✏ to name…')+'</span>'+
+          '<span class="note-title-txt'+(noteLabel?'':' placeholder')+'">'+( noteLabel||'Untitled')+'</span>'+
           '<div class="note-hd-meta"><span class="note-src-badge">'+n.tabName+'</span><span class="note-ts">'+ts+'</span></div>'+
         '</div>'+
-        '<button class="note-edit-btn" onclick="event.stopPropagation();jcRenameNote('+n.id+')" title="Rename">✏</button>'+
+        
         '<div class="note-chevron" style="padding:4px 0 4px 4px;">▾</div>'+
       '</div>'+
       '<div class="note-card-bd">'+
@@ -3839,8 +3839,8 @@ function renderNotes(){
         photosHtml+
         '<textarea class="note-annotation" placeholder="Add a job note…" rows="2" onchange="jcUpdateAnnotation('+n.id+',this.value)">'+escHtml(n.annotation||'')+'</textarea>'+
         '<div class="note-card-actions">'+
-          '<button class="note-export-card-btn" onclick="jcExportNote('+n.id+')">Export</button>'+
-          '<button class="note-print-card-btn" onclick="jcRenameNote('+n.id+')">Edit</button>'+
+          '<button class="note-export-card-btn" onclick="jcExportNote('+n.id+')">Share &amp; Export</button>'+
+          '<button class="note-print-card-btn" onclick="jcRenameNote('+n.id+')">Edit Header</button>'+
           '<button class="note-del-btn" onclick="jcDeleteNote('+n.id+')">Delete</button>'+
         '</div>'+
       '</div>'+
@@ -4096,7 +4096,7 @@ function renderManualNoteCard(n){
         '<div class="note-actions-row">'+
           '<button class="note-copy-btn" onclick="copyNoteContent('+n.id+')">Copy</button>'+
           '<button class="note-copy-btn" onclick="duplicateNote('+n.id+')">Duplicate</button>'+
-          '<button class="note-export-card-btn" onclick="jcExportNote('+n.id+')">Export</button>'+
+          '<button class="note-export-card-btn" onclick="jcExportNote('+n.id+')">Share &amp; Export</button>'+
         '</div>'+
         '<div class="note-actions-row">'+
           '<button class="note-export-card-btn" style="flex:2;background:rgba(240,192,32,.1);border-color:#f0c020;color:#c9a010;" onclick="openSaveAsTemplateSheet('+n.id+')">&#128190; Save as Template</button>'+
@@ -4162,7 +4162,7 @@ function jcExportNote(id){
     if(cl.length){var clDoneC=cl.filter(function(c){return c.done;}).length;bodyHTML+='<div class="sec-hd">Checklist ('+clDoneC+'/'+cl.length+')</div><table class="kv-table"><tbody>'+cl.map(function(c){return '<tr><td style="width:24px;text-align:center;">'+(c.done?'<strong style="color:#16a34a;">✓</strong>':'○')+'</td><td style="'+(c.done?'text-decoration:line-through;color:#9ca3af;':'')+'">'+escHtml(c.text)+'</td></tr>';}).join('')+'</tbody></table>';}
     if(n.photos&&n.photos.length){var _npc2=n.photos.length===1?'rpt-photo-solo':'rpt-photo';bodyHTML+='<div class="sec-hd">Photos ('+n.photos.length+')</div><div class="rpt-photo-grid">'+n.photos.map(function(p){return '<img src="'+p+'" class="'+_npc2+'">';}).join('')+'</div>';}
     var html=buildPrintHTML(title,'Note · Created '+created,bodyHTML);
-    openExportSheet(title,txt.join('\n'),csv,html,n.photos||[]);
+    openExportSheet(title,txt.join('\n'),csv,html);
     return;
   }
   var lines=n.lines||[];
@@ -4188,10 +4188,9 @@ function jcExportNote(id){
   }).join('');
   bodyHTML='<table class="kv-table"><thead><tr><th>Field</th><th>Value</th><th>Details / Comments</th></tr></thead><tbody>'+rows+'</tbody></table>';
   if(n.annotation)bodyHTML+='<div class="sec-hd">Job Notes</div><div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:12px;font-size:13px;line-height:1.6;">'+escHtml(n.annotation)+'</div>';
-  if(n.svg){bodyHTML+='<div class="sec-hd">Bend Diagram</div>'+'<div style="margin:12px 0 20px;text-align:center;background:#f9fafb;border-radius:10px;padding:20px;border:1px solid #e5e7eb;">'+n.svg+'</div>';}
   if(n.photos&&n.photos.length){var _npc=n.photos.length===1?'rpt-photo-solo':'rpt-photo';bodyHTML+='<div class="sec-hd">Photos ('+n.photos.length+')</div><div class="rpt-photo-grid">'+n.photos.map(function(p){return '<img src="'+p+'" class="'+_npc+'">';}).join('')+'</div>';}
   var html=buildPrintHTML(title,n.tabName+' · Created '+created,bodyHTML);
-  openExportSheet(title,txt.join('\n'),csv,html,n.photos||[]);
+  openExportSheet(title,txt.join('\n'),csv,html);
 }
 function jcExportAllNotes(){
   var notes=JSON.parse(localStorage.getItem('jc_notes')||'[]');if(!notes.length)return;
@@ -4292,8 +4291,8 @@ function buildPrintHTML(reportTitle,subtitle,bodyHTML){
   '</div>'+
   '</body></html>';
 }
-function openExportSheet(title,text,csv,html,photos){
-  _exportData={title:title,text:text,csv:csv||text,html:html||null,photos:photos||[]};
+function openExportSheet(title,text,csv,html){
+  _exportData={title:title,text:text,csv:csv||text,html:html||null};
   document.getElementById('export-sheet-title').textContent=title;
   document.getElementById('export-sheet-sub').textContent='Send or save this report';
   var nsBtn=document.getElementById('export-native-share');
@@ -4306,24 +4305,7 @@ function openExportSheet(title,text,csv,html,photos){
 function doNativeShare(){
   if(!_exportData||!navigator.share)return;
   closeExportSheet();
-  var htmlContent=_exportData.html||_exportData.text;
-  var slug=_exportData.title.replace(/[^a-z0-9]/gi,"_");
-  var files=[new File([htmlContent],slug+".html",{type:"text/html"})];
-  (_exportData.photos||[]).forEach(function(p,i){
-    var m=p.match(/^data:(image\/\w+);base64,(.+)$/);
-    if(!m)return;
-    var bytes=atob(m[2]),arr=new Uint8Array(bytes.length);
-    for(var j=0;j<bytes.length;j++)arr[j]=bytes.charCodeAt(j);
-    files.push(new File([arr],"photo_"+(i+1)+".jpg",{type:m[1]}));
-  });
-  var shareData={title:_exportData.title,files:files};
-  if(navigator.canShare&&navigator.canShare(shareData)){
-    navigator.share(shareData).catch(function(){
-      navigator.share({title:_exportData.title,text:_exportData.text}).catch(function(){});
-    });
-  }else{
-    navigator.share({title:_exportData.title,text:_exportData.text}).catch(function(){});
-  }
+  navigator.share({title:_exportData.title,text:_exportData.text}).catch(function(){});
 }
 function closeExportSheet(){document.getElementById('export-sheet-ov').classList.remove('open');}
 function openLightbox(src){document.getElementById('lightbox-img').src=src;document.getElementById('photo-lightbox').classList.add('open');}
@@ -4341,18 +4323,7 @@ function doExportPDF(){
 function doExportCopy(){
   if(!_exportData)return;
   var t=_exportData.text;
-  var h=_exportData.html;
   closeExportSheet();
-  if(h&&navigator.clipboard&&window.ClipboardItem){
-    try{
-      navigator.clipboard.write([new ClipboardItem({
-        "text/html":new Blob([h],{type:"text/html"}),
-        "text/plain":new Blob([t],{type:"text/plain"})
-      })]).catch(function(){_copyFallback(t);});
-    }catch(e){_copyFallback(t);}
-  }else{_copyFallback(t);}
-}
-function _copyFallback(t){
   if(navigator.clipboard){navigator.clipboard.writeText(t).catch(function(){});}
   else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);}
 }
@@ -7479,7 +7450,7 @@ window.addEventListener('load',function(){
     <div class="export-sheet-sub" id="export-sheet-sub">Send or save this report</div>
     <button class="export-sheet-btn export-sheet-btn-primary" id="export-native-share" onclick="doNativeShare()" style="display:none;">
       <span class="export-sheet-btn-icon">📱</span>
-      <div><div class="export-sheet-btn-lbl">Send via...</div><div class="export-sheet-btn-sub">Full report + photos via SMS, Email, AirDrop</div></div>
+      <div><div class="export-sheet-btn-lbl">Send via...</div><div class="export-sheet-btn-sub">SMS, Email, AirDrop &amp; more</div></div>
     </button>
     <div class="export-sheet-divider" id="export-native-divider" style="display:none;"><span>File Exports</span></div>
     <button class="export-sheet-btn" onclick="doExportPDF()">
@@ -7488,7 +7459,7 @@ window.addEventListener('load',function(){
     </button>
     <button class="export-sheet-btn" onclick="doExportCopy()">
       <span class="export-sheet-btn-icon">📋</span>
-      <div><div class="export-sheet-btn-lbl">Copy to Clipboard</div><div class="export-sheet-btn-sub">Rich format — paste into email, notes &amp; more</div></div>
+      <div><div class="export-sheet-btn-lbl">Copy to Clipboard</div><div class="export-sheet-btn-sub">Paste anywhere</div></div>
     </button>
     <button class="export-sheet-btn" onclick="doExportCSV()">
       <span class="export-sheet-btn-icon">📊</span>
