@@ -81,6 +81,33 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #f0c020; border-ra
 .cht-ocpd-chip{padding:5px 10px;border-radius:6px;background:var(--surface);color:var(--sub);font-family:'Roboto Mono',monospace;font-size:12px;font-weight:600;border:1px solid var(--border);}
 .cht-ocpd-chip.common{background:rgba(240,192,32,.15);color:#f0c020;border-color:#f0c020;}
 .cht-spacer{height:20px;}
+.sup-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px;}
+.sup-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 12px;}
+.sup-name{font-size:12px;font-weight:700;color:var(--text);font-family:'Inter',sans-serif;margin-bottom:6px;}
+.sup-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;}
+.sup-lbl{font-size:10px;color:var(--muted);font-family:'Inter',sans-serif;}
+.sup-val{font-size:12px;font-weight:700;color:#f0c020;font-family:'Roboto Mono',monospace;}
+.sup-note{font-size:10px;color:var(--sub);font-family:'Inter',sans-serif;margin-top:5px;line-height:1.4;}
+.fiber-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px 14px;}
+.fiber-chip{display:flex;align-items:center;gap:7px;padding:7px 8px;border-radius:8px;background:var(--surface);border:1px solid var(--border);}
+.fiber-dot{width:18px;height:18px;border-radius:50%;flex-shrink:0;border:2px solid rgba(255,255,255,.15);}
+.fiber-num{font-size:9px;font-weight:700;color:var(--muted);font-family:'Roboto Mono',monospace;line-height:1;}
+.fiber-name{font-size:10px;font-weight:600;color:var(--text);font-family:'Inter',sans-serif;line-height:1;}
+.rj45-wrap{padding:12px 14px;}
+.rj45-std-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:'Roboto Mono',monospace;margin-bottom:8px;}
+.rj45-diagrams{display:flex;gap:12px;}
+.rj45-blk{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;}
+.rj45-title{font-size:11px;font-weight:700;color:var(--text);font-family:'Inter',sans-serif;text-align:center;margin-bottom:8px;}
+.rj45-connector{background:#2a2a2a;border-radius:0 0 8px 8px;border:2px solid #555;border-top:none;padding:6px 4px 10px;margin-bottom:6px;width:100%;box-sizing:border-box;}
+.rj45-pins-row{display:flex;gap:2px;justify-content:center;margin-bottom:4px;}
+.rj45-pin{width:18px;height:22px;border-radius:2px 2px 0 0;display:flex;align-items:flex-start;justify-content:center;padding-top:2px;font-size:8px;font-weight:700;color:#fff;font-family:'Roboto Mono',monospace;flex-shrink:0;}
+.rj45-nums{display:flex;gap:2px;justify-content:center;}
+.rj45-pnum{width:18px;text-align:center;font-size:8px;font-weight:700;color:var(--muted);font-family:'Roboto Mono',monospace;flex-shrink:0;}
+.rj45-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.rj45-table td{padding:2px 3px;font-size:9px;font-family:'Roboto Mono',monospace;border-bottom:1px solid var(--border);}
+.rj45-table tr:last-child td{border-bottom:none;}
+.rj45-pin-dot{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0;border:1px solid rgba(255,255,255,.2);}
+
 .cht-2col{display:grid;grid-template-columns:1fr 1fr;gap:0;}
 .cht-2col .cht-tbl{min-width:0;}
 .cht-section-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:10px 14px 4px;font-family:'Roboto Mono',monospace;}
@@ -8022,6 +8049,298 @@ window.addEventListener('load',function(){
         </table>
       </div>
       <div class="cht-note">THHN and THWN-2 are often printed on the same jacket — use 75°C column for sizing even if 90°C rated, unless terminations are rated 90°C.</div>
+    </div>
+  </div>
+
+
+  <!-- 16. Wiring Method Support Spacing -->
+  <div class="cht-card">
+    <div class="cht-hd" onclick="toggleCht('cht-support')">
+      <span class="cht-icon">&#x1F4CC;</span>
+      <div class="cht-hd-txt"><div class="cht-title">Support Spacing — Cheat Sheet</div><div class="cht-sub">NM, MC, EMT, IMC, RMC, FMC, PVC</div></div>
+      <span class="cht-chev" id="cht-support-chev">&#x25B6;</span>
+    </div>
+    <div class="cht-body" id="cht-support">
+      <div class="sup-grid">
+        <div class="sup-card">
+          <div class="sup-name">&#x1F7E1; NM-B (Romex)</div>
+          <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
+          <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+          <div class="sup-note">Staple flat to framing. Not in exposed/damp/wet locations. Holes through studs count as support.</div>
+        </div>
+        <div class="sup-card">
+          <div class="sup-name">&#x26AA; MC Cable</div>
+          <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">72" (6 ft)</span></div>
+          <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+          <div class="sup-note">Approved staples, straps, or hangers. Listed connectors required at each termination.</div>
+        </div>
+        <div class="sup-card">
+          <div class="sup-name">&#x26AA; AC Cable (BX)</div>
+          <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
+          <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+          <div class="sup-note">Anti-short bushing required at each termination end. Same support rules as NM-B.</div>
+        </div>
+        <div class="sup-card">
+          <div class="sup-name">&#x1F535; EMT</div>
+          <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">120" (10 ft)</span></div>
+          <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">36"</span></div>
+          <div class="sup-note">All trade sizes: 10 ft max. One-hole straps, two-hole straps, or conduit hangers.</div>
+        </div>
+        <div class="sup-card">
+          <div class="sup-name">&#x1F535; IMC</div>
+          <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">120" (10 ft)</span></div>
+          <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">36"</span></div>
+          <div class="sup-note">Same support rules as EMT. Coupling at 10 ft joints counts as a support point.</div>
+        </div>
+        <div class="sup-card">
+          <div class="sup-name">&#x1F535; RMC</div>
+          <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">120" (10 ft)</span></div>
+          <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">36"</span></div>
+          <div class="sup-note">Rigid conduit at 10 ft sticks. Threaded coupling at each stick effectively becomes support.</div>
+        </div>
+        <div class="sup-card">
+          <div class="sup-name">&#x1F7E0; FMC (Flex)</div>
+          <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
+          <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+          <div class="sup-note">Max 6 ft flex whips for luminaires if securely fastened at fixture end. Listed fittings each end.</div>
+        </div>
+        <div class="sup-card">
+          <div class="sup-name">&#x1F7E0; LFMC / LFNC</div>
+          <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
+          <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+          <div class="sup-note">Liquidtight: up to 6 ft allowed at equipment terminals for vibration isolation. 3/8" max 6 ft.</div>
+        </div>
+        <div class="sup-card" style="grid-column:span 2;">
+          <div class="sup-name">&#x1F7E3; PVC Conduit (Schedule 40 / 80) — by Trade Size</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:6px;">
+            <div><div class="sup-lbl">1/2" – 1"</div><div class="sup-val">36" (3 ft)</div></div>
+            <div><div class="sup-lbl">1-1/4" – 1-1/2"</div><div class="sup-val">48" (4 ft)</div></div>
+            <div><div class="sup-lbl">2" – 2-1/2"</div><div class="sup-val">60" (5 ft)</div></div>
+            <div><div class="sup-lbl">3" – 3-1/2"</div><div class="sup-val">72" (6 ft)</div></div>
+            <div><div class="sup-lbl">4"</div><div class="sup-val">84" (7 ft)</div></div>
+            <div><div class="sup-lbl">5"</div><div class="sup-val">96" (8 ft)</div></div>
+            <div><div class="sup-lbl">6"</div><div class="sup-val">108" (9 ft)</div></div>
+            <div><div class="sup-lbl">Near box</div><div class="sup-val">36"</div></div>
+          </div>
+          <div class="sup-note" style="margin-top:8px;">PVC expands with heat — use expansion fittings every 30 ft in exposed runs. Support within 3 ft of every box, conduit body, or fitting.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 17. Torque Reference -->
+  <div class="cht-card">
+    <div class="cht-hd" onclick="toggleCht('cht-torque')">
+      <span class="cht-icon">&#x1F527;</span>
+      <div class="cht-hd-txt"><div class="cht-title">Torque Reference Chart</div><div class="cht-sub">Wire terminals, lug screws &amp; bolts</div></div>
+      <span class="cht-chev" id="cht-torque-chev">&#x25B6;</span>
+    </div>
+    <div class="cht-body" id="cht-torque">
+      <div class="cht-section-lbl">Wire / Terminal Connections</div>
+      <div class="cht-scroll">
+        <table class="cht-tbl">
+          <thead><tr><th>Wire Size</th><th>Typical Torque</th><th>in&#xB7;lb Range</th><th>ft&#xB7;lb</th></tr></thead>
+          <tbody>
+            <tr><td>14 AWG</td><td>Device screws / small lugs</td><td>7 – 20 in&#xB7;lb</td><td>0.6 – 1.7</td></tr>
+            <tr><td>12 AWG</td><td>Device screws / small lugs</td><td>7 – 20 in&#xB7;lb</td><td>0.6 – 1.7</td></tr>
+            <tr><td>10 AWG</td><td>Branch circuit lugs</td><td>25 – 35 in&#xB7;lb</td><td>2.1 – 2.9</td></tr>
+            <tr><td>8 AWG</td><td>Panel / breaker lugs</td><td>35 – 45 in&#xB7;lb</td><td>2.9 – 3.8</td></tr>
+            <tr><td>6 AWG</td><td>Panel / breaker lugs</td><td>35 – 45 in&#xB7;lb</td><td>2.9 – 3.8</td></tr>
+            <tr><td>4 AWG</td><td>Breaker lugs / compression</td><td>45 – 55 in&#xB7;lb</td><td>3.8 – 4.6</td></tr>
+            <tr><td>2 AWG</td><td>Breaker lugs / compression</td><td>50 – 60 in&#xB7;lb</td><td>4.2 – 5.0</td></tr>
+            <tr><td>1 AWG</td><td>Large lugs / main breaker</td><td>100 – 125 in&#xB7;lb</td><td>8.3 – 10.4</td></tr>
+            <tr><td>1/0 AWG</td><td>Large lugs / main breaker</td><td>100 – 150 in&#xB7;lb</td><td>8.3 – 12.5</td></tr>
+            <tr><td>2/0 AWG</td><td>Main lugs / switchboard</td><td>150 – 175 in&#xB7;lb</td><td>12.5 – 14.6</td></tr>
+            <tr><td>3/0 AWG</td><td>Main lugs / switchboard</td><td>175 – 200 in&#xB7;lb</td><td>14.6 – 16.7</td></tr>
+            <tr><td>4/0 AWG</td><td>Service entrance / MDP</td><td>200 – 250 in&#xB7;lb</td><td>16.7 – 20.8</td></tr>
+            <tr><td>250 kcmil</td><td>Service entrance / MDP</td><td>250 – 300 in&#xB7;lb</td><td>20.8 – 25.0</td></tr>
+            <tr><td>350 kcmil</td><td>Service entrance / MDP</td><td>300 – 350 in&#xB7;lb</td><td>25.0 – 29.2</td></tr>
+            <tr><td>500 kcmil</td><td>Service entrance / MDP</td><td>350 – 450 in&#xB7;lb</td><td>29.2 – 37.5</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cht-section-lbl" style="margin-top:6px;">Bolt / Stud Torque (Bus Bars, Lug Bolts)</div>
+      <div class="cht-scroll">
+        <table class="cht-tbl">
+          <thead><tr><th>Bolt Size</th><th>Grade 2 (in&#xB7;lb)</th><th>Grade 5 (in&#xB7;lb)</th><th>Grade 5 (ft&#xB7;lb)</th></tr></thead>
+          <tbody>
+            <tr><td>#8-32</td><td>18</td><td>20</td><td>1.7</td></tr>
+            <tr><td>#10-32</td><td>28</td><td>32</td><td>2.7</td></tr>
+            <tr><td>#10-24</td><td>30</td><td>35</td><td>2.9</td></tr>
+            <tr><td>1/4"-20</td><td>40</td><td>60</td><td>5.0</td></tr>
+            <tr><td>1/4"-28</td><td>45</td><td>70</td><td>5.8</td></tr>
+            <tr><td>5/16"-18</td><td>80</td><td>120</td><td>10.0</td></tr>
+            <tr><td>3/8"-16</td><td>140</td><td>200</td><td>16.7</td></tr>
+            <tr><td>3/8"-24</td><td>160</td><td>225</td><td>18.8</td></tr>
+            <tr><td>1/2"-13</td><td>270</td><td>400</td><td>33.3</td></tr>
+            <tr><td>1/2"-20</td><td>300</td><td>450</td><td>37.5</td></tr>
+            <tr><td>5/8"-11</td><td>540</td><td>800</td><td>66.7</td></tr>
+            <tr><td>3/4"-10</td><td>960</td><td>1400</td><td>116.7</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cht-note">&#x26A0;&#xFE0F; Always check the device label or installation instructions — manufacturer torque specs take precedence. Most breaker lugs and connectors are stamped with the required torque value. Torquing to spec prevents loose connections, arcing, and fires.</div>
+    </div>
+  </div>
+
+  <!-- 18. Fiber Optic Color Code -->
+  <div class="cht-card">
+    <div class="cht-hd" onclick="toggleCht('cht-fiber')">
+      <span class="cht-icon">&#x1F4A1;</span>
+      <div class="cht-hd-txt"><div class="cht-title">Fiber Optic Color Code</div><div class="cht-sub">12-fiber standard (TIA-598-C) — strand &amp; tube colors</div></div>
+      <span class="cht-chev" id="cht-fiber-chev">&#x25B6;</span>
+    </div>
+    <div class="cht-body" id="cht-fiber">
+      <div class="fiber-grid">
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#0070c0;"></div>
+          <div><div class="fiber-num">1</div><div class="fiber-name">Blue</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#ff6600;"></div>
+          <div><div class="fiber-num">2</div><div class="fiber-name">Orange</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#00a550;"></div>
+          <div><div class="fiber-num">3</div><div class="fiber-name">Green</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#7b3f00;"></div>
+          <div><div class="fiber-num">4</div><div class="fiber-name">Brown</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#808080;"></div>
+          <div><div class="fiber-num">5</div><div class="fiber-name">Slate</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#f0f0f0;border-color:var(--border);"></div>
+          <div><div class="fiber-num">6</div><div class="fiber-name">White</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#cc0000;"></div>
+          <div><div class="fiber-num">7</div><div class="fiber-name">Red</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#1a1a1a;border-color:#555;"></div>
+          <div><div class="fiber-num">8</div><div class="fiber-name">Black</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#f0c020;"></div>
+          <div><div class="fiber-num">9</div><div class="fiber-name">Yellow</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#6a0dad;"></div>
+          <div><div class="fiber-num">10</div><div class="fiber-name">Violet</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#ff69b4;"></div>
+          <div><div class="fiber-num">11</div><div class="fiber-name">Rose</div></div>
+        </div>
+        <div class="fiber-chip">
+          <div class="fiber-dot" style="background:#00ced1;"></div>
+          <div><div class="fiber-num">12</div><div class="fiber-name">Aqua</div></div>
+        </div>
+      </div>
+      <div class="cht-section-lbl">Multi-Tube Cable — Tube Color Sequence (same order)</div>
+      <div class="cht-scroll">
+        <table class="cht-tbl" style="min-width:0;">
+          <thead><tr><th>Position</th><th>Tube Color</th><th>Fibers Inside</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td>T1</td><td>Blue</td><td>Fibers 1-12</td><td>First tube</td></tr>
+            <tr><td>T2</td><td>Orange</td><td>Fibers 13-24</td><td></td></tr>
+            <tr><td>T3</td><td>Green</td><td>Fibers 25-36</td><td></td></tr>
+            <tr><td>T4</td><td>Brown</td><td>Fibers 37-48</td><td></td></tr>
+            <tr><td>T5</td><td>Slate</td><td>Fibers 49-60</td><td></td></tr>
+            <tr><td>T6</td><td>White</td><td>Fibers 61-72</td><td></td></tr>
+            <tr><td>T7</td><td>Red</td><td>Fibers 73-84</td><td></td></tr>
+            <tr><td>T8</td><td>Black</td><td>Fibers 85-96</td><td></td></tr>
+            <tr><td>T9</td><td>Yellow</td><td>Fibers 97-108</td><td></td></tr>
+            <tr><td>T10</td><td>Violet</td><td>Fibers 109-120</td><td></td></tr>
+            <tr><td>T11</td><td>Rose</td><td>Fibers 121-132</td><td></td></tr>
+            <tr><td>T12</td><td>Aqua</td><td>Fibers 133-144</td><td>Last of 144-fiber</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cht-note">Mnemonic: <strong style="color:var(--text);">B</strong>ig <strong style="color:var(--text);">O</strong>range <strong style="color:var(--text);">G</strong>irls <strong style="color:var(--text);">B</strong>uy <strong style="color:var(--text);">S</strong>lates <strong style="color:var(--text);">W</strong>hile <strong style="color:var(--text);">R</strong>ed <strong style="color:var(--text);">B</strong>ananas <strong style="color:var(--text);">Y</strong>ield <strong style="color:var(--text);">V</strong>ery <strong style="color:var(--text);">P</strong>retty <strong style="color:var(--text);">A</strong>qua. Fibers within each tube follow the same 12-color sequence.</div>
+    </div>
+  </div>
+
+  <!-- 19. RJ-45 Pinout -->
+  <div class="cht-card">
+    <div class="cht-hd" onclick="toggleCht('cht-rj45')">
+      <span class="cht-icon">&#x1F50C;</span>
+      <div class="cht-hd-txt"><div class="cht-title">RJ-45 Pinout — T568A &amp; T568B</div><div class="cht-sub">Cat5e / Cat6 data cable wiring (connector front view)</div></div>
+      <span class="cht-chev" id="cht-rj45-chev">&#x25B6;</span>
+    </div>
+    <div class="cht-body" id="cht-rj45">
+      <div class="rj45-wrap">
+        <div class="rj45-diagrams">
+
+          <!-- T568B -->
+          <div class="rj45-blk">
+            <div class="rj45-title">T568B &mdash; Commercial (US Standard)</div>
+            <div class="rj45-connector">
+              <div class="rj45-pins-row">
+                <div class="rj45-pin" style="background:#ff8c00;" title="Wh/Or">1</div>
+                <div class="rj45-pin" style="background:#ff6600;" title="Orange">2</div>
+                <div class="rj45-pin" style="background:#90ee90;" title="Wh/Gr">3</div>
+                <div class="rj45-pin" style="background:#0000cd;" title="Blue">4</div>
+                <div class="rj45-pin" style="background:#add8e6;" title="Wh/Bl">5</div>
+                <div class="rj45-pin" style="background:#008000;" title="Green">6</div>
+                <div class="rj45-pin" style="background:#d2b48c;" title="Wh/Br">7</div>
+                <div class="rj45-pin" style="background:#8b4513;" title="Brown">8</div>
+              </div>
+              <div class="rj45-nums">
+                <div class="rj45-pnum">1</div><div class="rj45-pnum">2</div><div class="rj45-pnum">3</div><div class="rj45-pnum">4</div>
+                <div class="rj45-pnum">5</div><div class="rj45-pnum">6</div><div class="rj45-pnum">7</div><div class="rj45-pnum">8</div>
+              </div>
+            </div>
+            <table class="rj45-table">
+              <tr><td style="color:#ff8c00;">&#x25CF;</td><td><b>1</b></td><td>Wh/Orange</td><td>TX+</td></tr>
+              <tr><td style="color:#ff6600;">&#x25CF;</td><td><b>2</b></td><td>Orange</td><td>TX&#x2212;</td></tr>
+              <tr><td style="color:#90ee90;">&#x25CF;</td><td><b>3</b></td><td>Wh/Green</td><td>RX+</td></tr>
+              <tr><td style="color:#0000cd;">&#x25CF;</td><td><b>4</b></td><td>Blue</td><td>&#x2014;</td></tr>
+              <tr><td style="color:#add8e6;">&#x25CF;</td><td><b>5</b></td><td>Wh/Blue</td><td>&#x2014;</td></tr>
+              <tr><td style="color:#008000;">&#x25CF;</td><td><b>6</b></td><td>Green</td><td>RX&#x2212;</td></tr>
+              <tr><td style="color:#d2b48c;">&#x25CF;</td><td><b>7</b></td><td>Wh/Brown</td><td>&#x2014;</td></tr>
+              <tr><td style="color:#8b4513;">&#x25CF;</td><td><b>8</b></td><td>Brown</td><td>&#x2014;</td></tr>
+            </table>
+          </div>
+
+          <!-- T568A -->
+          <div class="rj45-blk">
+            <div class="rj45-title">T568A &mdash; Residential / Gov&apos;t</div>
+            <div class="rj45-connector">
+              <div class="rj45-pins-row">
+                <div class="rj45-pin" style="background:#90ee90;" title="Wh/Gr">1</div>
+                <div class="rj45-pin" style="background:#008000;" title="Green">2</div>
+                <div class="rj45-pin" style="background:#ff8c00;" title="Wh/Or">3</div>
+                <div class="rj45-pin" style="background:#0000cd;" title="Blue">4</div>
+                <div class="rj45-pin" style="background:#add8e6;" title="Wh/Bl">5</div>
+                <div class="rj45-pin" style="background:#ff6600;" title="Orange">6</div>
+                <div class="rj45-pin" style="background:#d2b48c;" title="Wh/Br">7</div>
+                <div class="rj45-pin" style="background:#8b4513;" title="Brown">8</div>
+              </div>
+              <div class="rj45-nums">
+                <div class="rj45-pnum">1</div><div class="rj45-pnum">2</div><div class="rj45-pnum">3</div><div class="rj45-pnum">4</div>
+                <div class="rj45-pnum">5</div><div class="rj45-pnum">6</div><div class="rj45-pnum">7</div><div class="rj45-pnum">8</div>
+              </div>
+            </div>
+            <table class="rj45-table">
+              <tr><td style="color:#90ee90;">&#x25CF;</td><td><b>1</b></td><td>Wh/Green</td><td>TX+</td></tr>
+              <tr><td style="color:#008000;">&#x25CF;</td><td><b>2</b></td><td>Green</td><td>TX&#x2212;</td></tr>
+              <tr><td style="color:#ff8c00;">&#x25CF;</td><td><b>3</b></td><td>Wh/Orange</td><td>RX+</td></tr>
+              <tr><td style="color:#0000cd;">&#x25CF;</td><td><b>4</b></td><td>Blue</td><td>&#x2014;</td></tr>
+              <tr><td style="color:#add8e6;">&#x25CF;</td><td><b>5</b></td><td>Wh/Blue</td><td>&#x2014;</td></tr>
+              <tr><td style="color:#ff6600;">&#x25CF;</td><td><b>6</b></td><td>Orange</td><td>RX&#x2212;</td></tr>
+              <tr><td style="color:#d2b48c;">&#x25CF;</td><td><b>7</b></td><td>Wh/Brown</td><td>&#x2014;</td></tr>
+              <tr><td style="color:#8b4513;">&#x25CF;</td><td><b>8</b></td><td>Brown</td><td>&#x2014;</td></tr>
+            </table>
+          </div>
+
+        </div><!-- end rj45-diagrams -->
+        <div class="cht-note" style="margin-top:10px;">&#x1F4A1; <strong style="color:var(--text);">Crossover cable</strong> = one end T568A, other end T568B (connects two devices directly). <strong style="color:var(--text);">Straight-through</strong> = both ends same standard (connects device to switch/router). Pins 1,2 = Transmit &bull; Pins 3,6 = Receive (10/100 Mbps). Gigabit uses all 4 pairs.</div>
+      </div>
     </div>
   </div>
 
