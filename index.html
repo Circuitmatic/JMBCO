@@ -5915,7 +5915,7 @@ function calculateBend(){
   document.getElementById('bend-results-label').style.display='block';
   document.getElementById('bend-results').innerHTML=blocks.join('');
   document.getElementById('bend-disclaimer').style.display='block';
-  var _bsvg=document.getElementById('bend-svg');jcResultsReady('cf','Conduit Bend',_bsvg?'<svg viewBox="'+(_bsvg.getAttribute('viewBox')||'0 0 280 96')+'" width="100%" style="max-height:120px">'+_bsvg.innerHTML+'</svg>':null);
+  var _bsvg=document.getElementById('bend-svg');jcResultsReady('bend','Conduit Bend',_bsvg?'<svg viewBox="'+(_bsvg.getAttribute('viewBox')||'0 0 280 96')+'" width="100%" style="max-height:120px">'+_bsvg.innerHTML+'</svg>':null);
 }
 
 function resetBend(){
