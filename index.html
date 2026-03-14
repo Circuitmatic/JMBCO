@@ -67,9 +67,9 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #ffffff; border-ra
 .cht-body{display:none;border-top:1px solid var(--border);padding:0 0 10px;}
 .cht-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .cht-tbl{border-collapse:collapse;width:100%;font-family:'Roboto Mono',monospace;font-size:11px;}
-.cht-tbl th{background:var(--surface);color:var(--sub);font-size:9px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:5px 7px;text-align:right;border-bottom:1px solid var(--border);white-space:normal;line-height:1.2;position:sticky;top:0;}
+.cht-tbl th{background:var(--surface);color:var(--sub);font-size:9px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:5px 5px;text-align:right;border-bottom:1px solid var(--border);white-space:normal;line-height:1.2;position:sticky;top:0;}
 .cht-tbl th:first-child{text-align:left;}
-.cht-tbl td{padding:5px 7px;text-align:right;color:var(--text);border-bottom:1px solid var(--border);white-space:nowrap;}
+.cht-tbl td{padding:5px 5px;text-align:right;color:var(--text);border-bottom:1px solid var(--border);white-space:nowrap;font-size:10px;}
 .cht-tbl td:first-child{text-align:left;font-weight:700;color:var(--sub);}
 .cht-tbl tr:last-child td{border-bottom:none;}
 .cht-tbl tr:hover td{background:var(--surface);}
@@ -86,7 +86,7 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #ffffff; border-ra
 .sup-name{font-size:12px;font-weight:700;color:var(--text);font-family:'Inter',sans-serif;margin-bottom:6px;}
 .sup-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;}
 .sup-lbl{font-size:10px;color:var(--muted);font-family:'Inter',sans-serif;}
-.sup-val{font-size:12px;font-weight:700;color:#f0c020;font-family:'Roboto Mono',monospace;}
+.sup-val{font-size:11px;font-weight:700;color:#7dd3fc;font-family:'Roboto Mono',monospace;}
 .sup-note{font-size:10px;color:var(--sub);font-family:'Inter',sans-serif;margin-top:5px;line-height:1.4;}
 .fiber-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:12px 14px;}
 .fiber-chip{display:flex;align-items:center;gap:7px;padding:7px 8px;border-radius:8px;background:var(--surface);border:1px solid var(--border);}
@@ -2757,7 +2757,82 @@ if('serviceWorker' in navigator){
       <div class="charts-hdr-sub">Tap any section to expand</div>
     </div>
 
-    <!-- 1. Conductor Ampacity -->
+    <!-- 1. Support Spacing -->
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-support')">
+        <span class="cht-icon">&#x1F4CC;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Support Spacing — Cheat Sheet</div><div class="cht-sub">NM, MC, EMT, IMC, RMC, FMC, PVC</div></div>
+        <span class="cht-chev" id="cht-support-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-support">
+        <div class="sup-grid">
+          <div class="sup-card">
+            <div class="sup-name">&#x1F7E1; NM-B (Romex)</div>
+            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
+            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+            <div class="sup-note">Staple flat to framing. Not in exposed/damp/wet locations. Holes through studs count as support.</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">&#x26AA; MC Cable</div>
+            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">72" (6 ft)</span></div>
+            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+            <div class="sup-note">Approved staples, straps, or hangers. Listed connectors required at each termination.</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">&#x26AA; AC Cable (BX)</div>
+            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
+            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+            <div class="sup-note">Anti-short bushing required at each termination end. Same support rules as NM-B.</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">&#x1F535; EMT</div>
+            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">120" (10 ft)</span></div>
+            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">36"</span></div>
+            <div class="sup-note">All trade sizes: 10 ft max. One-hole straps, two-hole straps, or conduit hangers.</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">&#x1F535; IMC</div>
+            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">120" (10 ft)</span></div>
+            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">36"</span></div>
+            <div class="sup-note">Same support rules as EMT. Coupling at 10 ft joints counts as a support point.</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">&#x1F535; RMC</div>
+            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">120" (10 ft)</span></div>
+            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">36"</span></div>
+            <div class="sup-note">Rigid conduit at 10 ft sticks. Threaded coupling at each stick effectively becomes support.</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">&#x1F7E0; FMC (Flex)</div>
+            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
+            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+            <div class="sup-note">Max 6 ft flex whips for luminaires if securely fastened at fixture end. Listed fittings each end.</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">&#x1F7E0; LFMC / LFNC</div>
+            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
+            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
+            <div class="sup-note">Liquidtight: up to 6 ft allowed at equipment terminals for vibration isolation. 3/8" max 6 ft.</div>
+          </div>
+          <div class="sup-card" style="grid-column:span 2;">
+            <div class="sup-name">&#x1F7E3; PVC Conduit (Schedule 40 / 80) — by Trade Size</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:6px;">
+              <div><div class="sup-lbl">1/2" – 1"</div><div class="sup-val">36" (3 ft)</div></div>
+              <div><div class="sup-lbl">1-1/4" – 1-1/2"</div><div class="sup-val">48" (4 ft)</div></div>
+              <div><div class="sup-lbl">2" – 2-1/2"</div><div class="sup-val">60" (5 ft)</div></div>
+              <div><div class="sup-lbl">3" – 3-1/2"</div><div class="sup-val">72" (6 ft)</div></div>
+              <div><div class="sup-lbl">4"</div><div class="sup-val">84" (7 ft)</div></div>
+              <div><div class="sup-lbl">5"</div><div class="sup-val">96" (8 ft)</div></div>
+              <div><div class="sup-lbl">6"</div><div class="sup-val">108" (9 ft)</div></div>
+              <div><div class="sup-lbl">Near box</div><div class="sup-val">36"</div></div>
+            </div>
+            <div class="sup-note" style="margin-top:8px;">PVC expands with heat — use expansion fittings every 30 ft in exposed runs. Support within 3 ft of every box, conduit body, or fitting.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Conductor Ampacity -->
     <div class="cht-card">
       <div class="cht-hd" onclick="toggleCht('cht-ampacity')">
         <span class="cht-icon">&#x26A1;</span>
@@ -3268,81 +3343,6 @@ if('serviceWorker' in navigator){
       </div>
     </div>
 
-
-    <!-- 16. Wiring Method Support Spacing -->
-    <div class="cht-card">
-      <div class="cht-hd" onclick="toggleCht('cht-support')">
-        <span class="cht-icon">&#x1F4CC;</span>
-        <div class="cht-hd-txt"><div class="cht-title">Support Spacing — Cheat Sheet</div><div class="cht-sub">NM, MC, EMT, IMC, RMC, FMC, PVC</div></div>
-        <span class="cht-chev" id="cht-support-chev">&#x25B6;</span>
-      </div>
-      <div class="cht-body" id="cht-support">
-        <div class="sup-grid">
-          <div class="sup-card">
-            <div class="sup-name">&#x1F7E1; NM-B (Romex)</div>
-            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
-            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
-            <div class="sup-note">Staple flat to framing. Not in exposed/damp/wet locations. Holes through studs count as support.</div>
-          </div>
-          <div class="sup-card">
-            <div class="sup-name">&#x26AA; MC Cable</div>
-            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">72" (6 ft)</span></div>
-            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
-            <div class="sup-note">Approved staples, straps, or hangers. Listed connectors required at each termination.</div>
-          </div>
-          <div class="sup-card">
-            <div class="sup-name">&#x26AA; AC Cable (BX)</div>
-            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
-            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
-            <div class="sup-note">Anti-short bushing required at each termination end. Same support rules as NM-B.</div>
-          </div>
-          <div class="sup-card">
-            <div class="sup-name">&#x1F535; EMT</div>
-            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">120" (10 ft)</span></div>
-            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">36"</span></div>
-            <div class="sup-note">All trade sizes: 10 ft max. One-hole straps, two-hole straps, or conduit hangers.</div>
-          </div>
-          <div class="sup-card">
-            <div class="sup-name">&#x1F535; IMC</div>
-            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">120" (10 ft)</span></div>
-            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">36"</span></div>
-            <div class="sup-note">Same support rules as EMT. Coupling at 10 ft joints counts as a support point.</div>
-          </div>
-          <div class="sup-card">
-            <div class="sup-name">&#x1F535; RMC</div>
-            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">120" (10 ft)</span></div>
-            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">36"</span></div>
-            <div class="sup-note">Rigid conduit at 10 ft sticks. Threaded coupling at each stick effectively becomes support.</div>
-          </div>
-          <div class="sup-card">
-            <div class="sup-name">&#x1F7E0; FMC (Flex)</div>
-            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
-            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
-            <div class="sup-note">Max 6 ft flex whips for luminaires if securely fastened at fixture end. Listed fittings each end.</div>
-          </div>
-          <div class="sup-card">
-            <div class="sup-name">&#x1F7E0; LFMC / LFNC</div>
-            <div class="sup-row"><span class="sup-lbl">Max spacing</span><span class="sup-val">54" (4.5 ft)</span></div>
-            <div class="sup-row"><span class="sup-lbl">Near box/fitting</span><span class="sup-val">12"</span></div>
-            <div class="sup-note">Liquidtight: up to 6 ft allowed at equipment terminals for vibration isolation. 3/8" max 6 ft.</div>
-          </div>
-          <div class="sup-card" style="grid-column:span 2;">
-            <div class="sup-name">&#x1F7E3; PVC Conduit (Schedule 40 / 80) — by Trade Size</div>
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:6px;">
-              <div><div class="sup-lbl">1/2" – 1"</div><div class="sup-val">36" (3 ft)</div></div>
-              <div><div class="sup-lbl">1-1/4" – 1-1/2"</div><div class="sup-val">48" (4 ft)</div></div>
-              <div><div class="sup-lbl">2" – 2-1/2"</div><div class="sup-val">60" (5 ft)</div></div>
-              <div><div class="sup-lbl">3" – 3-1/2"</div><div class="sup-val">72" (6 ft)</div></div>
-              <div><div class="sup-lbl">4"</div><div class="sup-val">84" (7 ft)</div></div>
-              <div><div class="sup-lbl">5"</div><div class="sup-val">96" (8 ft)</div></div>
-              <div><div class="sup-lbl">6"</div><div class="sup-val">108" (9 ft)</div></div>
-              <div><div class="sup-lbl">Near box</div><div class="sup-val">36"</div></div>
-            </div>
-            <div class="sup-note" style="margin-top:8px;">PVC expands with heat — use expansion fittings every 30 ft in exposed runs. Support within 3 ft of every box, conduit body, or fitting.</div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- 17. Torque Reference -->
     <div class="cht-card">
