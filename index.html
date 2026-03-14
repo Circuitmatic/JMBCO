@@ -4701,10 +4701,9 @@ function renderNotes(){
     return '<div class="note-card" id="nc-'+n.id+'">'+
       '<div class="note-card-hd" onclick="jcToggleNote('+n.id+')">'+
         '<div class="note-hd-left">'+
-          '<span class="note-title-txt'+(noteLabel?'':' placeholder')+'">'+( noteLabel||'Tap ✏ to name…')+'</span>'+
+          '<span class="note-title-txt'+(noteLabel?'':' placeholder')+'">'+( noteLabel||'Tap to expand…')+'</span>'+
           '<div class="note-hd-meta"><span class="note-src-badge">'+n.tabName+'</span><span class="note-ts">'+ts+'</span></div>'+
         '</div>'+
-        '<button class="note-edit-btn" onclick="event.stopPropagation();jcRenameNote('+n.id+')" title="Rename">✏</button>'+
         '<div class="note-chevron" style="padding:4px 0 4px 4px;">▾</div>'+
       '</div>'+
       '<div class="note-card-bd">'+
