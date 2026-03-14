@@ -214,6 +214,14 @@ body.light-mode .gfci-table td,.gfci-table th{border-bottom-color:#e2e8f0;}
 body.light-mode .gfci-code-note{background:#f8fafc;border-color:#e2e8f0;}
 body.light-mode .gfci-section-head{background:rgba(240,192,32,.06);}
 body.light-mode .gfci-alert{background:rgba(240,192,32,.06);border-color:rgba(240,192,32,.3);}
+/* ── EV Charger Tab ─────────────────────────────────────────────────────────── */
+.ev-preset-row{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+.ev-preset-btn{flex:1;min-width:0;padding:8px 4px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--sub);font-size:0.72rem;font-weight:700;cursor:pointer;text-align:center;transition:all .18s;line-height:1.3;}
+.ev-preset-btn span{display:block;font-size:0.62rem;font-weight:400;color:var(--muted);margin-top:2px;}
+.ev-preset-btn.active,.ev-preset-btn:hover{border-color:#f0c020;color:#f0c020;background:rgba(240,192,32,.08);}
+.ev-kw-badge{display:inline-block;background:rgba(240,192,32,.12);border:1px solid rgba(240,192,32,.3);color:#f0c020;font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:8px;font-family:'Roboto Mono',monospace;}
+body.light-mode .ev-preset-btn{background:#f8fafc;border-color:#e2e8f0;color:#64748b;}
+body.light-mode .ev-preset-btn.active,body.light-mode .ev-preset-btn:hover{border-color:#d4a000;color:#b45309;background:rgba(240,192,32,.06);}
 
   html {
     height: 100%;
@@ -1266,6 +1274,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-scan" onclick="switchTab('scan',this)">Scan</button>
     <button class="tab-btn" id="tab-btn-quiz" onclick="switchTab('quiz',this)">Quiz</button>
     <button class="tab-btn" id="tab-btn-gfci" onclick="switchTab('gfci',this)">GFCI/AFCI</button>
+    <button class="tab-btn" id="tab-btn-ev" onclick="switchTab('ev',this)">EV</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -3708,6 +3717,76 @@ if('serviceWorker' in navigator){
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ── EV Charger Sizing Tab ── -->
+  <div class="tab-panel" id="tab-ev">
+    <div class="section-label">EV Charger Circuit Sizing</div>
+    <div class="fields">
+      <!-- Quick presets -->
+      <div class="field-row" style="flex-direction:column;align-items:stretch;gap:6px;">
+        <div class="field-label">Quick Presets</div>
+        <div class="ev-preset-row">
+          <button class="ev-preset-btn" onclick="evPreset(12,120,this)">Level 1<span>12A / 120V</span></button>
+          <button class="ev-preset-btn" onclick="evPreset(16,240,this)">L2 Basic<span>16A / 240V</span></button>
+          <button class="ev-preset-btn" onclick="evPreset(32,240,this)">L2 Standard<span>32A / 240V</span></button>
+          <button class="ev-preset-btn" onclick="evPreset(40,240,this)">L2 Fast<span>40A / 240V</span></button>
+          <button class="ev-preset-btn" onclick="evPreset(48,240,this)">L2 Max<span>48A / 240V</span></button>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">EVSE Nameplate Amps</div>
+        <input class="fi" id="ev-amps" type="number" min="1" max="400" placeholder="e.g. 32" oninput="evPresetClear()"/>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Voltage</div>
+        <div class="sel-wrap"><select class="fi" id="ev-voltage" oninput="evPresetClear()">
+          <option value="120">120V (Level 1)</option>
+          <option value="208">208V (3-phase / commercial)</option>
+          <option value="240" selected>240V (Level 2 residential)</option>
+        </select></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Number of EVSEs</div>
+        <div class="sel-wrap"><select class="fi" id="ev-qty">
+          <option value="1" selected>1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="6">6</option>
+          <option value="8">8</option>
+          <option value="10">10</option>
+        </select></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Conductor</div>
+        <div class="sel-wrap"><select class="fi" id="ev-cond">
+          <option value="copper" selected>Copper</option>
+          <option value="aluminum">Aluminum</option>
+        </select></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Insulation</div>
+        <div class="sel-wrap"><select class="fi" id="ev-ins">
+          <option value="comm75" selected>75°C — THWN / XHHW</option>
+          <option value="comm90">90°C — THHN / XHHW-2</option>
+          <option value="residential">60°C — TW / UF</option>
+        </select></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="err-msg" id="ev-err"></div>
+    <div class="btn-row">
+      <button class="btn btn-calc" onclick="calculateEV()">Calculate</button>
+      <button class="btn btn-reset" onclick="resetEV()">Reset</button>
+    </div>
+    <div class="section-label" id="ev-results-label" style="display:none;">Results</div>
+    <div class="results" id="ev-results"></div>
+    <div class="disclaimer" id="ev-disclaimer" style="display:none;">
+      <div class="disclaimer-title">Important Notice</div>
+      <div class="disclaimer-text">EVSE is a continuous load per §625.41 — circuit sized at 125% of nameplate. Each outlet &gt;16A or &gt;120V requires a dedicated branch circuit per §625.40. Conductor sized per Table 310.16 at the lower of insulation or terminal rating. Maximum cable/cord length 25 ft per §625.17(C) without listed cable management. Multiple EVSEs may share a feeder with a listed Power Control System (PCS) per §625.42(A). For design guidance only — verify all installations with local AHJ.</div>
+    </div>
+    <div class="code-note" id="ev-note"></div>
   </div>
 
   <!-- ── GFCI / AFCI Lookup Tab ── -->
@@ -8258,6 +8337,139 @@ window.addEventListener('load',function(){
   var _sb=document.getElementById('stg-cy-'+_sy);
   if(_sb)_sb.classList.add('active');
 });
+
+// ── EV Charger Sizing ────────────────────────────────────────────────────────
+
+var _evPresetActive = null;
+
+function evPreset(amps, volts, btn) {
+  document.getElementById('ev-amps').value = amps;
+  document.getElementById('ev-voltage').value = volts;
+  document.querySelectorAll('.ev-preset-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  _evPresetActive = btn;
+  calculateEV();
+}
+
+function evPresetClear() {
+  document.querySelectorAll('.ev-preset-btn').forEach(function(b){b.classList.remove('active');});
+  _evPresetActive = null;
+}
+
+function resetEV() {
+  document.getElementById('ev-amps').value = '';
+  document.getElementById('ev-voltage').value = '240';
+  document.getElementById('ev-qty').value = '1';
+  document.getElementById('ev-cond').value = 'copper';
+  document.getElementById('ev-ins').value = 'comm75';
+  evPresetClear();
+  document.getElementById('ev-err').className = 'err-msg';
+  document.getElementById('ev-results').innerHTML = '';
+  document.getElementById('ev-results-label').style.display = 'none';
+  document.getElementById('ev-disclaimer').style.display = 'none';
+  document.getElementById('ev-note').textContent = '';
+}
+
+function showEvErr(m) {
+  var e = document.getElementById('ev-err');
+  e.innerHTML = m; e.className = 'err-msg show';
+  document.getElementById('ev-results').innerHTML = '';
+  document.getElementById('ev-results-label').style.display = 'none';
+  document.getElementById('ev-disclaimer').style.display = 'none';
+}
+
+function calculateEV() {
+  document.getElementById('ev-err').className = 'err-msg';
+
+  var nameplate = parseFloat(document.getElementById('ev-amps').value);
+  var voltage   = parseInt(document.getElementById('ev-voltage').value);
+  var qty       = parseInt(document.getElementById('ev-qty').value) || 1;
+  var cond      = document.getElementById('ev-cond').value;
+  var ins       = document.getElementById('ev-ins').value;
+
+  if (!nameplate || nameplate <= 0) { showEvErr('Enter EVSE nameplate amperage from the unit\'s label.'); return; }
+  if (nameplate > 400) { showEvErr('Nameplate amperage seems too high — verify the value.'); return; }
+
+  // §625.41 — continuous load: circuit must be sized at 125%
+  var minCircuit = nameplate * 1.25;
+  // For multiple EVSEs without PCS, multiply
+  var totalMinCircuit = minCircuit * qty;
+  // Standard breaker at or above required ampacity
+  var breaker = stdOCPDatOrAbove(Math.ceil(minCircuit));
+  var totalBreaker = qty > 1 ? stdOCPDatOrAbove(Math.ceil(totalMinCircuit)) : null;
+
+  // Min conductor size from 310.16 — sized to carry the breaker rating
+  var wire = mcMinWire(cond, breaker, ins, ins);
+
+  // Power output
+  var kw = (nameplate * voltage / 1000).toFixed(1);
+  // Rough miles-of-range per hour (EPA avg: ~3-4 miles/kWh at 90% efficiency)
+  var milesPerHr = Math.round(nameplate * voltage * 0.90 / 1000 * 3.5);
+
+  // Dedicated circuit required if >16A or >120V (§625.40)
+  var needDedicated = nameplate > 16 || voltage > 120;
+
+  var blocks = [];
+
+  // Power output info first — useful context
+  blocks.push(makeBlock('ok', 'EVSE Output', '',
+    kw + ' kW <span class="ev-kw-badge">~' + milesPerHr + ' mi/hr</span>',
+    nameplate + 'A × ' + voltage + 'V · ~' + milesPerHr + ' miles of range per hour of charging'));
+
+  // Min circuit ampacity
+  blocks.push(makeBlock('ok', 'Min. Circuit Ampacity', '§625.41',
+    minCircuit.toFixed(0) + 'A',
+    nameplate + 'A nameplate × 125% (continuous load)'));
+
+  // Breaker size
+  blocks.push(makeBlock('ok', 'Breaker / OCPD', '§240.6(A)',
+    breaker + 'A',
+    'Next standard size at or above ' + minCircuit.toFixed(1) + 'A'));
+
+  // Wire size
+  if (wire) {
+    var tempLabel = ins === 'comm90' ? '90°C' : ins === 'residential' ? '60°C' : '75°C';
+    blocks.push(makeBlock('ok', 'Min. Conductor Size', '§310.16 ' + tempLabel,
+      sizeLabel(wire.size) + ' ' + (cond === 'copper' ? 'Cu' : 'Al'),
+      wire.amp + 'A ampacity — sized to carry ' + breaker + 'A OCPD rating'));
+  } else {
+    blocks.push(makeBlock('warn', 'Conductor Size', '§310.16',
+      'See engineer', 'Exceeds standard table range — consult licensed engineer'));
+  }
+
+  // Dedicated circuit
+  blocks.push(makeBlock(needDedicated ? 'warn' : 'ok', 'Dedicated Circuit', '§625.40',
+    needDedicated ? 'Required' : 'Not required',
+    needDedicated
+      ? 'EVSE above 16A or above 120V must have its own branch circuit'
+      : 'Level 1 ≤16A at 120V may share a circuit in some cases — verify with AHJ'));
+
+  // Cable length
+  blocks.push(makeBlock('ok', 'Max Cable Length', '§625.17(C)',
+    '25 ft',
+    'Without a listed cable management system as part of the EVSE'));
+
+  // Multiple EVSE note
+  if (qty > 1) {
+    blocks.push(makeBlock('warn', qty + ' EVSEs — No PCS', '§625.42',
+      totalBreaker + 'A service/feeder load',
+      qty + ' × ' + breaker + 'A circuits = ' + totalMinCircuit.toFixed(0) + 'A total. A Power Control System (PCS) per §625.42(A) can reduce this.'));
+  }
+
+  // 210.17 EV-ready outlet for new construction (2023/2026)
+  if (_codeYear !== '2020' && nameplate <= 40 && voltage >= 240) {
+    blocks.push(makeBlock('ok', '§210.17 EV-Ready Outlet', '2023/2026',
+      '40A min. branch circuit',
+      'New construction dwelling units must include at least one EV-ready outlet in the garage or parking area.'));
+  }
+
+  document.getElementById('ev-results-label').style.display = 'block';
+  document.getElementById('ev-results').innerHTML = blocks.join('');
+  document.getElementById('ev-disclaimer').style.display = 'block';
+  document.getElementById('ev-note').textContent =
+    'Code ' + _codeYear + ' · §625.40 §625.41 §625.42 §625.17(C) · Table 310.16 · §240.6(A) · Design guidance only · Verify with AHJ';
+  jcResultsReady('ev', 'EV Charger');
+}
 
 // ── GFCI / AFCI Lookup ───────────────────────────────────────────────────────
 
