@@ -1,12 +1,12 @@
 =============================================================================
                          CIRCUITMATiC — MASTER LAUNCH PLAN
-                              Final Version
+                         Updated: March 2026
 =============================================================================
 
 App: Circuitmatic
 Developer: Dominic Defrancesco
 Platforms: iOS (App Store) + Android (Google Play)
-Code edition: 2020, 2023, 2026
+Code editions: 2020, 2023, 2026
 https://circuitmatic.app
 support@circuitmatic.app
 
@@ -28,11 +28,11 @@ Subtitle:       Electrician Master Calculator
 Category:       Utilities (primary), Business (secondary)
 Age Rating:     4+
 
-Keywords (100 chars): [VERIFY VERY IMPORTANT]
+Keywords (100 chars): [VERIFY — VERY IMPORTANT]
 electrician, NEC, voltage drop, ampacity, conduit, fill, box fill, wire size, motor, bend, calculator, 2026, union
 
 =============================================================================
-3. BUSINESS STRUCTURE —
+3. BUSINESS STRUCTURE
 =============================================================================
 
 PUBLISH AS YOURSELF:
@@ -53,21 +53,22 @@ LIABILITY:
 LAUNCH COSTS (one-time):
   Apple Developer Program          $99
   Google Play Developer            $25
-  Domain (optional, only if cheap) $10-15
+  Domain (circuitmatic.app)        ~$12/year
   ─────────────────────────────────────
   TOTAL:                           $124
 
 ANNUAL COSTS:
   Apple Developer renewal          $99
+  Domain renewal                   ~$12
   ─────────────────────────────────────
-  TOTAL:                           $99/year
+  TOTAL:                           ~$111/year
 
 No servers. No database. No hosting. No backend.
 App runs 100% on the user's device.
-Break-even: 24 downloads at $4.99. [Tax Write off]
+Break-even: 24 downloads at $4.99.
 
 =============================================================================
-5. PRICING [REVISIT]
+5. PRICING [REVISIT BEFORE LAUNCH]
 =============================================================================
 
 BASIC: $4.99 one-time
@@ -91,10 +92,10 @@ PRO: $14.99 one-time In-App Purchase
 RULES:
   - Never lock a calculator behind Pro
   - Never take away what was in Basic
-  - Pro = workflow/documentation tools ON TOP of the calculators
+  - Pro = workflow/documentation tools ON TOP of calculators
   - No subscriptions until user base justifies it (1,000+ Pro users)
 
-FUTURE SUBSCRIPTION (only if/when justified): - Modest IDK
+FUTURE SUBSCRIPTION (only if/when justified):
   $29.99/year "Pro Teams"
   - Cloud sync between devices
   - Team sharing / multi-user job folders
@@ -121,7 +122,7 @@ Year 3+ (with subscription tier):
   TOTAL:                                               ~$32,000
 
 =============================================================================
-8. LEGAL PROTECTION
+7. LEGAL PROTECTION
 =============================================================================
 
 DISCLAIMER MODAL (build before launch):
@@ -163,18 +164,17 @@ IN-APP TERMS OF SERVICE:
   of the National Fire Protection Association (NFPA). This app
   is not affiliated with or endorsed by NFPA."
 
-================================================================================
-10. APP STORE LISTING [DEFINITELY FIX - LESS CALC]
-================================================================================
+=============================================================================
+8. APP STORE LISTING [FINALIZE BEFORE SUBMIT]
+=============================================================================
 
-FIRST THREE LINES (this is what shows before "more"):
+FIRST THREE LINES (what shows before "more"):
   "The all-in-one electrical code calculator built for electricians
   in the field. Supports 2026, 2023, and 2020 code editions.
   Residential service sizing, voltage drop, ampacity, conduit fill,
   box fill, motor circuits, bending — 100% offline, no ads."
 
-FULL DESCRIPTION: See Circuitmatic_AppStore_Listing.docx
-(Update with all new features before submitting)
+FULL DESCRIPTION: Update with all features before submitting.
 
 SCREENSHOTS (6-8, in this order):
   1. "Voltage Drop in Seconds"
@@ -186,21 +186,152 @@ SCREENSHOTS (6-8, in this order):
   7. "Motor Circuit Sizing"
   8. "Built for the Field — 100% Offline"
 
-The bend illustration + code year toggle + residential service
-sizing are the VISUAL DIFFERENTIATORS. They prove this isn't
-another wall-of-numbers app and that it serves BOTH commercial
-and residential electricians.
+The bend illustration + code year toggle + residential service sizing
+are the VISUAL DIFFERENTIATORS. They prove this isn't another
+wall-of-numbers app.
 
-================================================================================
-14. QA TESTING — VERIFY EVERY NUMBER
-================================================================================
+=============================================================================
+9. WHAT'S BUILT ✅
+=============================================================================
+
+CALCULATORS:
+  ✅ Voltage Drop (Ch.9 Tables 8 & 9) — 2020/2023/2026
+  ✅ Ampacity Table 310.16/310.17 with derating — 2026 data branches correctly
+  ✅ Motor Circuit (Art.430) — FLC, wire, breaker, overload
+  ✅ Box Fill (314.16(B))
+  ✅ Conduit Fill (Ch.9 Table 1, Annex C)
+  ✅ Conduit Bend (8 types — 90/stub/offset/saddle/4pt/back-back/kick/rolling, SVG diagrams)
+  ✅ EV Charger sizing data ready (Art.625) — needs UI built
+
+REFERENCE TABS:
+  ✅ Wire Color Chart (120/208V, 277/480V, DC)
+  ✅ Phase Color Chart
+  ✅ Resistor Color Code
+  ✅ RJ-45 Pinout (T568A / T568B visual)
+  ✅ 12-Strand Fiber Color Sequence
+  ✅ Support Spacing Chart (romex, MC, EMT/IMC, RMC, PVC, FMC)
+  ✅ Fraction Calculator
+  ✅ DIP Switch Calculator
+
+FEATURES:
+  ✅ Dark/gold UI — Orbitron branding
+  ✅ Light mode toggle
+  ✅ Code year selector (2020 / 2023 / 2026) — actually branches ampacity data
+  ✅ CODE 2026 EXAM PREP quiz — 115-question bank, 50 random per session
+  ✅ PDF/Scan capture with localStorage persistence
+  ✅ Save to Notes / Punch List (job folders, Pro features)
+  ✅ Search bar across all tabs
+
+DATA STATUS:
+  ✅ 2026 NEC: Ampacity, GFCI/AFCI, Art.120 load calcs, Art.625 EV, burial depths — all extracted
+  ⚠️  2020 NEC: Table 310.16/310.17 not verified against 2023 baseline (low risk, likely identical)
+
+=============================================================================
+10. NEXT TO BUILD — PRIORITY ORDER
+=============================================================================
+
+── TIER 1 — HIGH IMPACT, DATA IN HAND ─────────────────────────────────────
+
+[ ] DWELLING UNIT SERVICE SIZING WIZARD (Art. 120 / 2026, Art. 220 / 2023)
+    - THE #1 residential feature. Every panel upgrade, every new
+      construction permit needs this.
+    - Step-by-step: sq ft → general lighting (2 VA/ft² 2026, 3 VA 2023)
+      → small appliance circuits (1500 VA × 2 min) → laundry →
+      range/oven demand table → dryer demand table → HVAC (largest wins)
+      → demand factors → minimum service amps + conductor + GEC size
+    - Standard method AND optional method (120.82 / 220.82)
+    - Output: minimum service amps, conductor size, GEC size (Table 250.66)
+    - 2026 optional method: first 8 kVA @ 100% (was 10 kVA in 2023)
+    - Residential guys buy the app for this feature alone
+
+[ ] GFCI / AFCI REQUIREMENT LOOKUP (210.8, 210.12)
+    - Input: location/room type + code year
+    - Output: GFCI required? AFCI required? Both? Neither?
+    - 2026 adds GFCI for ranges, ovens, dryers, dishwashers, sump pumps
+      (210.8(D)) — major change most guys don't know
+    - Common inspection fail. Quick win.
+
+[ ] EV CHARGER CIRCUIT SIZING (Art. 625)
+    - Input: EVSE nameplate amps + voltage
+    - Output: min circuit ampacity (nameplate × 125% — continuous load),
+      standard breaker size, minimum wire size, dedicated circuit flag
+    - Covers Level 1 / Level 2 / DCFC
+    - Hot market right now
+
+[ ] GROUNDING ELECTRODE CONDUCTOR (Table 250.66)
+    - Input: largest ungrounded service conductor
+    - Output: minimum GEC size (copper and aluminum)
+    - Needed by service sizing wizard anyway
+
+[ ] EQUIPMENT GROUNDING CONDUCTOR (Table 250.122)
+    - Input: OCPD rating
+    - Output: minimum EGC size (copper and aluminum)
+    - Quick reference, used constantly
+
+── TIER 2 — SOLID ADDITIONS ────────────────────────────────────────────────
+
+[ ] BURIAL DEPTH LOOKUP (Table 300.7(A) in 2026, Table 300.5 in 2023)
+    - Input: wiring method + circuit type
+    - Output: minimum cover depth in inches
+    - Residential guys trench constantly: pools, sheds, landscape, hot tubs
+    - Simple lookup, used all the time
+
+[ ] RECEPTACLE SPACING (210.52)
+    - Input: room dimensions
+    - Output: minimum receptacle count + max spacing (12 ft rule)
+    - Countertop rules (210.52(C)): island, peninsula, wall counter
+    - Visual layout would be a differentiator
+
+[ ] RESIDENTIAL CIRCUIT QUICK REFERENCE
+    - Kitchen: two 20A small appliance, dedicated dishwasher, disposal,
+      refrigerator (dedicated per 2026)
+    - Bathroom: dedicated 20A, GFCI, which bathrooms can share
+    - Laundry: dedicated 20A
+    - One-screen cheat sheet. Apprentices and homeowners love this.
+
+[ ] RACEWAY DERATING QUICK-CHECK
+    - Input: conductor count
+    - Output: CCC adjustment factor from Table 310.15(C)(1)
+    - Fast lookup, currently buried in the ampacity calculator
+
+[ ] GENERATOR SIZING
+    - Input: loads to back up → minimum generator kW
+    - Transfer switch requirements reference
+    - Hot market: storms, grid instability, whole-home backup
+
+── TIER 3 — NICE TO HAVE ───────────────────────────────────────────────────
+
+[ ] SOLAR / PV CONDUCTOR SIZING (Art. 690)
+[ ] CONDUIT RUN PLANNER
+    - Build a full run: panel to destination
+    - Add segments with lengths + bends, track cumulative degrees
+    - 360° limit per 358.26 — yellow at 270°, red at 360°
+    - Flag when pull box is needed
+[ ] SMOKE / CO DETECTOR PLACEMENT (NFPA 72 reference)
+[ ] DATA CONDUIT FILL (TIA-569 low voltage)
+[ ] TORQUE CHART (common breaker/lug/device torque specs)
+[ ] OUTDOOR / WET LOCATION RULES (in-use covers, wet vs damp)
+
+=============================================================================
+11. FRONT END / INFRASTRUCTURE
+=============================================================================
+
+[ ] Legal disclaimer modal (build before launch — session-based, dark/gold)
+[ ] PostHog — event tracking (free tier)
+[ ] Sentry — crash reporting (free tier)
+[ ] Plausible — traffic monitoring (free tier, self-hostable)
+[ ] Wrap in Capacitor for iOS/Android native container
+[ ] Pro IAP implementation (RevenueCat recommended — handles both stores)
+[ ] App icon: 1024×1024 PNG, solid black background, gold Circuitmatic mark
+
+=============================================================================
+12. QA TESTING — VERIFY EVERY NUMBER
+=============================================================================
 
 Your app's reputation lives or dies on accuracy. One wrong ampacity
 value = 1-star review = ranking death. Test once, test right.
 
-SOURCE OF TRUTH:
-  Your physical 2026 code book. Every number traces to a specific
-  table and article. No substitute.
+SOURCE OF TRUTH: Your physical 2026 code book.
 
 TEST CASES PER CALCULATOR (5 each):
   1. Normal case — typical everyday values
@@ -209,138 +340,38 @@ TEST CASES PER CALCULATOR (5 each):
   4. Boundary case — right at a threshold where answer changes
   5. Known gotcha — the tricky NEC exception that trips people up
 
-  ~8 tabs × 5 cases = 40 test cases. One afternoon with the book.
+PRIORITY SPOT CHECKS:
+  - Ampacity: Copper #3 THHN 2026 = 115A (2023 = 110A) ← verify this branching
+  - Ampacity: Copper #1 THHN 2026 = 145A (2023 = 150A) ← verify
+  - Ampacity: Aluminum #8 THHN 2026 = 35A 60°C (2023 = 30A) ← verify
+  - Service sizing: 2026 optional method first block = 8 kVA (2023 = 10 kVA)
+  - GFCI: 2026 outdoor outlets up to 60A require GFCI (2023 = 50A)
 
-SHORTCUT FOR TABLE LOOKUPS:
-  Photo the NEC table. Photo your app's output. Put them side by
-  side. Visually scan for mismatches. Eyes catch differences faster
-  than comparing numbers one at a time.
-
-================================================================================
-16. LAUNCH CHECKLIST
-================================================================================
+=============================================================================
+13. LAUNCH CHECKLIST
+=============================================================================
 
 BUILD:
-[ ] All calculators and features built
-[ ] Both files (index.html + electricians_calculator.html) in sync
+[ ] Tier 1 calculators complete (service sizing, GFCI/AFCI, EV, GEC, EGC)
+[ ] Disclaimer modal built and tested
 
 TEST:
-[ ] QA spreadsheet completed — 5 test cases per calculator
-[ ] All table values spot-checked against physical 2026 code book
-[ ] Cross-referenced against ElectriCalc Pro / competing apps
-[ ] Field feedback from crew
+[ ] QA spreadsheet — 5 test cases per calculator
+[ ] All 2026 table values spot-checked against physical code book
+[ ] Tested on iPhone + Android
 
 PREPARE:
-[ ] Decide Basic vs Pro feature split
-[ ] Legal disclaimer modal built and tested
-[ ] Terms of Service accessible in-app
-[ ] Icon: 1024x1024 PNG, solid black background
+[ ] Basic vs Pro feature split finalized
+[ ] App icon 1024×1024
 [ ] Apple Developer account ($99)
 [ ] Google Play Developer account ($25)
-[ ] App wrapped in native container (Capacitor/PWABuilder)
+[ ] Wrapped in Capacitor/PWABuilder
 [ ] 6-8 screenshots at correct device resolutions
-[ ] App Store description finalized (update the .docx with new features)
-[ ] Tested on iPhone + Android device
+[ ] App Store description finalized
 
 SUBMIT:
 [ ] Submit to App Store review
 [ ] Submit to Google Play review
-[ ] Set up support email
+[ ] Support email active (support@circuitmatic.app)
 
-================================================================================
-
-FRONT END:
-
-- posthog [event tracking], [sentry] crash reporting, [plausible] traffic   monitoring. all free
-- polish up pipe bends
-- Front end UI Pro
-- estimate/change order/labor tracker (maby)
-
-TO BUILD:
-
-Storage Bar in projects
-Grounding Electrode Conductor sizing (250.66)
-Equipment Grounding Conductor sizing (250.122)
-Article 220 load calculations — residential
-Article 220 load calculations — commercial
-Raceway derating quick-check (conductor count → factor)
-EV charger circuit sizing (625.41)
-Solar/PV conductor sizing
-Conduit run planner
-    - Build a full run: panel to destination
-    - Add segments with lengths
-    - Add bends, track cumulative degrees
-    - 360° limit per 358.26 — yellow at 270°, red at 360°
-    - Flag when pull box is needed
-[ ] Dwelling unit service sizing wizard (Article 220)
-    - THE #1 residential feature. Every panel upgrade, every
-      new construction permit needs this calculation.
-    - Step-by-step: sq ft → general lighting load → small
-      appliance circuits (2 min) → laundry → range/oven/cooktop
-      (demand table) → dryer → AC vs heat (largest wins) →
-      demand factors → minimum service size
-    - Standard method AND optional method (220.82/220.83)
-    - Output: minimum service amps, conductor size, GEC size
-    - If you nail this with a good UI, residential guys buy
-      the app for this feature alone
-[ ] GFCI / AFCI requirement lookup
-    - Input: room type + code year
-    - Output: GFCI required? AFCI required? Both?
-    - Covers: kitchen, bathroom, garage, basement, outdoor,
-      bedroom, laundry, crawl space, attic, etc.
-    - Rules change per code year — ties into code year toggle
-    - Common inspection fail. Electricians get this wrong constantly.
-[ ] Receptacle spacing calculator (210.52)
-    - Input room dimensions → minimum receptacle count + max spacing
-    - Countertop rules (210.52(C)) — island, peninsula, wall counter
-    - These rules are confusing and inspectors love flagging them
-    - Visual layout would crush here
-[ ] Kitchen circuit requirements
-    - Two 20A small appliance circuits (minimum)
-    - Dedicated dishwasher circuit
-    - Disposal circuit
-    - Refrigerator circuit (dedicated per 2026)
-    - Quick reference — common inspection fail
-[ ] Bathroom circuit requirements
-    - Dedicated 20A circuit rules
-    - Which bathrooms can share a circuit
-    - GFCI requirements
-    - Another common inspection fail
-[ ] Smoke / CO detector placement
-    - Where required per code
-    - How many per dwelling
-    - Interconnection requirements
-    - New construction vs renovation rules
-[ ] Generator sizing calculator
-    - Input loads to back up → minimum generator kW
-    - Hot market: storms, grid instability, whole-home backup
-    - Transfer switch requirements reference
-[ ] Burial depth table (300.5)
-    - Input wiring method → minimum cover depth
-    - Residential guys trench constantly: pools, sheds,
-      detached garages, landscape lighting, hot tubs
-    - Simple lookup, used all the time
-[ ] Outdoor / wet location rules
-    - In-use vs weatherproof cover requirements
-    - Outdoor receptacle requirements
-    - Wet vs damp location definitions
-[ ] Standard residential circuit reference
-    - Quick cheat sheet:
-      15A circuit = #14, 20A = #12
-      Kitchen = 20A dedicated
-      Bathroom = 20A GFCI
-      Laundry = 20A dedicated
-    - One-page reference for the apprentice doing first house
-[ ] Apprentice mode / Exam prep
-- FA Voltage Drop
-- fiber color code 
-- RJ45 Pinout Visual
-- 12 Strand Fiber Color Sequence
-- Data conduit fill
-- Torque chart
-- Support chart (romex, mc, emt/imc,rmc,pvc, fmc)
-
-
-Verify verify verify
-
-
+=============================================================================

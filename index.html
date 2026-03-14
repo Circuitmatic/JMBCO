@@ -185,6 +185,35 @@ body.light-mode .quiz-q-text{color:#111827;}
 body.light-mode .calc-home-lbl { color: #c9a010; }
 body.light-mode .menu-btn { color: #c9a010; }
 body { background: var(--bg); }
+/* ── GFCI/AFCI Tab ─────────────────────────────────────────────────────────── */
+.gfci-wrap{padding:12px 14px 24px;max-width:640px;margin:0 auto;}
+.gfci-mode-row{display:flex;gap:8px;margin-bottom:14px;}
+.gfci-mode-btn{flex:1;padding:9px 6px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--sub);font-size:0.78rem;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px;transition:all .18s;}
+.gfci-mode-btn.active{background:rgba(240,192,32,.12);border-color:#f0c020;color:#f0c020;}
+.gfci-section-head{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#f0c020;margin:14px 0 6px;padding:6px 10px;background:rgba(240,192,32,.07);border-left:3px solid #f0c020;border-radius:0 6px 6px 0;}
+.gfci-table{width:100%;border-collapse:collapse;margin-bottom:10px;}
+.gfci-table th{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;}
+.gfci-table th.center{text-align:center;}
+.gfci-table td{font-size:0.82rem;padding:7px 8px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+.gfci-table tr:last-child td{border-bottom:none;}
+.gfci-table td.center{text-align:center;}
+.gfci-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:0.68rem;font-weight:700;letter-spacing:0.3px;}
+.gfci-yes{background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3);}
+.gfci-no{background:var(--surface);color:var(--muted);border:1px solid var(--border);}
+.gfci-new{background:rgba(240,192,32,.15);color:#f0c020;border:1px solid rgba(240,192,32,.3);}
+.gfci-year-note{font-size:0.72rem;color:var(--muted);margin-top:2px;}
+.gfci-code-note{font-size:0.72rem;color:var(--sub);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:14px;line-height:1.6;}
+.gfci-code-note strong{color:var(--text);}
+.gfci-alert{background:rgba(240,192,32,.08);border:1px solid rgba(240,192,32,.25);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:0.8rem;color:var(--text);line-height:1.5;}
+.gfci-alert-title{font-weight:700;color:#f0c020;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+body.light-mode .gfci-mode-btn{background:#f8fafc;border-color:#e2e8f0;color:#64748b;}
+body.light-mode .gfci-mode-btn.active{background:rgba(240,192,32,.1);border-color:#d4a000;color:#b45309;}
+body.light-mode .gfci-table td{color:#1e293b;}
+body.light-mode .gfci-table th{color:#64748b;}
+body.light-mode .gfci-table td,.gfci-table th{border-bottom-color:#e2e8f0;}
+body.light-mode .gfci-code-note{background:#f8fafc;border-color:#e2e8f0;}
+body.light-mode .gfci-section-head{background:rgba(240,192,32,.06);}
+body.light-mode .gfci-alert{background:rgba(240,192,32,.06);border-color:rgba(240,192,32,.3);}
 
   html {
     height: 100%;
@@ -1236,6 +1265,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-charts" onclick="switchTab('charts',this)">Charts</button>
     <button class="tab-btn" id="tab-btn-scan" onclick="switchTab('scan',this)">Scan</button>
     <button class="tab-btn" id="tab-btn-quiz" onclick="switchTab('quiz',this)">Quiz</button>
+    <button class="tab-btn" id="tab-btn-gfci" onclick="switchTab('gfci',this)">GFCI/AFCI</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -3680,6 +3710,52 @@ if('serviceWorker' in navigator){
     </div>
   </div>
 
+  <!-- ── GFCI / AFCI Lookup Tab ── -->
+  <div class="tab-panel" id="tab-gfci">
+    <div class="gfci-wrap">
+      <div class="gfci-mode-row">
+        <button class="gfci-mode-btn active" id="gfci-btn-dw" onclick="gfciMode('dwelling',this)">Dwelling</button>
+        <button class="gfci-mode-btn" id="gfci-btn-cm" onclick="gfciMode('commercial',this)">Commercial</button>
+        <button class="gfci-mode-btn" id="gfci-btn-ap" onclick="gfciMode('appliance',this)">Appliances</button>
+      </div>
+
+      <!-- DWELLING PANEL -->
+      <div id="gfci-panel-dwelling">
+        <div id="gfci-dw-2026-alert" class="gfci-alert" style="display:none;">
+          <div class="gfci-alert-title">⚡ 2026 Code Changes</div>
+          Outdoor outlets now GFCI-required up to <strong>60A</strong> (was 50A — §210.8(F)). New appliance requirements added — see <strong>Appliances tab</strong>.
+        </div>
+        <div class="gfci-section-head">GFCI — Dwelling Unit Locations · §210.8(A)</div>
+        <table class="gfci-table">
+          <thead><tr><th>Location</th><th class="center">GFCI</th><th class="center">AFCI</th></tr></thead>
+          <tbody id="gfci-dw-tbody"></tbody>
+        </table>
+        <div class="gfci-code-note" id="gfci-dw-note"></div>
+      </div>
+
+      <!-- COMMERCIAL PANEL -->
+      <div id="gfci-panel-commercial" style="display:none;">
+        <div class="gfci-section-head">GFCI — Other Than Dwelling · §210.8(B)</div>
+        <table class="gfci-table">
+          <thead><tr><th>Location</th><th class="center">GFCI</th></tr></thead>
+          <tbody id="gfci-cm-tbody"></tbody>
+        </table>
+        <div class="gfci-code-note" id="gfci-cm-note"></div>
+      </div>
+
+      <!-- APPLIANCE PANEL -->
+      <div id="gfci-panel-appliance" style="display:none;">
+        <div id="gfci-ap-alert" class="gfci-alert"></div>
+        <div class="gfci-section-head">Specific Appliances — §210.8(D)</div>
+        <table class="gfci-table">
+          <thead><tr><th>Appliance</th><th class="center">GFCI Req.</th><th>Added</th></tr></thead>
+          <tbody id="gfci-ap-tbody"></tbody>
+        </table>
+        <div class="gfci-code-note">Applies to equipment rated <strong>150V or less to ground, 60A or less</strong>, single- or 3-phase, all occupancies. §210.8(D)</div>
+      </div>
+    </div>
+  </div>
+
   <div class="app-footer">
     <span style="font-family:'Roboto Mono',monospace; font-size:8px; letter-spacing:1px;">© 2026 Circuitmatic · circuitmatic.app · For reference only — verify with licensed electrician and local AHJ.</span>
   </div>
@@ -4332,6 +4408,8 @@ function setCodeYear(year){
   if(sb)sb.classList.add('active');
   // Show/hide 2026-only conductor sizes in wire selects
   document.querySelectorAll('.opt-2026').forEach(function(o){o.style.display=year==='2026'?'':'none';});
+  // Refresh GFCI/AFCI tab if visible
+  if(typeof gfciRender==='function') gfciRender();
 }
 // ── Save to Notes ──
 var _jcPending=null;
@@ -8172,12 +8250,166 @@ window.addEventListener('load',function(){
   scanLoad();
   // Init quiz
   qzStart();
+  // Init GFCI/AFCI tab
+  gfciRender();
   // Init settings code year buttons
   var _sy=localStorage.getItem('jc_code_year')||'2026';
   document.querySelectorAll('.stg-cy-btn').forEach(function(b){b.classList.remove('active');});
   var _sb=document.getElementById('stg-cy-'+_sy);
   if(_sb)_sb.classList.add('active');
 });
+
+// ── GFCI / AFCI Lookup ───────────────────────────────────────────────────────
+
+// Dwelling locations: [label, gfci_all_years, afci_2020, afci_2023_plus, ref]
+var _GFCI_DW = [
+  ['Bathrooms',                         true,  false, false, '210.8(A)(1)'],
+  ['Garages',                           true,  false, false, '210.8(A)(2)'],
+  ['Accessory building storage areas',  true,  false, false, '210.8(A)(3)'],
+  ['Outdoors',                          true,  false, false, '210.8(A)(4)'],
+  ['Crawl spaces — at or below grade',  true,  false, false, '210.8(A)(5)'],
+  ['Basements',                         true,  false, false, '210.8(A)(6)'],
+  ['Kitchens',                          true,  true,  true,  '210.8(A)(7) / 210.12(B)(1)'],
+  ['Food/beverage prep areas w/ sink',  true,  false, false, '210.8(A)(8)'],
+  ['Sinks — within 6 ft of bowl edge',  true,  false, false, '210.8(A)(9)'],
+  ['Boathouses',                        true,  false, false, '210.8(A)(10)'],
+  ['Bathtubs/shower stalls — 6 ft',     true,  false, false, '210.8(A)(11)'],
+  ['Laundry areas',                     true,  false, true,  '210.8(A)(12) / 210.12(B)(13)'],
+  ['Indoor damp locations',             true,  false, false, '210.8(A)(13)'],
+  ['Indoor wet locations',              true,  false, false, '210.8(A)(14)'],
+  ['Living rooms',                      false, true,  true,  '210.12(B)(4)'],
+  ['Family rooms',                      false, true,  true,  '210.12(B)(2)'],
+  ['Dining rooms',                      false, true,  true,  '210.12(B)(3)'],
+  ['Bedrooms',                          false, true,  true,  '210.12(B)(8)'],
+  ['Hallways',                          false, true,  true,  '210.12(B)(12)'],
+  ['Closets',                           false, true,  true,  '210.12(B)(11)'],
+  ['Recreation rooms / sunrooms',       false, true,  true,  '210.12(B)(10)'],
+  ['Libraries / dens / parlors',        false, true,  true,  '210.12(B)(5-7)'],
+];
+
+// Commercial locations: [label, ref]
+var _GFCI_CM = [
+  ['Bathrooms',                                   '210.8(B)(1)'],
+  ['Kitchens',                                    '210.8(B)(2)'],
+  ['Food/beverage prep areas',                    '210.8(B)(3)'],
+  ['Buffet / food serving areas',                 '210.8(B)(4)'],
+  ['Rooftops',                                    '210.8(B)(5)'],
+  ['Outdoors',                                    '210.8(B)(6)'],
+  ['Sinks — within 6 ft of bowl edge',            '210.8(B)(7)'],
+  ['Indoor damp locations',                       '210.8(B)(8)'],
+  ['Indoor wet locations',                        '210.8(B)(9)'],
+  ['Locker rooms with showers',                   '210.8(B)(10)'],
+  ['Garages / service bays',                      '210.8(B)(11)'],
+  ['Crawl spaces — at or below grade',            '210.8(B)(12)'],
+  ['Unfinished basements',                        '210.8(B)(13)'],
+  ['Open aquariums / bait wells within 6 ft',     '210.8(B)(14)'],
+  ['Laundry areas',                               '210.8(B)(15)'],
+  ['Bathtubs/shower stalls — within 6 ft',        '210.8(B)(16)'],
+];
+
+// Specific appliances 210.8(D) — [label, isNew2026]
+// true = NEW in 2026, false = existed earlier
+var _GFCI_AP = [
+  ['Automotive vacuum machines',          false],
+  ['Drinking water coolers / bottle fill',false],
+  ['High-pressure spray washing machines',false],
+  ['Tire inflation machines',             false],
+  ['Vending machines',                    false],
+  ['Sump pumps',                          true],
+  ['Dishwashers',                         true],
+  ['Electric ranges',                     true],
+  ['Wall-mounted ovens',                  true],
+  ['Counter-mounted cooking units',       true],
+  ['Clothes dryers',                      true],
+  ['Microwave ovens',                     true],
+];
+
+var _gfciCurrentMode = 'dwelling';
+
+function gfciMode(mode, btn) {
+  _gfciCurrentMode = mode;
+  document.querySelectorAll('.gfci-mode-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('gfci-panel-dwelling').style.display   = mode==='dwelling'   ? '' : 'none';
+  document.getElementById('gfci-panel-commercial').style.display = mode==='commercial' ? '' : 'none';
+  document.getElementById('gfci-panel-appliance').style.display  = mode==='appliance'  ? '' : 'none';
+  gfciRender();
+}
+
+function gfciRender() {
+  var yr = _codeYear || '2026';
+
+  // ── Dwelling ──
+  var alert2026 = document.getElementById('gfci-dw-2026-alert');
+  if (alert2026) alert2026.style.display = yr==='2026' ? '' : 'none';
+
+  var dwTbody = document.getElementById('gfci-dw-tbody');
+  if (dwTbody) {
+    var rows = '';
+    _GFCI_DW.forEach(function(row) {
+      var loc=row[0], hasGfci=row[1], afci20=row[2], afci23=row[3], ref=row[4];
+      var afciReq = yr==='2020' ? afci20 : afci23;
+      var gfciCell = hasGfci
+        ? '<span class="gfci-badge gfci-yes">Required</span>'
+        : '<span class="gfci-badge gfci-no">—</span>';
+      var afciCell = afciReq
+        ? '<span class="gfci-badge gfci-yes">Required</span>'
+        : '<span class="gfci-badge gfci-no">—</span>';
+      rows += '<tr><td>'+loc+'<div class="gfci-year-note">'+ref+'</div></td><td class="center">'+gfciCell+'</td><td class="center">'+afciCell+'</td></tr>';
+    });
+    dwTbody.innerHTML = rows;
+  }
+
+  var dwNote = document.getElementById('gfci-dw-note');
+  if (dwNote) {
+    var threshold = yr==='2026' ? '60A' : '50A';
+    dwNote.innerHTML = '<strong>Code '+yr+' · §210.8(A) / §210.12(B)</strong><br>Covers 125V–250V receptacles on single-phase circuits ≤150V to ground. Outdoor outlets at dwellings require GFCI up to <strong>'+threshold+'</strong> per §210.8(F). AFCI covers 120V 15/20A branch circuits. Living areas listed are AFCI only — they do not require GFCI unless another condition applies.';
+  }
+
+  // ── Commercial ──
+  var cmTbody = document.getElementById('gfci-cm-tbody');
+  if (cmTbody) {
+    var cmRows = '';
+    _GFCI_CM.forEach(function(row) {
+      cmRows += '<tr><td>'+row[0]+'<div class="gfci-year-note">'+row[1]+'</div></td><td class="center"><span class="gfci-badge gfci-yes">Required</span></td></tr>';
+    });
+    cmTbody.innerHTML = cmRows;
+  }
+
+  var cmNote = document.getElementById('gfci-cm-note');
+  if (cmNote) {
+    cmNote.innerHTML = '<strong>Code '+yr+' · §210.8(B)</strong><br>Applies to 125V–250V receptacles on single-phase circuits ≤150V to ground, 50A or less; and 3-phase circuits ≤150V to ground, 100A or less. AFCI is not required in commercial occupancies.';
+  }
+
+  // ── Appliances ──
+  var apAlert = document.getElementById('gfci-ap-alert');
+  if (apAlert) {
+    if (yr==='2026') {
+      apAlert.style.display = '';
+      apAlert.innerHTML = '<div class="gfci-alert-title">⚡ 2026 New Requirement — §210.8(D)</div>Items marked <span class="gfci-badge gfci-new">New 2026</span> were added in the 2026 NEC. This is a major change — verify with your AHJ as local adoption varies.';
+    } else {
+      apAlert.style.display = '';
+      apAlert.innerHTML = '<div class="gfci-alert-title">§210.8(D) — Specific Appliances</div>Showing 2023/2020 requirements. Items marked <span class="gfci-badge gfci-new">New 2026</span> are not yet required under Code '+yr+'. Switch to 2026 to see full list.';
+    }
+  }
+
+  var apTbody = document.getElementById('gfci-ap-tbody');
+  if (apTbody) {
+    var apRows = '';
+    _GFCI_AP.forEach(function(row) {
+      var appliance=row[0], isNew=row[1];
+      var req = (!isNew || yr==='2026');
+      var reqCell = req
+        ? '<span class="gfci-badge gfci-yes">Required</span>'
+        : '<span class="gfci-badge gfci-no">Not yet</span>';
+      var addedCell = isNew
+        ? '<span class="gfci-badge gfci-new">New 2026</span>'
+        : '<span style="font-size:0.75rem;color:var(--sub);">Pre-2026</span>';
+      apRows += '<tr><td>'+appliance+'</td><td class="center">'+reqCell+'</td><td>'+addedCell+'</td></tr>';
+    });
+    apTbody.innerHTML = apRows;
+  }
+}
 
 </script>
 
