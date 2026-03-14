@@ -1330,6 +1330,8 @@ if('serviceWorker' in navigator){
           <option value="600">600 kcmil</option><option value="700">700 kcmil</option>
           <option value="750">750 kcmil</option><option value="800">800 kcmil</option>
           <option value="900">900 kcmil</option><option value="1000">1000 kcmil</option>
+          <option value="1250" class="opt-2026" style="display:none">1250 kcmil</option><option value="1500" class="opt-2026" style="display:none">1500 kcmil</option>
+          <option value="1750" class="opt-2026" style="display:none">1750 kcmil</option><option value="2000" class="opt-2026" style="display:none">2000 kcmil</option>
         </select></div>
       </div>
       <div class="field-row" id="row-distance">
@@ -1423,6 +1425,8 @@ if('serviceWorker' in navigator){
           <option value="600">600 kcmil</option><option value="700">700 kcmil</option>
           <option value="750">750 kcmil</option><option value="800">800 kcmil</option>
           <option value="900">900 kcmil</option><option value="1000">1000 kcmil</option>
+          <option value="1250" class="opt-2026" style="display:none">1250 kcmil</option><option value="1500" class="opt-2026" style="display:none">1500 kcmil</option>
+          <option value="1750" class="opt-2026" style="display:none">1750 kcmil</option><option value="2000" class="opt-2026" style="display:none">2000 kcmil</option>
         </select></div>
       </div>
       <div class="field-row">
@@ -3685,11 +3689,21 @@ if('serviceWorker' in navigator){
 // ── Electrical Code 2026 Ch.9 Table 8 & 9 — Voltage Drop Data ────────────────────────────
 var COND_TBL={copper:{'18':{r75:7.77,xl_nonmetal:0.058,xl_steel:0.073,dc:7.77},'16':{r75:4.89,xl_nonmetal:0.058,xl_steel:0.073,dc:4.89},'14':{r75:3.10,xl_nonmetal:0.058,xl_steel:0.073,dc:3.07},'12':{r75:2.00,xl_nonmetal:0.054,xl_steel:0.068,dc:1.93},'10':{r75:1.20,xl_nonmetal:0.050,xl_steel:0.063,dc:1.21},'8':{r75:0.780,xl_nonmetal:0.052,xl_steel:0.065,dc:0.778},'6':{r75:0.490,xl_nonmetal:0.051,xl_steel:0.064,dc:0.491},'4':{r75:0.310,xl_nonmetal:0.048,xl_steel:0.060,dc:0.308},'3':{r75:0.250,xl_nonmetal:0.047,xl_steel:0.059,dc:0.245},'2':{r75:0.190,xl_nonmetal:0.045,xl_steel:0.057,dc:0.194},'1':{r75:0.150,xl_nonmetal:0.046,xl_steel:0.057,dc:0.154},'1/0':{r75:0.120,xl_nonmetal:0.044,xl_steel:0.055,dc:0.122},'2/0':{r75:0.100,xl_nonmetal:0.043,xl_steel:0.054,dc:0.0967},'3/0':{r75:0.077,xl_nonmetal:0.042,xl_steel:0.052,dc:0.0766},'4/0':{r75:0.062,xl_nonmetal:0.041,xl_steel:0.051,dc:0.0608},'250':{r75:0.052,xl_nonmetal:0.041,xl_steel:0.052,dc:0.0515},'300':{r75:0.044,xl_nonmetal:0.041,xl_steel:0.051,dc:0.0429},'350':{r75:0.038,xl_nonmetal:0.040,xl_steel:0.050,dc:0.0367},'400':{r75:0.033,xl_nonmetal:0.040,xl_steel:0.049,dc:0.0321},'500':{r75:0.027,xl_nonmetal:0.039,xl_steel:0.048,dc:0.0258},'600':{r75:0.023,xl_nonmetal:0.039,xl_steel:0.048,dc:0.0214},'700':{r75:0.021,xl_nonmetal:0.038,xl_steel:0.048,dc:0.0184},'750':{r75:0.019,xl_nonmetal:0.038,xl_steel:0.048,dc:0.0171},'800':{r75:0.018,xl_nonmetal:0.038,xl_steel:0.047,dc:0.0161},'900':{r75:0.017,xl_nonmetal:0.037,xl_steel:0.047,dc:0.0143},'1000':{r75:0.015,xl_nonmetal:0.037,xl_steel:0.046,dc:0.0129}},aluminum:{'12':{r75:3.20,xl_nonmetal:0.054,xl_steel:0.068,dc:3.18},'10':{r75:2.00,xl_nonmetal:0.050,xl_steel:0.063,dc:2.00},'8':{r75:1.30,xl_nonmetal:0.052,xl_steel:0.065,dc:1.26},'6':{r75:0.810,xl_nonmetal:0.051,xl_steel:0.064,dc:0.808},'4':{r75:0.510,xl_nonmetal:0.048,xl_steel:0.060,dc:0.508},'3':{r75:0.400,xl_nonmetal:0.047,xl_steel:0.059,dc:0.403},'2':{r75:0.320,xl_nonmetal:0.045,xl_steel:0.057,dc:0.319},'1':{r75:0.250,xl_nonmetal:0.046,xl_steel:0.057,dc:0.253},'1/0':{r75:0.200,xl_nonmetal:0.044,xl_steel:0.055,dc:0.201},'2/0':{r75:0.160,xl_nonmetal:0.043,xl_steel:0.054,dc:0.159},'3/0':{r75:0.130,xl_nonmetal:0.042,xl_steel:0.052,dc:0.126},'4/0':{r75:0.105,xl_nonmetal:0.041,xl_steel:0.051,dc:0.100},'250':{r75:0.085,xl_nonmetal:0.041,xl_steel:0.052,dc:0.0847},'300':{r75:0.071,xl_nonmetal:0.041,xl_steel:0.051,dc:0.0707},'350':{r75:0.061,xl_nonmetal:0.040,xl_steel:0.050,dc:0.0605},'400':{r75:0.054,xl_nonmetal:0.040,xl_steel:0.049,dc:0.0529},'500':{r75:0.043,xl_nonmetal:0.039,xl_steel:0.048,dc:0.0424},'600':{r75:0.036,xl_nonmetal:0.039,xl_steel:0.048,dc:0.0353},'700':{r75:0.033,xl_nonmetal:0.038,xl_steel:0.048,dc:0.0303},'750':{r75:0.029,xl_nonmetal:0.038,xl_steel:0.048,dc:0.0282},'800':{r75:0.027,xl_nonmetal:0.038,xl_steel:0.047,dc:0.0265},'900':{r75:0.025,xl_nonmetal:0.037,xl_steel:0.047,dc:0.0235},'1000':{r75:0.023,xl_nonmetal:0.037,xl_steel:0.046,dc:0.0212}}};
 
-// ── Electrical Code 2026 Table 310.16 — Raceway/Cable/Earth [60°C, 75°C, 90°C] ──────────
+// ── NEC Table 310.16 (2020/2023) — Raceway/Cable/Earth [60°C, 75°C, 90°C] ──────────
 var AMP16={copper:{'14':[15,20,25],'12':[20,25,30],'10':[30,35,40],'8':[40,50,55],'6':[55,65,75],'4':[70,85,95],'3':[85,100,110],'2':[95,115,130],'1':[110,130,150],'1/0':[125,150,170],'2/0':[145,175,195],'3/0':[165,200,225],'4/0':[195,230,260],'250':[215,255,290],'300':[240,285,320],'350':[260,310,350],'400':[280,335,380],'500':[320,380,430],'600':[350,420,475],'700':[385,460,520],'750':[400,475,535],'800':[410,490,555],'900':[435,520,585],'1000':[455,545,615]},aluminum:{'12':[20,25,30],'10':[25,30,35],'8':[30,40,45],'6':[40,50,55],'4':[55,65,75],'3':[65,75,85],'2':[75,90,100],'1':[85,100,115],'1/0':[100,120,135],'2/0':[115,135,150],'3/0':[130,155,175],'4/0':[150,180,205],'250':[170,205,230],'300':[195,230,260],'350':[210,250,280],'400':[225,270,305],'500':[260,310,350],'600':[285,340,385],'700':[315,375,425],'750':[320,385,435],'800':[330,395,445],'900':[355,425,480],'1000':[375,445,500]}};
 
-// ── Electrical Code 2026 Table 310.17 — Single Conductor Free Air [60°C, 75°C, 90°C] ────
+// ── NEC Table 310.17 (2020/2023) — Single Conductor Free Air [60°C, 75°C, 90°C] ────
 var AMP17={copper:{'14':[null,null,18],'12':[null,30,40],'10':[40,50,55],'8':[60,70,80],'6':[80,95,105],'4':[105,125,140],'3':[120,145,165],'2':[140,170,190],'1':[165,195,220],'1/0':[195,230,260],'2/0':[225,265,300],'3/0':[260,310,350],'4/0':[300,360,405],'250':[340,405,455],'300':[375,445,500],'350':[420,505,570],'400':[455,545,615],'500':[515,620,700],'600':[575,690,780],'700':[630,755,850],'750':[655,785,885],'800':[680,815,920],'900':[730,870,980],'1000':[780,935,1055]},aluminum:{'12':[null,null,null],'10':[null,null,null],'8':[45,55,60],'6':[60,75,85],'4':[80,100,115],'3':[95,115,130],'2':[110,135,150],'1':[130,155,175],'1/0':[150,180,205],'2/0':[175,210,235],'3/0':[200,240,270],'4/0':[235,280,315],'250':[265,315,355],'300':[290,350,395],'350':[330,395,445],'400':[355,425,480],'500':[405,485,545],'600':[500,595,670],'700':[545,650,735],'750':[515,620,700],'800':[535,645,725],'900':[580,700,790],'1000':[625,750,845]}};
+
+// ── 2026 NEC Table 310.16 — Changes vs 2023 (copper #3 90°C: 110→115, #1 90°C: 150→145; aluminum #8 60°C: 30→35; new 1250-2000 kcmil sizes) ──
+var AMP16_2026={copper:{'14':[15,20,25],'12':[20,25,30],'10':[30,35,40],'8':[40,50,55],'6':[55,65,75],'4':[70,85,95],'3':[85,100,115],'2':[95,115,130],'1':[110,130,145],'1/0':[125,150,170],'2/0':[145,175,195],'3/0':[165,200,225],'4/0':[195,230,260],'250':[215,255,290],'300':[240,285,320],'350':[260,310,350],'400':[280,335,380],'500':[320,380,430],'600':[350,420,475],'700':[385,460,520],'750':[400,475,535],'800':[410,490,555],'900':[435,520,585],'1000':[455,545,615],'1250':[495,590,665],'1500':[525,625,705],'1750':[545,650,735],'2000':[555,665,750]},aluminum:{'12':[20,25,30],'10':[25,30,35],'8':[35,40,45],'6':[40,50,55],'4':[55,65,75],'3':[65,75,85],'2':[75,90,100],'1':[85,100,115],'1/0':[100,120,135],'2/0':[115,135,150],'3/0':[130,155,175],'4/0':[150,180,205],'250':[170,205,230],'300':[195,230,260],'350':[210,250,280],'400':[225,270,305],'500':[260,310,350],'600':[285,340,385],'700':[315,375,425],'750':[320,385,435],'800':[330,395,445],'900':[355,425,480],'1000':[375,445,500],'1250':[405,485,545],'1500':[435,520,585],'1750':[455,545,615],'2000':[470,560,630]}};
+
+// ── 2026 NEC Table 310.17 — Single Conductor Free Air (identical to 2023 for sizes up to 1000 kcmil) ──
+var AMP17_2026=AMP17;
+
+// ── Year-keyed table helpers — use these everywhere instead of AMP16/AMP17 directly ──
+function getAmpTbl16(){return _codeYear==='2026'?AMP16_2026:AMP16;}
+function getAmpTbl17(){return _codeYear==='2026'?AMP17_2026:AMP17;}
 
 // ── Table 310.15(B)(1)(1) — Ambient Correction Factors (30°C base) ──────────
 var AMB={'10':[1.29,1.20,1.15],'11':[1.22,1.15,1.12],'16':[1.15,1.11,1.08],'21':[1.08,1.05,1.04],'26':[1.00,1.00,1.00],'30':[1.00,1.00,1.00],'31':[0.91,0.94,0.96],'36':[0.82,0.88,0.91],'41':[0.71,0.82,0.87],'46':[0.58,0.75,0.82],'51':[0.41,0.67,0.76],'56':[null,0.58,0.71],'61':[null,0.47,0.65],'66':[null,0.33,0.58],'71':[null,null,0.50],'76':[null,null,0.41],'81':[null,null,0.29]};
@@ -3709,7 +3723,7 @@ function getDcR(c,s){var t=COND_TBL[c];return(t&&t[s])?t[s].dc:null;}
 function calcK(r,xl,pf){var s=Math.sqrt(1-pf*pf);return{K:r*pf+xl*s,sinT:s};}
 function calcVD(ph,K,I,L,par){return(ph==='three'?Math.sqrt(3):2)*K*I*L/1000/par;}
 function calcMaxDist(ph,K,I,V,thr,par){return V*thr/100*1000*par/((ph==='three'?Math.sqrt(3):2)*K*I);}
-function checkAmp16(c,s,t,I,par){var tbl=AMP16[c];if(!tbl||!tbl[s])return false;var a=tbl[s][getTempIdx(getTempC(t))];return typeof a==='number'&&I>a*par;}
+function checkAmp16(c,s,t,I,par){var tbl=getAmpTbl16()[c];if(!tbl||!tbl[s])return false;var a=tbl[s][getTempIdx(getTempC(t))];return typeof a==='number'&&I>a*par;}
 function checkPar(s,par){return par>1&&BELOW1_0.indexOf(s)!==-1;}
 function makeBlock(st,lbl,badge,val,sub){return'<div class="result-block '+st+'"><div class="result-head"><span class="result-lbl">'+lbl+'</span>'+(badge?'<span class="result-badge">'+badge+'</span>':'')+'</div><div class="result-val">'+val+'</div>'+(sub?'<div class="result-sub">'+sub+'</div>':'')+'</div>';}
 
@@ -4316,6 +4330,8 @@ function setCodeYear(year){
   document.querySelectorAll('.stg-cy-btn').forEach(function(b){b.classList.remove('active');});
   var sb=document.getElementById('stg-cy-'+year);
   if(sb)sb.classList.add('active');
+  // Show/hide 2026-only conductor sizes in wire selects
+  document.querySelectorAll('.opt-2026').forEach(function(o){o.style.display=year==='2026'?'':'none';});
 }
 // ── Save to Notes ──
 var _jcPending=null;
@@ -6178,7 +6194,7 @@ function calculateAmp(){
 
   // ── Helper: run full derating for a given wire size, return governed ampacity or null
   function getGoverned(size){
-    var tbl=(inst==='freeair')?AMP17[cond]:AMP16[cond];
+    var tbl=(inst==='freeair')?getAmpTbl17()[cond]:getAmpTbl16()[cond];
     if(!tbl||!tbl[size]) return null;
     var idx=getTempIdx(tr);
     var base=tbl[size][idx];
@@ -6275,7 +6291,7 @@ function calculateAmp(){
 
   // ── AMPACITY LOOKUP mode ──────────────────────────────────────────────────
   // Get base ampacity table
-  var tbl=(inst==='freeair')?AMP17[cond]:AMP16[cond];
+  var tbl=(inst==='freeair')?getAmpTbl17()[cond]:getAmpTbl16()[cond];
   if(!tbl||!tbl[ws]){showAmpErr('No data for '+sizeLabel(ws)+' '+cond+' in this installation.');return;}
 
   var idx=getTempIdx(tr);
@@ -7525,7 +7541,7 @@ function mcMinWire(cond, required, insTemp, termTemp){
   var termIdx = getTempIdx(parseInt(termTemp));
   var insIdx  = getTempIdx(getTempC(insTemp));
   var useIdx  = Math.min(termIdx, insIdx); // governed by lower of the two
-  var tbl = AMP16[cond];
+  var tbl = getAmpTbl16()[cond];
   for(var i=0; i<WIRE_ORDER.length; i++){
     var s=WIRE_ORDER[i];
     if(!tbl[s]) continue;
