@@ -9260,7 +9260,7 @@ function gfciRender() {
   var dwNote = document.getElementById('gfci-dw-note');
   if (dwNote) {
     var threshold = yr==='2026' ? '60A' : '50A';
-    dwNote.innerHTML = '<strong>Code '+yr+' · §210.8(A) / §210.12(B)</strong><br>Covers 125V–250V receptacles on single-phase circuits ≤150V to ground. Outdoor outlets at dwellings require GFCI up to <strong>'+threshold+'</strong> per §210.8(F). AFCI covers 120V 15/20A branch circuits. Living areas listed are AFCI only — they do not require GFCI unless another condition applies.';
+    dwNote.innerHTML = '<strong>Code '+yr+' · §210.8(A) / §210.12(B)</strong><br>Applies to receptacles rated 125V–250V on branch circuits up to 150V-to-ground. Outdoor receptacles at dwellings require GFCI up to <strong>'+threshold+'</strong> per §210.8(F). AFCI applies to 120V, 15/20A branch circuits. Living areas shown are AFCI only — no GFCI required unless another condition applies.';
   }
 
   // ── Commercial ──
@@ -9275,7 +9275,7 @@ function gfciRender() {
 
   var cmNote = document.getElementById('gfci-cm-note');
   if (cmNote) {
-    cmNote.innerHTML = '<strong>Code '+yr+' · §210.8(B)</strong><br>Applies to 125V–250V receptacles on single-phase circuits ≤150V to ground, 50A or less; and 3-phase circuits ≤150V to ground, 100A or less. AFCI is not required in commercial occupancies.';
+    cmNote.innerHTML = '<strong>Code '+yr+' · §210.8(B)</strong><br>Applies to receptacles rated 125V–250V on single-phase branch circuits up to 150V-to-ground and rated 50A max; also three-phase branch circuits up to 150V-to-ground and rated 100A max. AFCI is not required in commercial occupancies.';
   }
 
   // ── Appliances ──
