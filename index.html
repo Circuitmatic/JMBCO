@@ -1517,6 +1517,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-ev" onclick="switchTab('ev',this)">EV</button>
     <button class="tab-btn" id="tab-btn-svc" onclick="switchTab('svc',this)">Service</button>
     <button class="tab-btn" id="tab-btn-gnd" onclick="switchTab('gnd',this)">Ground</button>
+    <button class="tab-btn" id="tab-btn-xfmr" onclick="switchTab('xfmr',this)">Transformer</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -5042,6 +5043,242 @@ if('serviceWorker' in navigator){
     </div>
   </div>
 
+  <!-- ── TRANSFORMER TAB ── -->
+  <div class="tab-panel" id="tab-xfmr">
+    <div class="gnd-subtab-row">
+      <button class="gnd-subtab-btn active" id="xf-sub-fla" onclick="xfmrSetSub('fla',this)">KVA &amp; FLA<span>Sizing &amp; Amps</span></button>
+      <button class="gnd-subtab-btn" id="xf-sub-ocpd" onclick="xfmrSetSub('ocpd',this)">OCPD<span>Art. 450.3</span></button>
+      <button class="gnd-subtab-btn" id="xf-sub-sds" onclick="xfmrSetSub('sds',this)">SDS Ground<span>GEC &amp; SBJ</span></button>
+    </div>
+    <div id="xf-fla-panel">
+      <div class="section-label">KVA &amp; Full Load Amps</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Phase</div>
+          <div class="sel-wrap"><select class="fi" id="xf-fla-phase">
+            <option value="3" selected>3-Phase</option>
+            <option value="1">1-Phase</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Primary Voltage <button class="svc-ib" onclick="svcInfo('xfmr_voltage')">&#9432;</button></div>
+          <div class="sel-wrap"><select class="fi" id="xf-fla-pri">
+            <optgroup label="Low Voltage">
+              <option value="120">120V</option>
+              <option value="208">208V</option>
+              <option value="240">240V</option>
+              <option value="277">277V</option>
+              <option value="480" selected>480V</option>
+              <option value="600">600V</option>
+            </optgroup>
+            <optgroup label="Medium Voltage">
+              <option value="2400">2,400V</option>
+              <option value="4160">4,160V</option>
+              <option value="7200">7,200V</option>
+              <option value="12470">12,470V</option>
+              <option value="13200">13,200V</option>
+              <option value="13800">13,800V</option>
+            </optgroup>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Secondary Voltage</div>
+          <div class="sel-wrap"><select class="fi" id="xf-fla-sec">
+            <optgroup label="Low Voltage">
+              <option value="120">120V</option>
+              <option value="208" selected>208V</option>
+              <option value="240">240V</option>
+              <option value="277">277V</option>
+              <option value="480">480V</option>
+              <option value="600">600V</option>
+            </optgroup>
+            <optgroup label="Medium Voltage">
+              <option value="2400">2,400V</option>
+              <option value="4160">4,160V</option>
+              <option value="7200">7,200V</option>
+              <option value="12470">12,470V</option>
+              <option value="13200">13,200V</option>
+              <option value="13800">13,800V</option>
+            </optgroup>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Transformer KVA</div>
+          <input class="fi" id="xf-fla-kva" type="number" min="0.1" max="50000" placeholder="e.g. 75, 150, 500"/>
+        </div>
+        <div style="padding:0 14px 8px;font-size:9.5px;color:var(--muted);">Or find required KVA from secondary load:</div>
+        <div class="field-row">
+          <div class="field-label">Secondary Load (Amps)</div>
+          <input class="fi" id="xf-fla-load" type="number" min="0" max="99999" placeholder="Leave blank if entering KVA above"/>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="err-msg" id="xf-fla-panel-err"></div>
+      <div class="btn-row">
+        <button class="btn btn-calc" onclick="calculateXfmrFLA()">Calculate</button>
+        <button class="btn btn-reset" onclick="resetXfmrFLA()">Reset</button>
+      </div>
+      <div class="section-label" id="xf-fla-results-label" style="display:none;">Results</div>
+      <div class="results" id="xf-fla-results"></div>
+      <div class="disclaimer" id="xf-fla-disclaimer" style="display:none;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">Transformer FLA calculated from KVA rating. For 3-phase: FLA = (KVA × 1000) ÷ (V × √3). For 1-phase: FLA = (KVA × 1000) ÷ V. Always verify nameplate FLA against calculated values. Standard KVA ratings are industry common sizes — consult manufacturer for available ratings. Design guidance only — verify with AHJ.</div>
+      </div>
+      <div class="code-note" id="xf-fla-note"></div>
+    </div>
+    <div id="xf-ocpd-panel">
+      <div class="section-label">Overcurrent Protection — NEC 450.3</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Phase</div>
+          <div class="sel-wrap"><select class="fi" id="xf-ocpd-phase">
+            <option value="3" selected>3-Phase</option>
+            <option value="1">1-Phase</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Primary Voltage</div>
+          <div class="sel-wrap"><select class="fi" id="xf-ocpd-pri">
+            <optgroup label="Low Voltage">
+              <option value="120">120V</option>
+              <option value="208">208V</option>
+              <option value="240">240V</option>
+              <option value="277">277V</option>
+              <option value="480" selected>480V</option>
+              <option value="600">600V</option>
+            </optgroup>
+            <optgroup label="Medium Voltage">
+              <option value="2400">2,400V</option>
+              <option value="4160">4,160V</option>
+              <option value="7200">7,200V</option>
+              <option value="12470">12,470V</option>
+              <option value="13200">13,200V</option>
+              <option value="13800">13,800V</option>
+            </optgroup>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Secondary Voltage</div>
+          <div class="sel-wrap"><select class="fi" id="xf-ocpd-sec">
+            <optgroup label="Low Voltage">
+              <option value="120">120V</option>
+              <option value="208" selected>208V</option>
+              <option value="240">240V</option>
+              <option value="277">277V</option>
+              <option value="480">480V</option>
+              <option value="600">600V</option>
+            </optgroup>
+            <optgroup label="Medium Voltage">
+              <option value="2400">2,400V</option>
+              <option value="4160">4,160V</option>
+              <option value="7200">7,200V</option>
+              <option value="12470">12,470V</option>
+              <option value="13200">13,200V</option>
+              <option value="13800">13,800V</option>
+            </optgroup>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Transformer KVA</div>
+          <input class="fi" id="xf-ocpd-kva" type="number" min="0.1" max="50000" placeholder="e.g. 75"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Installation Type <button class="svc-ib" onclick="svcInfo('xfmr_install')">&#9432;</button></div>
+          <div class="sel-wrap"><select class="fi" id="xf-ocpd-install">
+            <option value="general" selected>General (unsupervised)</option>
+            <option value="supervised">Supervised installation</option>
+          </select></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="err-msg" id="xf-ocpd-panel-err"></div>
+      <div class="btn-row">
+        <button class="btn btn-calc" onclick="calculateXfmrOCPD()">Calculate</button>
+        <button class="btn btn-reset" onclick="resetXfmrOCPD()">Reset</button>
+      </div>
+      <div class="section-label" id="xf-ocpd-results-label" style="display:none;">Results</div>
+      <div class="results" id="xf-ocpd-results"></div>
+      <div class="disclaimer" id="xf-ocpd-disclaimer" style="display:none;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">OCPD sized per NEC Table 450.3(B) for transformers with primary and secondary ≤ 1000V. General (unsupervised) primary-only protection: 125% of primary FLA, next standard size up. Primary + secondary option: primary ≤ 250%, secondary ≤ 125%. Supervised installations permit higher primary OCPD with secondary protection. Always verify with the AHJ — some local codes have additional requirements. Design guidance only — not a substitute for engineering review.</div>
+      </div>
+      <div class="code-note" id="xf-ocpd-note"></div>
+    </div>
+    <div id="xf-sds-panel">
+      <div class="section-label">Separately Derived System (SDS) Grounding</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Phase</div>
+          <div class="sel-wrap"><select class="fi" id="xf-sds-phase">
+            <option value="3" selected>3-Phase</option>
+            <option value="1">1-Phase</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Secondary Voltage</div>
+          <div class="sel-wrap"><select class="fi" id="xf-sds-sec">
+            <optgroup label="Low Voltage">
+              <option value="120">120V</option>
+              <option value="208" selected>208V</option>
+              <option value="240">240V</option>
+              <option value="277">277V</option>
+              <option value="480">480V</option>
+              <option value="600">600V</option>
+            </optgroup>
+            <optgroup label="Medium Voltage">
+              <option value="2400">2,400V</option>
+              <option value="4160">4,160V</option>
+              <option value="7200">7,200V</option>
+              <option value="12470">12,470V</option>
+              <option value="13200">13,200V</option>
+              <option value="13800">13,800V</option>
+            </optgroup>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Transformer KVA</div>
+          <input class="fi" id="xf-sds-kva" type="number" min="0.1" max="50000" placeholder="e.g. 75"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Secondary Conductor Material</div>
+          <div class="sel-wrap"><select class="fi" id="xf-sds-cond-mat">
+            <option value="copper" selected>Copper</option>
+            <option value="aluminum">Aluminum / CCA</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">GEC / SBJ Material</div>
+          <div class="sel-wrap"><select class="fi" id="xf-sds-gnd-mat">
+            <option value="copper" selected>Copper</option>
+            <option value="aluminum">Aluminum / CCA</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Grounding Electrode Type <button class="svc-ib" onclick="svcInfo('gec_electrode')">&#9432;</button></div>
+          <div class="sel-wrap"><select class="fi" id="xf-sds-electrode">
+            <option value="system" selected>Electrode System / Multiple</option>
+            <option value="concrete">Concrete-Encased (Ufer)</option>
+            <option value="rod">Rod, Pipe, or Plate</option>
+            <option value="ring">Ground Ring</option>
+          </select></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="err-msg" id="xf-sds-panel-err"></div>
+      <div class="btn-row">
+        <button class="btn btn-calc" onclick="calculateXfmrSDS()">Calculate</button>
+        <button class="btn btn-reset" onclick="resetXfmrSDS()">Reset</button>
+      </div>
+      <div class="section-label" id="xf-sds-results-label" style="display:none;">Results</div>
+      <div class="results" id="xf-sds-results"></div>
+      <div class="disclaimer" id="xf-sds-disclaimer" style="display:none;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">SDS grounding per NEC §250.30. The GEC is sized per Table 250.66 based on the largest secondary (derived) conductor. The SBJ connects the secondary neutral to the EGC at the transformer or at the first disconnecting means. The GEC connects to the nearest available grounding electrode — not necessarily the same electrode serving the service. A separately derived system requires its own complete grounding electrode system. Design guidance only — verify with licensed engineer and AHJ.</div>
+      </div>
+      <div class="code-note" id="xf-sds-note"></div>
+    </div>
+  </div>
+
   <div class="app-footer">
     <span style="font-family:'Roboto Mono',monospace; font-size:8px; letter-spacing:1px;">© 2026 Circuitmatic · circuitmatic.app · For reference only — verify with licensed electrician and local AHJ.</span>
   </div>
@@ -5710,6 +5947,9 @@ function setCodeYear(year){
   if(document.getElementById('ssbj-results-label')&&document.getElementById('ssbj-results-label').style.display!=='none')calculateSSBJ();
   if(document.getElementById('ebj-results-label')&&document.getElementById('ebj-results-label').style.display!=='none')calculateEBJ();
   if(document.getElementById('bond-results-label')&&document.getElementById('bond-results-label').style.display!=='none')calculateBond();
+  if(document.getElementById('xf-fla-results-label')&&document.getElementById('xf-fla-results-label').style.display!=='none')calculateXfmrFLA();
+  if(document.getElementById('xf-ocpd-results-label')&&document.getElementById('xf-ocpd-results-label').style.display!=='none')calculateXfmrOCPD();
+  if(document.getElementById('xf-sds-results-label')&&document.getElementById('xf-sds-results-label').style.display!=='none')calculateXfmrSDS();
   // Update quiz title immediately regardless of which tab is active
   var qzTitleEl=document.getElementById('qz-title');
   if(qzTitleEl) qzTitleEl.textContent='⚡ CODE '+year+' — EXAM PREP';
@@ -10104,6 +10344,8 @@ var _SVC_INFO={
   ebj_what:{t:'Equipment Bonding Jumper (EBJ) — What It Is',b:'The Equipment Bonding Jumper bonds equipment enclosures, raceways, conduit, and metallic parts on the LOAD SIDE of the service disconnect back to the EGC system.\n\nSized the same as the EGC: Table 250.122 based on the OCPD protecting the circuit or feeder.\n\nCommon uses:\n• Motor disconnects and motor frames\n• Panelboard and subpanel enclosures\n• Metal conduit and raceway runs to equipment\n• Large appliances and HVAC equipment\n• Metal wireways, gutters, and cable trays\n\nEBJ vs EGC: The EGC runs inside the raceway alongside the circuit conductors and handles fault current continuously. The EBJ is a supplemental connection that bonds the enclosure or equipment itself. In many installations the EGC also serves as the EBJ — but for parallel conductors in a single raceway or equipment with multiple feeds, a separate EBJ may be required.',r:'NEC §250.102(D)'},
   bond_what:{t:'Metal Water Pipe &amp; Structural Steel Bonding',b:'NEC requires certain metal systems in buildings to be bonded to the electrical grounding system to prevent dangerous voltage differences if a fault occurs.\n\n► Interior Metal Water Piping (§250.104(A))\nRequired on ALL buildings with metal water pipe. The bonding jumper connects the metal water piping system to the service equipment enclosure, grounded service conductor, GEC, or grounding electrode. Must be bonded at the point where the water pipe enters the building or at the nearest accessible location inside. Why: If a live wire contacts metal water pipe anywhere in the building, bonding ensures the fault current returns through the electrical system (clearing the breaker) rather than through a person touching a faucet.\n\n► Structural Metal Framing (§250.104(C))\nRequired when structural steel is interconnected as a building frame AND is likely to become energized. Most common in commercial and industrial steel-frame buildings where electrical equipment is mounted on or near the steel. The bonding jumper connects the steel frame to the service grounded conductor, EGC, GEC, or grounding electrode at the building.\n\nBoth are sized per Table 250.102(C)(1) based on the service entrance conductors — the same table used for GEC and SBJ sizing.',r:'NEC §250.104(A)(C)'},
   bond_target:{t:'Bonding Target — Water Pipe vs Structural Steel',b:'Interior Metal Water Piping: Select this for the bonding jumper that connects the metal water supply pipe to the grounding system. Required on virtually every residential, commercial, and industrial building that has copper, galvanized, or other metal water pipe. Plastic (PVC, PEX) water piping does not require this bond.\n\nStructural Metal: Select this for the bonding jumper that ties a steel building frame or interconnected structural metal to the grounding system. More common in commercial and industrial construction. Not typically required in wood-frame residences.\n\nBoth: Select this if you need bonding jumpers for both in the same installation. Both are sized identically from Table 250.102(C)(1) — the calculator will show a result card for each.',r:'NEC §250.104'},
+  xfmr_voltage:{t:'Transformer Voltage — What to Enter',b:'Always enter the line-to-line voltage for 3-phase transformers and line-to-neutral (or full secondary) voltage for 1-phase.\n\nCommon primary voltages:\n• 480V — most common in commercial/industrial 3-phase services\n• 208V — when fed from a 208Y/120 distribution system\n• 240V — common for 1-phase services\n• 4,160V or 12,470V — medium-voltage primary feeds from utility\n\nCommon secondary voltages:\n• 208V (3-phase) — standard distribution in commercial buildings (208Y/120V system)\n• 480V (3-phase) — power distribution to large equipment\n• 120V or 240V (1-phase) — residential and light commercial\n• 277V — lighting transformers on 480V systems\n\nNote: For a 208Y/120V system, enter 208V (the line-to-line value). The 120V line-to-neutral is used for branch circuit calculations, not transformer sizing.',r:'NEC §450 / IEEE C57'},
+  xfmr_install:{t:'General vs. Supervised Installation',b:'This affects the maximum allowed primary overcurrent device size per Table 450.3(B).\n\n► General (Unsupervised) — the default for most installations:\nThe transformer is accessible to unqualified persons or in a location without continuous qualified supervision. Primary-only OCPD is limited to 125% of primary FLA (next standard size up). With secondary OCPD, the primary can go up to 250%.\n\n► Supervised Installation:\nThe transformer is in a locked electrical room, restricted access vault, or location accessible only to qualified electricians with continuous or regular monitoring. The primary OCPD can be sized up to 250% (or 300% for very small FLA) even without secondary OCPD. Most industrial plant electrical rooms and utility substations qualify. A typical commercial panel room does not automatically qualify — the AHJ makes the final determination.',r:'NEC Table 450.3(B)'},
   mc_nameplate:{t:'Where to Find Motor Information',b:'Everything you need for this calculator is on the motor nameplate — the metal data plate bolted to the motor frame (usually on the side or end).\n\nWhat to look for:\n\n• Horsepower (HP) — listed as "HP"\n• Voltage — listed as "VOLTS" — may show multiple voltages like 230/460\n• Phase — listed as "PH" — 1 for single-phase, 3 for three-phase\n• Motor Type — usually identified by NEMA Design letter (A, B, C, D) or "Squirrel Cage." If not listed, assume Squirrel Cage (Design B) — it is by far the most common\n• Service Factor (SF) — listed as "S.F." — if 1.15 or higher, overload protection is set to 125%; if not listed or below 1.15, use 115%\n\nIf the nameplate is missing or unreadable, check the motor spec sheet or the original equipment documentation.',r:'NEC §430.7 (Nameplate Requirements)'}
 };
 function svcInfo(key){
@@ -10737,6 +10979,274 @@ function calculateBond(){
   document.getElementById('bond-disclaimer').style.display='block';
   document.getElementById('bond-note').textContent='NEC '+yr+' \u00a7250.104 \u00b7 Table 250.102(C)(1) \u00b7 '+svcMatLbl+' service \u00b7 '+bjMatLbl+' jumper \u00b7 Design guidance only \u00b7 Verify with AHJ';
   if(typeof jcResultsReady==='function')jcResultsReady('gnd','Bonding Jumper Sizing');
+}
+
+// ── Transformer Calculator ────────────────────────────────────────────────────
+var _STD_OCPD=[15,20,25,30,35,40,45,50,60,70,80,90,100,110,125,150,175,200,225,250,
+               300,350,400,450,500,600,700,800,1000,1200,1600,2000,2500,3000,4000,5000,6000];
+var _STD_KVA=[1,1.5,2,3,5,7.5,10,15,25,37.5,45,50,75,100,112.5,150,167,225,300,500,750,1000,1500,2000,2500];
+
+function _nextOCPD(amps){
+  for(var i=0;i<_STD_OCPD.length;i++){if(_STD_OCPD[i]>=amps)return _STD_OCPD[i];}
+  return Math.ceil(amps);
+}
+function _nextKVA(kva){
+  for(var i=0;i<_STD_KVA.length;i++){if(_STD_KVA[i]>=kva)return _STD_KVA[i];}
+  return Math.ceil(kva);
+}
+function _xfmrFLA(kva,volts,phase){
+  return phase===3?(kva*1000)/(volts*Math.sqrt(3)):(kva*1000)/volts;
+}
+function _xfmrTurns(priV,secV){return (priV/secV).toFixed(3);}
+
+function xfmrSetSub(sub,btn){
+  document.querySelectorAll('#tab-xfmr .gnd-subtab-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  document.getElementById('xf-fla-panel').style.display=sub==='fla'?'':'none';
+  document.getElementById('xf-ocpd-panel').style.display=sub==='ocpd'?'':'none';
+  document.getElementById('xf-sds-panel').style.display=sub==='sds'?'':'none';
+}
+
+// ── KVA & FLA ────────────────────────────────────────────────────────────────
+function resetXfmrFLA(){
+  document.getElementById('xf-fla-phase').value='3';
+  document.getElementById('xf-fla-pri').value='480';
+  document.getElementById('xf-fla-sec').value='208';
+  document.getElementById('xf-fla-kva').value='';
+  document.getElementById('xf-fla-load').value='';
+  document.getElementById('xf-fla-panel-err').className='err-msg';
+  document.getElementById('xf-fla-results').innerHTML='';
+  document.getElementById('xf-fla-results-label').style.display='none';
+  document.getElementById('xf-fla-disclaimer').style.display='none';
+  document.getElementById('xf-fla-note').textContent='';
+}
+function calculateXfmrFLA(){
+  var errEl=document.getElementById('xf-fla-panel-err');
+  errEl.className='err-msg';
+  var ph=parseInt(document.getElementById('xf-fla-phase').value);
+  var priV=parseFloat(document.getElementById('xf-fla-pri').value);
+  var secV=parseFloat(document.getElementById('xf-fla-sec').value);
+  var kvaIn=parseFloat(document.getElementById('xf-fla-kva').value);
+  var loadIn=parseFloat(document.getElementById('xf-fla-load').value);
+
+  // Derive KVA from load if provided
+  var kva=kvaIn;
+  var fromLoad=false;
+  if(loadIn>0&&isNaN(kvaIn)){
+    // KVA needed from secondary load amps
+    kva=ph===3?(loadIn*secV*Math.sqrt(3))/1000:(loadIn*secV)/1000;
+    fromLoad=true;
+  }
+  if(!kva||kva<=0){errEl.innerHTML='Enter a KVA rating or a secondary load in amps.';errEl.className='err-msg show';return;}
+  if(!priV||!secV){errEl.innerHTML='Select valid primary and secondary voltages.';errEl.className='err-msg show';return;}
+  if(priV===secV){errEl.innerHTML='Primary and secondary voltages are the same \u2014 check your input (a transformer transforms voltage).';errEl.className='err-msg show';return;}
+
+  var priA=_xfmrFLA(kva,priV,ph);
+  var secA=_xfmrFLA(kva,secV,ph);
+  var turns=_xfmrTurns(priV,secV);
+  var stdKVA=_nextKVA(kva);
+  var phLbl=ph===3?'3-Phase':'1-Phase';
+  var yr=_codeYear||'2026';
+  var blocks=[];
+
+  if(fromLoad){
+    blocks.push(makeBlock('pass','Required KVA','From secondary load',kva.toFixed(2)+' kVA',
+      'Based on '+loadIn.toFixed(1)+'A on '+secV+'V '+phLbl+' secondary'));
+    blocks.push(makeBlock('neutral','Recommended Standard Size','Next standard KVA',stdKVA+' kVA',
+      stdKVA===Math.ceil(kva*10)/10?'Exact match':'Up from calculated '+kva.toFixed(2)+' kVA \u2014 use '+stdKVA+' kVA unit'));
+  } else {
+    blocks.push(makeBlock('neutral','Transformer Rating','Input KVA',kva+' kVA',phLbl+' \u00b7 '+priV+'V primary \u2192 '+secV+'V secondary'));
+  }
+
+  blocks.push(makeBlock('pass','Primary Full Load Amps','NEC \u00a7450.3',priA.toFixed(1)+'A',
+    priV+'V '+phLbl+(ph===3?' \u00b7 FLA = (KVA \u00d7 1000) \u00f7 ('+priV+' \u00d7 \u221a3)'
+                              :' \u00b7 FLA = (KVA \u00d7 1000) \u00f7 '+priV)));
+  blocks.push(makeBlock('pass','Secondary Full Load Amps','NEC \u00a7450.3',secA.toFixed(1)+'A',
+    secV+'V '+phLbl+(ph===3?' \u00b7 FLA = (KVA \u00d7 1000) \u00f7 ('+secV+' \u00d7 \u221a3)'
+                              :' \u00b7 FLA = (KVA \u00d7 1000) \u00f7 '+secV)));
+  blocks.push(makeBlock('neutral','Turns Ratio','Vpri \u00f7 Vsec',turns+' : 1',
+    'Primary '+priV+'V \u00f7 Secondary '+secV+'V. Secondary current is '+turns+'\u00d7 higher than primary current.'));
+
+  if(secA>1.25*priA||priA>1.25*secA){
+    // sanity check flag
+  }
+
+  document.getElementById('xf-fla-results-label').style.display='block';
+  document.getElementById('xf-fla-results').innerHTML=blocks.join('');
+  document.getElementById('xf-fla-disclaimer').style.display='block';
+  document.getElementById('xf-fla-note').textContent=phLbl+' \u00b7 '+priV+'V\u2192'+secV+'V \u00b7 '+(fromLoad?stdKVA+' kVA recommended':kva+' kVA')+' \u00b7 Design guidance only';
+  if(typeof jcResultsReady==='function')jcResultsReady('xfmr','Transformer FLA');
+}
+
+// ── OCPD ─────────────────────────────────────────────────────────────────────
+function resetXfmrOCPD(){
+  document.getElementById('xf-ocpd-phase').value='3';
+  document.getElementById('xf-ocpd-pri').value='480';
+  document.getElementById('xf-ocpd-sec').value='208';
+  document.getElementById('xf-ocpd-kva').value='';
+  document.getElementById('xf-ocpd-install').value='general';
+  document.getElementById('xf-ocpd-panel-err').className='err-msg';
+  document.getElementById('xf-ocpd-results').innerHTML='';
+  document.getElementById('xf-ocpd-results-label').style.display='none';
+  document.getElementById('xf-ocpd-disclaimer').style.display='none';
+  document.getElementById('xf-ocpd-note').textContent='';
+}
+function calculateXfmrOCPD(){
+  var errEl=document.getElementById('xf-ocpd-panel-err');
+  errEl.className='err-msg';
+  var ph=parseInt(document.getElementById('xf-ocpd-phase').value);
+  var priV=parseFloat(document.getElementById('xf-ocpd-pri').value);
+  var secV=parseFloat(document.getElementById('xf-ocpd-sec').value);
+  var kva=parseFloat(document.getElementById('xf-ocpd-kva').value);
+  var install=document.getElementById('xf-ocpd-install').value;
+  if(!kva||kva<=0){errEl.innerHTML='Enter the transformer KVA rating.';errEl.className='err-msg show';return;}
+  if(!priV||!secV){errEl.innerHTML='Select valid primary and secondary voltages.';errEl.className='err-msg show';return;}
+
+  var priA=_xfmrFLA(kva,priV,ph);
+  var secA=_xfmrFLA(kva,secV,ph);
+  var phLbl=ph===3?'3-Phase':'1-Phase';
+  var yr=_codeYear||'2026';
+
+  // Primary OCPD options
+  // 125% option (primary only, no secondary needed)
+  var pri125=_nextOCPD(priA*1.25);
+  // 250% option (requires secondary OCPD)
+  var pri250=_nextOCPD(priA*2.5);
+  // Secondary 125%
+  var sec125=_nextOCPD(secA*1.25);
+
+  // Special small-FLA cases
+  var pri167=_nextOCPD(priA*1.67);
+
+  var blocks=[];
+
+  // Option A: 125% primary, no secondary required
+  var opt_a_state = 'pass';
+  var opt_a_note = 'No secondary OCPD required with this option. If 125% doesn\'t land on a standard size, the next standard size up is used.';
+  if(priA<=2) {
+    blocks.push(makeBlock('ok','Primary FLA \u2264 2A','Table 450.3(B)',priA.toFixed(1)+'A',
+      'Primary FLA is very small. Any standard overcurrent device size is acceptable \u2014 size for the primary conductor ampacity.'));
+  } else if(priA<=9 && install==='general'){
+    blocks.push(makeBlock('neutral','Option A \u2014 Primary Only','\u00a7450.3(B) Table (General)',
+      'Primary: '+pri167+'A max','Primary FLA \u2264 9A allows up to 167% for primary-only protection. No secondary OCPD required. Primary FLA: '+priA.toFixed(1)+'A \u00d7 167% = '+( priA*1.67).toFixed(1)+'A \u2192 '+pri167+'A.'));
+  } else {
+    blocks.push(makeBlock('pass','Option A \u2014 Primary Only','\u00a7450.3(B) Table (General / Supervised)',
+      'Primary: '+pri125+'A max',
+      'Use 125% of primary FLA: '+priA.toFixed(1)+'A \u00d7 125% = '+(priA*1.25).toFixed(1)+'A \u2192 next standard: '+pri125+'A. No secondary OCPD required.'));
+  }
+
+  // Option B: 250% primary + 125% secondary
+  if(install==='general'){
+    blocks.push(makeBlock('neutral','Option B \u2014 Primary + Secondary','\u00a7450.3(B) Table (General)',
+      'Primary: '+pri250+'A \u00b7 Secondary: '+sec125+'A',
+      'Primary FLA '+priA.toFixed(1)+'A \u00d7 250% = '+(priA*2.5).toFixed(1)+'A \u2192 '+pri250+'A. '
+      +'Secondary FLA '+secA.toFixed(1)+'A \u00d7 125% = '+(secA*1.25).toFixed(1)+'A \u2192 '+sec125+'A. '
+      +'Both primary and secondary must be protected with this option.'));
+  } else {
+    // supervised
+    var pri_sup = priA<=9 ? _nextOCPD(priA*3.0) : pri250;
+    var pct_sup = priA<=9 ? '300' : '250';
+    blocks.push(makeBlock('neutral','Supervised \u2014 Primary + Secondary','\u00a7450.3(B) Table (Supervised)',
+      'Primary: '+pri_sup+'A \u00b7 Secondary: '+sec125+'A',
+      'Supervised: primary FLA '+priA.toFixed(1)+'A \u00d7 '+pct_sup+'% = '+(priA*(priA<=9?3:2.5)).toFixed(1)+'A \u2192 '+pri_sup+'A. '
+      +'Secondary FLA '+secA.toFixed(1)+'A \u00d7 125% = '+(secA*1.25).toFixed(1)+'A \u2192 '+sec125+'A.'));
+  }
+
+  // FLA reference
+  blocks.push(makeBlock('neutral','Calculated FLA','Reference',
+    'Primary: '+priA.toFixed(1)+'A  |  Secondary: '+secA.toFixed(1)+'A',
+    phLbl+' \u00b7 '+kva+' kVA \u00b7 '+priV+'V primary / '+secV+'V secondary'));
+
+  // Conductor sizing tip
+  var priCond=typeof svcFindWire==='function'?svcFindWire(priA*1.25,'copper'):'see Table 310.16';
+  var secCond=typeof svcFindWire==='function'?svcFindWire(secA*1.25,'copper'):'see Table 310.16';
+  blocks.push(makeBlock('neutral','Min. Conductor Size (125% FLA)','Table 310.16 \u00b7 Cu \u00b7 75\u00b0C',
+    'Primary: '+sizeLabel(priCond)+'  |  Secondary: '+sizeLabel(secCond),
+    'Size conductors at 125% of FLA for continuous transformer load. Verify conduit fill and temperature rating.'));
+
+  document.getElementById('xf-ocpd-results-label').style.display='block';
+  document.getElementById('xf-ocpd-results').innerHTML=blocks.join('');
+  document.getElementById('xf-ocpd-disclaimer').style.display='block';
+  document.getElementById('xf-ocpd-note').textContent='NEC '+yr+' \u00a7450.3(B) \u00b7 '+phLbl+' \u00b7 '+kva+' kVA \u00b7 '+install+' installation \u00b7 Design guidance only \u00b7 Verify with AHJ';
+  if(typeof jcResultsReady==='function')jcResultsReady('xfmr','Transformer OCPD');
+}
+
+// ── SDS Ground ────────────────────────────────────────────────────────────────
+function resetXfmrSDS(){
+  document.getElementById('xf-sds-phase').value='3';
+  document.getElementById('xf-sds-sec').value='208';
+  document.getElementById('xf-sds-kva').value='';
+  document.getElementById('xf-sds-cond-mat').value='copper';
+  document.getElementById('xf-sds-gnd-mat').value='copper';
+  document.getElementById('xf-sds-electrode').value='system';
+  document.getElementById('xf-sds-panel-err').className='err-msg';
+  document.getElementById('xf-sds-results').innerHTML='';
+  document.getElementById('xf-sds-results-label').style.display='none';
+  document.getElementById('xf-sds-disclaimer').style.display='none';
+  document.getElementById('xf-sds-note').textContent='';
+}
+function calculateXfmrSDS(){
+  var errEl=document.getElementById('xf-sds-panel-err');
+  errEl.className='err-msg';
+  var ph=parseInt(document.getElementById('xf-sds-phase').value);
+  var secV=parseFloat(document.getElementById('xf-sds-sec').value);
+  var kva=parseFloat(document.getElementById('xf-sds-kva').value);
+  var condMat=document.getElementById('xf-sds-cond-mat').value;
+  var gndMat=document.getElementById('xf-sds-gnd-mat').value;
+  var electrode=document.getElementById('xf-sds-electrode').value;
+  if(!kva||kva<=0){errEl.innerHTML='Enter the transformer KVA rating.';errEl.className='err-msg show';return;}
+  if(!secV){errEl.innerHTML='Select the secondary voltage.';errEl.className='err-msg show';return;}
+
+  var secA=_xfmrFLA(kva,secV,ph);
+  var condSize=typeof svcFindWire==='function'?svcFindWire(secA*1.25,condMat):'see Table 310.16';
+  var phLbl=ph===3?'3-Phase':'1-Phase';
+  var yr=_codeYear||'2026';
+  var condMatLbl=condMat==='copper'?'Copper':'Aluminum / CCA';
+  var gndMatLbl=gndMat==='copper'?'Copper':'Aluminum / CCA';
+
+  // GEC: Table 250.66 based on secondary conductor size
+  var gecRes=_sbjLookup(condSize,condMat,gndMat);
+  // Apply electrode cap
+  var gecFinal=gecRes?gecRes.size:null;
+  var capNote='';
+  if(gecRes && electrode==='rod'){
+    var capSz=gndMat==='copper'?'6':'4';
+    var capIdx=_WIDX[capSz]||0;
+    var rawIdx=_WIDX[gecRes.size]||0;
+    if(rawIdx>capIdx){gecFinal=capSz;capNote='Capped at '+sizeLabel(capSz)+' for rod/pipe/plate electrode (\u00a7250.66(A)).';}
+  } else if(gecRes && electrode==='concrete' && gndMat==='copper'){
+    var capIdx=_WIDX['4']||0;
+    var rawIdx=_WIDX[gecRes.size]||0;
+    if(rawIdx>capIdx){gecFinal='4';capNote='Capped at 4 AWG copper for concrete-encased electrode (\u00a7250.66(B)).';}
+  }
+
+  // SBJ: Table 250.102(C)(1) based on secondary conductor
+  var sbjRes=_sbjLookup(condSize,condMat,gndMat);
+
+  var blocks=[];
+  blocks.push(makeBlock('pass','Secondary FLA',phLbl,secA.toFixed(1)+'A',
+    kva+' kVA \u00b7 '+secV+'V '+phLbl+(ph===3?' \u00b7 FLA = (KVA\u00d71000)\u00f7('+secV+'\u00d7\u221a3)':' \u00b7 FLA = (KVA\u00d71000)\u00f7'+secV)));
+  blocks.push(makeBlock('pass','Secondary Conductor Size','Table 310.16 \u00b7 75\u00b0C',sizeLabel(condSize)+' '+condMatLbl,
+    'Sized at 125% of secondary FLA: '+secA.toFixed(1)+'A \u00d7 125% = '+(secA*1.25).toFixed(1)+'A \u2192 '+sizeLabel(condSize)));
+  if(gecFinal){
+    blocks.push(makeBlock('pass','GEC Size','\u00a7250.30(A)(5) Table 250.66',sizeLabel(gecFinal)+' '+gndMatLbl,
+      capNote||('Based on secondary conductor '+sizeLabel(condSize)+' '+condMatLbl)));
+  }
+  if(sbjRes){
+    blocks.push(makeBlock('pass','SBJ Size','\u00a7250.30(A)(1) Table 250.102(C)(1)',sizeLabel(sbjRes.size)+' '+gndMatLbl,
+      'System Bonding Jumper at transformer secondary \u2014 connects neutral to EGC. Based on secondary conductor '+sizeLabel(condSize)));
+  }
+  blocks.push(makeBlock('neutral','SDS Grounding Requirements','\u00a7250.30','GEC + SBJ both required',
+    'An SDS needs: (1) a System Bonding Jumper at the transformer or first disconnect, '
+    +'(2) a GEC connecting to a grounding electrode near the source, '
+    +'(3) the electrode must be as close as practical to the transformer. '
+    +'The SDS grounding electrode cannot be the same as the service grounding electrode unless they are bonded together.'));
+
+  document.getElementById('xf-sds-results-label').style.display='block';
+  document.getElementById('xf-sds-results').innerHTML=blocks.join('');
+  document.getElementById('xf-sds-disclaimer').style.display='block';
+  document.getElementById('xf-sds-note').textContent='NEC '+yr+' \u00a7250.30 \u00b7 '+phLbl+' \u00b7 '+kva+' kVA \u00b7 '+condMatLbl+' conductors \u00b7 Design guidance only \u00b7 Verify with AHJ';
+  if(typeof jcResultsReady==='function')jcResultsReady('xfmr','SDS Grounding');
 }
 
 // ── GFCI / AFCI Lookup ───────────────────────────────────────────────────────
