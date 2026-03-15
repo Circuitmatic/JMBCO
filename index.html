@@ -228,6 +228,18 @@ body.light-mode .ev-preset-btn.active,body.light-mode .ev-preset-btn:hover{borde
 .svc-method-btn.active,.svc-method-btn:hover{border-color:#f0c020;color:#f0c020;background:rgba(240,192,32,.08);}
 body.light-mode .svc-method-btn{background:#f8fafc;border-color:#e2e8f0;color:#64748b;}
 body.light-mode .svc-method-btn.active,body.light-mode .svc-method-btn:hover{border-color:#d4a000;color:#b45309;background:rgba(240,192,32,.06);}
+.svc-ib{background:none;border:none;color:rgba(240,192,32,0.65);font-size:11px;font-weight:700;cursor:pointer;padding:0 0 0 4px;line-height:1;font-family:'Inter',sans-serif;vertical-align:middle;display:inline;}
+.svc-ib:hover{color:#f0c020;}
+.svc-info-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;}
+.svc-info-overlay.open{display:flex;align-items:center;justify-content:center;}
+.svc-info-modal{background:var(--card,#1e2a3a);border-radius:14px;padding:22px;width:calc(100% - 40px);max-width:340px;box-shadow:0 8px 40px rgba(0,0,0,0.35);}
+.svc-info-modal-title{font-size:14px;font-weight:700;font-family:'Inter',sans-serif;color:var(--text,#f1f5f9);margin-bottom:10px;}
+.svc-info-modal-body{font-size:13px;font-family:'Inter',sans-serif;color:var(--text,#f1f5f9);line-height:1.6;opacity:0.85;}
+.svc-info-modal-ref{font-size:11px;font-family:'Roboto Mono',monospace;color:#f0c020;margin-top:10px;opacity:0.8;}
+.svc-info-close{width:100%;margin-top:14px;background:#f0c020;color:#1a1200;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
+body.light-mode .svc-info-modal{background:#fff;}
+body.light-mode .svc-info-modal-title{color:#111827;}
+body.light-mode .svc-info-modal-body{color:#374151;}
 
   html {
     height: 100%;
@@ -3844,44 +3856,44 @@ if('serviceWorker' in navigator){
     <div class="section-label">Dwelling Unit Service Sizing</div>
     <div class="fields">
       <div class="field-row" style="flex-direction:column;align-items:stretch;gap:6px;">
-        <div class="field-label">Calculation Method</div>
+        <div class="field-label">Calculation Method <button class="svc-ib" onclick="svcInfo('method')">ⓘ</button></div>
         <div class="svc-method-row">
           <button class="svc-method-btn active" id="svc-m-std" onclick="svcSetMethod('std',this)">Standard Method<span>Art. 220 / 120</span></button>
           <button class="svc-method-btn" id="svc-m-opt" onclick="svcSetMethod('opt',this)">Optional Method<span>220.82 / 120.82</span></button>
         </div>
       </div>
       <div class="field-row">
-        <div class="field-label">Floor Area (sq ft)</div>
+        <div class="field-label">Floor Area (sq ft) <button class="svc-ib" onclick="svcInfo('sqft')">ⓘ</button></div>
         <input class="fi" id="svc-sqft" type="number" min="1" placeholder="e.g. 1800"/>
       </div>
       <div class="field-row">
-        <div class="field-label">Range / Oven (kW)</div>
+        <div class="field-label">Range / Oven (kW) <button class="svc-ib" onclick="svcInfo('range')">ⓘ</button></div>
         <div style="display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap;">
           <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="checkbox" id="svc-has-range" checked onchange="svcRangeToggle()"> Present</label>
           <input class="fi" id="svc-range-kw" type="number" min="1" max="60" placeholder="kW" value="12" style="max-width:72px;"/>
         </div>
       </div>
       <div class="field-row">
-        <div class="field-label">Electric Dryer (W)</div>
+        <div class="field-label">Electric Dryer (W) <button class="svc-ib" onclick="svcInfo('dryer')">ⓘ</button></div>
         <div style="display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap;">
           <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="checkbox" id="svc-has-dryer" checked onchange="svcDryerToggle()"> Present</label>
           <input class="fi" id="svc-dryer-w" type="number" min="1" placeholder="watts" value="5000" style="max-width:90px;"/>
         </div>
       </div>
       <div class="field-row">
-        <div class="field-label">A/C Load (W)</div>
+        <div class="field-label">A/C Load (W) <button class="svc-ib" onclick="svcInfo('ac')">ⓘ</button></div>
         <input class="fi" id="svc-ac-w" type="number" min="0" value="0" style="max-width:90px;"/>
       </div>
       <div class="field-row">
-        <div class="field-label">Electric Heat (W)</div>
+        <div class="field-label">Electric Heat (W) <button class="svc-ib" onclick="svcInfo('heat')">ⓘ</button></div>
         <input class="fi" id="svc-heat-w" type="number" min="0" value="0" style="max-width:90px;"/>
       </div>
       <div class="field-row">
-        <div class="field-label">Water Heater (W)</div>
+        <div class="field-label">Water Heater (W) <button class="svc-ib" onclick="svcInfo('wh')">ⓘ</button></div>
         <input class="fi" id="svc-wh-w" type="number" min="0" value="4500" style="max-width:90px;"/>
       </div>
       <div class="field-row">
-        <div class="field-label">Other Fixed Loads (W)</div>
+        <div class="field-label">Other Fixed Loads (W) <button class="svc-ib" onclick="svcInfo('other')">ⓘ</button></div>
         <input class="fi" id="svc-other-w" type="number" min="0" value="0" style="max-width:90px;"/>
       </div>
       <div class="field-row">
@@ -3900,6 +3912,13 @@ if('serviceWorker' in navigator){
     </div>
     <div class="section-label" id="svc-results-label" style="display:none;">Results</div>
     <div class="results" id="svc-results"></div>
+    <div class="eng-panel" id="svc-breakdown-panel" style="display:none;margin:0 0 0 0;">
+      <div class="eng-panel-head" onclick="svcToggleBreakdown()">
+        <span class="eng-panel-title">Calculation Breakdown</span>
+        <span class="eng-toggle" id="svc-breakdown-toggle">▾</span>
+      </div>
+      <div class="eng-body" id="svc-breakdown-body"></div>
+    </div>
     <div class="disclaimer" id="svc-disclaimer" style="display:none;">
       <div class="disclaimer-title">Important Notice</div>
       <div class="disclaimer-text">Service sizing calculations are for reference only. Actual service size is subject to adopted code edition, local amendments, and Authority Having Jurisdiction (AHJ) approval. Verify all values against the physical code book. Consult a licensed electrician or engineer for permit and design work.</div>
@@ -8566,6 +8585,32 @@ function svcSetMethod(m,btn){
   document.querySelectorAll('.svc-method-btn').forEach(function(b){b.classList.remove('active');});
   if(btn)btn.classList.add('active');
 }
+var _SVC_INFO={
+  method:{t:'Calculation Method',b:'Standard Method (Art. 220/120): Calculates each load individually — lighting, appliances, range, dryer, HVAC, water heater — then applies demand factors. Required for most applications and more conservative.\n\nOptional Method (§220.82/120.82): Combines most loads and applies a single demand schedule (first 10kVA or 8kVA at 100%, remainder at 40%). Valid for new or existing dwelling units. Usually results in a smaller calculated load than Standard.',r:'NEC 220.82 / 120.82'},
+  sqft:{t:'Floor Area (sq ft)',b:'Enter the total conditioned living area in square feet. This is the heated and cooled interior floor space.\n\nHow to find it: Measure length × width of each room, or get it from the building plans or permit. Do NOT include garage, unfinished basement, or unheated storage areas.\n\nNEC uses 3 VA per sq ft (2020/2023) or 2 VA per sq ft (2026) as the general lighting unit load.',r:'NEC Table 220.12 / 120.14'},
+  range:{t:'Range / Oven (kW)',b:'Enter the nameplate rating of the electric range or oven in kilowatts (kW).\n\nHow to find it: Look on the data plate on the back or inside the door of the range. Standard residential ranges are 10–14 kW.\n\nIf you don\'t know: Use 12 kW. NEC requires a minimum demand of 8 kW for any range 12 kW or under (Table 220.55). For ranges over 12 kW, the demand increases 5% per kW above 12.',r:'NEC Table 220.55 / 120.55'},
+  dryer:{t:'Electric Dryer (W)',b:'Enter the nameplate wattage of the electric clothes dryer.\n\nHow to find it: Look on the label inside the dryer door or on the back of the unit. Standard residential dryers are 4,000–6,000 W (4–6 kW).\n\nNEC requires a minimum demand of 5,000 W regardless of nameplate, so if your dryer is rated below 5,000 W the code minimum still applies. Gas dryers = 0 W (electric usage is negligible).',r:'NEC §220.54 / §120.54'},
+  ac:{t:'A/C Load (W)',b:'Enter the total nameplate or calculated load for air conditioning in watts.\n\nHow to find it: Check the data plate on the outdoor condenser unit. It usually shows amps and voltage — multiply them (Amps × Volts = Watts). Example: 20A × 240V = 4,800 W. For BTU ratings: divide BTU/hr by 3.41.\n\nNote: Only the LARGER of A/C or electric heat is included in the service calculation (§220.60). If you have both, enter both and the larger will be used automatically.',r:'NEC §220.60 / §120.60'},
+  heat:{t:'Electric Heat (W)',b:'Enter the total nameplate load for all electric resistance heating in watts.\n\nHow to find it: Add up the wattage from all baseboard heaters, electric furnace, or heat strips. Each unit has a data plate. Electric furnaces are typically 10,000–20,000 W. Baseboard heaters are typically 500–2,000 W each.\n\nHeat pump users: Enter the emergency/auxiliary heat strip rating, not the compressor load.\n\nNote: Only the LARGER of A/C or electric heat is included per §220.60.',r:'NEC §220.60 / §120.60'},
+  wh:{t:'Water Heater (W)',b:'Enter the nameplate wattage of the electric water heater.\n\nHow to find it: Look on the label on the side of the tank, usually near the top. Standard residential units are 3,500–4,500 W. Tanks with two elements still typically show only the upper element rating since they don\'t run simultaneously.\n\nIf unknown: Use 4,500 W as a conservative default.\n\nGas, propane, or tankless gas = 0 W.',r:'NEC §220.53'},
+  other:{t:'Other Fixed Loads (W)',b:'Enter the combined wattage of any other permanently installed fixed appliances not already listed above.\n\nCommon examples: dishwasher (1,200–1,500 W), garbage disposal (500–900 W), well pump (750–1,500 W), trash compactor (500 W), pool pump or hot tub equipment.\n\nHow to find it: Add the nameplate wattages from each appliance\'s data plate. If you have 4 or more fixed appliances, Standard Method applies a 75% demand factor automatically.\n\nDo not include EV chargers here — use the EV tab for those.',r:'NEC §220.53'}
+};
+function svcInfo(key){
+  var d=_SVC_INFO[key];
+  if(!d)return;
+  document.getElementById('svc-info-title').textContent=d.t;
+  document.getElementById('svc-info-body').innerHTML=d.b.replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+  document.getElementById('svc-info-ref').textContent=d.r||'';
+  document.getElementById('svc-info-overlay').classList.add('open');
+}
+function svcHideInfo(){document.getElementById('svc-info-overlay').classList.remove('open');}
+function svcToggleBreakdown(){
+  var body=document.getElementById('svc-breakdown-body');
+  var tog=document.getElementById('svc-breakdown-toggle');
+  var isOpen=body.classList.contains('open');
+  body.classList.toggle('open',!isOpen);
+  tog.classList.toggle('open',!isOpen);
+}
 function svcRangeToggle(){
   var inp=document.getElementById('svc-range-kw');
   if(inp)inp.disabled=!document.getElementById('svc-has-range').checked;
@@ -8749,40 +8794,45 @@ function calculateSVC(){
   var cuSize=cond==='copper'?wireSize:svcFindWire(svcSize,'copper');
   var gecSize=svcGEC(cuSize);
 
-  // Build table HTML
-  var html='<table style="width:100%;border-collapse:collapse;font-size:13px;">';
-  html+='<tr><th style="text-align:left;padding:4px 2px;border-bottom:1px solid var(--border);color:var(--sub);font-size:11px;font-weight:600;letter-spacing:.5px;">ITEM</th>';
-  html+='<th style="text-align:right;padding:4px 2px;border-bottom:1px solid var(--border);color:var(--sub);font-size:11px;font-weight:600;letter-spacing:.5px;">VA</th></tr>';
+  // Build result-block cards
+  var html='';
+  html+=makeBlock('neutral','Total Calculated Load',(_svcMethod==='std'?'Standard Method':'Optional Method'),
+    Math.round(totalVA).toLocaleString()+' VA',
+    'All loads after demand factors applied');
+  html+=makeBlock('neutral','Minimum Service',
+    'NEC §230.79',
+    svcSize+' A',
+    'Calculated minimum: '+minAmps+' A at 240V · Next standard size: '+svcSize+' A');
+  html+=makeBlock('neutral','Service Entrance Conductor',
+    'Table 310.16 · 75°C',
+    '#'+wireSize+' '+cond.charAt(0).toUpperCase()+cond.slice(1),
+    'Sized to carry '+svcSize+' A service');
+  html+=makeBlock('neutral','Grounding Electrode Conductor',
+    'Table 250.66',
+    '#'+gecSize+' Copper',
+    'Based on service entrance conductor size');
 
+  // Build breakdown table for collapsible panel
+  var bk='<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+  bk+='<tr><th style="text-align:left;padding:5px 10px;border-bottom:1px solid var(--border);font-size:10px;letter-spacing:.5px;color:var(--sub);">ITEM</th>';
+  bk+='<th style="text-align:right;padding:5px 10px;border-bottom:1px solid var(--border);font-size:10px;letter-spacing:.5px;color:var(--sub);">VA</th></tr>';
   rows.forEach(function(r){
-    var ref=r.opts.ref?'<span style="font-size:10px;color:var(--sub);margin-left:5px;">'+r.opts.ref+'</span>':'';
+    var ref=r.opts.ref?'<span style="font-size:9px;color:var(--sub);margin-left:5px;">'+r.opts.ref+'</span>':'';
     if(r.opts.total){
-      html+='<tr style="border-top:2px solid var(--gold);"><td style="padding:7px 2px;font-weight:700;color:var(--gold);">'+r.label+'</td><td style="text-align:right;font-weight:700;color:var(--gold);padding:7px 2px;">'+Math.round(r.va).toLocaleString()+'</td></tr>';
+      bk+='<tr style="border-top:2px solid var(--gold,#f0c020);"><td style="padding:6px 10px;font-weight:700;color:#f0c020;">'+r.label+'</td><td style="text-align:right;padding:6px 10px;font-weight:700;color:#f0c020;">'+Math.round(r.va).toLocaleString()+'</td></tr>';
     } else if(r.opts.highlight){
-      html+='<tr style="background:rgba(240,192,32,0.06);"><td style="padding:5px 2px;font-weight:600;">'+r.label+ref+'</td><td style="text-align:right;padding:5px 2px;font-weight:600;">'+Math.round(r.va).toLocaleString()+'</td></tr>';
+      bk+='<tr style="background:rgba(240,192,32,0.06);"><td style="padding:4px 10px;font-weight:600;">'+r.label+ref+'</td><td style="text-align:right;padding:4px 10px;font-weight:600;">'+Math.round(r.va).toLocaleString()+'</td></tr>';
     } else if(r.opts.note){
-      html+='<tr><td colspan="2" style="padding:2px 2px 2px 12px;color:var(--sub);font-size:12px;">'+r.label+ref+'</td></tr>';
+      bk+='<tr><td colspan="2" style="padding:2px 10px 2px 20px;font-size:11px;color:var(--sub);">'+r.label+ref+'</td></tr>';
     } else if(r.va!==null&&r.va!==undefined){
-      html+='<tr><td style="padding:3px 2px;">'+r.label+ref+'</td><td style="text-align:right;padding:3px 2px;">'+Math.round(r.va).toLocaleString()+'</td></tr>';
+      bk+='<tr><td style="padding:3px 10px;color:var(--text);">'+r.label+ref+'</td><td style="text-align:right;padding:3px 10px;">'+Math.round(r.va).toLocaleString()+'</td></tr>';
     }
   });
-  html+='</table>';
-
-  // Summary boxes
-  html+='<div style="margin-top:14px;border:2px solid var(--gold);border-radius:6px;padding:12px;">';
-  html+='<div style="font-size:10px;color:var(--sub);letter-spacing:.8px;font-weight:700;margin-bottom:4px;">MINIMUM SERVICE SIZE</div>';
-  html+='<div style="font-size:30px;font-weight:800;color:var(--gold);line-height:1;">'+svcSize+' A</div>';
-  html+='<div style="font-size:12px;color:var(--sub);margin-top:3px;">'+Math.round(totalVA).toLocaleString()+' VA ÷ 240V = '+minAmps+' A calculated</div>';
-  html+='</div>';
-
-  html+='<div style="margin-top:10px;border:1px solid var(--border);border-radius:6px;padding:10px;">';
-  html+='<div style="font-size:10px;color:var(--sub);letter-spacing:.8px;font-weight:700;margin-bottom:8px;">SERVICE CONDUCTORS — TABLE 310.16 (75°C)</div>';
-  html+='<div style="display:flex;gap:20px;flex-wrap:wrap;">';
-  html+='<div><div style="font-size:10px;color:var(--sub);">MIN. CONDUCTOR</div><div style="font-size:18px;font-weight:700;">#'+wireSize+' '+cond.charAt(0).toUpperCase()+cond.slice(1)+'</div></div>';
-  html+='<div><div style="font-size:10px;color:var(--sub);">GEC (Table 250.66)</div><div style="font-size:18px;font-weight:700;">#'+gecSize+' Copper</div></div>';
-  html+='</div></div>';
+  bk+='</table>';
 
   document.getElementById('svc-results').innerHTML=html;
+  document.getElementById('svc-breakdown-body').innerHTML=bk;
+  document.getElementById('svc-breakdown-panel').style.display='';
   document.getElementById('svc-results-label').style.display='';
   document.getElementById('svc-disclaimer').style.display='';
   var mLabel=_svcMethod==='std'?'Standard Method':'Optional Method';
@@ -9233,6 +9283,14 @@ function gfciRender() {
       <div><div class="export-sheet-btn-lbl">CSV</div><div class="export-sheet-btn-sub">Open in spreadsheet</div></div>
     </button>
     <button class="export-sheet-cancel" onclick="closeExportSheet()">Cancel</button>
+  </div>
+</div>
+<div class="svc-info-overlay" id="svc-info-overlay" onclick="svcHideInfo()">
+  <div class="svc-info-modal" onclick="event.stopPropagation()">
+    <div class="svc-info-modal-title" id="svc-info-title">Info</div>
+    <div class="svc-info-modal-body" id="svc-info-body"></div>
+    <div class="svc-info-modal-ref" id="svc-info-ref"></div>
+    <button class="svc-info-close" onclick="svcHideInfo()">Got It</button>
   </div>
 </div>
 <div class="ts-info-overlay" id="ts-info-overlay" onclick="tsHideInfo()">
