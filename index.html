@@ -5892,8 +5892,8 @@ function renderManualNoteCard(n){
       photosHtml+
       '<div class="note-card-actions">'+
         '<div class="note-actions-row">'+
-          '<button class="note-copy-btn" onclick="copyNoteContent('+n.id+')">Copy</button>'+
-          '<button class="note-copy-btn" onclick="duplicateNote('+n.id+')">Duplicate</button>'+
+          '<button class="note-export-card-btn" onclick="jcRenameNote('+n.id+')">Edit Title</button>'+
+          '<button class="note-export-card-btn" onclick="duplicateNote('+n.id+')">Duplicate</button>'+
           '<button class="note-export-card-btn" onclick="jcExportNote('+n.id+')">Export</button>'+
         '</div>'+
         '<div class="note-actions-row">'+
