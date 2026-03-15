@@ -1302,6 +1302,29 @@ body:not(.light-mode) .co-cancel-btn{background:var(--surface2);color:var(--sub)
 /* Result export button */
 body:not(.light-mode) .result-export-btn{background:var(--surface);color:var(--sub);border-color:var(--border);}
 
+.stg-state-ov{display:none;position:fixed;inset:0;background:var(--bg);z-index:810;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+.stg-state-ov.open{display:block;}
+.stg-state-head{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 14px) 16px 14px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1;}
+.stg-state-title{font-family:'Orbitron',sans-serif;font-size:14px;color:#f0c020;letter-spacing:.04em;}
+.stg-state-close{background:none;border:none;color:#9ca3af;font-size:20px;cursor:pointer;padding:4px 6px;line-height:1;}
+.stg-state-intro{padding:14px 16px 6px;font-size:12px;color:var(--sub);font-family:'Inter',sans-serif;line-height:1.5;}
+.stg-state-intro strong{color:var(--text);}
+.stg-state-grp-hd{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-family:'Roboto Mono',monospace;padding:14px 16px 6px;display:flex;align-items:center;gap:8px;}
+.stg-state-grp-hd span{display:inline-block;padding:3px 10px;border-radius:12px;font-size:10px;font-weight:800;letter-spacing:.05em;}
+.stg-state-grp-hd.yr2023 span{background:rgba(37,99,235,0.15);color:#60a5fa;}
+.stg-state-grp-hd.yr2020 span{background:rgba(107,114,128,0.15);color:var(--sub);}
+.stg-state-grp-hd.yrlocal span{background:rgba(234,88,12,0.15);color:#fb923c;}
+.stg-state-list{padding:0 16px 8px;}
+.stg-state-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;}
+.stg-state-name{font-size:13px;font-weight:700;font-family:'Inter',sans-serif;color:var(--text);white-space:nowrap;min-width:130px;}
+.stg-state-comment{font-size:11px;font-family:'Inter',sans-serif;color:var(--sub);line-height:1.4;flex:1;}
+.stg-state-badge{font-size:10px;font-weight:800;font-family:'Roboto Mono',monospace;padding:3px 9px;border-radius:10px;white-space:nowrap;flex-shrink:0;}
+.stg-state-badge.yr2023{background:rgba(37,99,235,0.15);color:#60a5fa;}
+.stg-state-badge.yr2020{background:rgba(107,114,128,0.15);color:var(--sub);}
+.stg-state-badge.yrlocal{background:rgba(234,88,12,0.15);color:#fb923c;}
+body.light-mode .stg-state-grp-hd.yr2023 span,body.light-mode .stg-state-badge.yr2023{background:rgba(37,99,235,0.1);color:#1d4ed8;}
+body.light-mode .stg-state-grp-hd.yr2020 span,body.light-mode .stg-state-badge.yr2020{background:#f3f4f6;color:#374151;}
+body.light-mode .stg-state-grp-hd.yrlocal span,body.light-mode .stg-state-badge.yrlocal{background:rgba(234,88,12,0.1);color:#c2410c;}
 .stg-overlay{position:fixed;inset:0;background:var(--bg);z-index:800;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;}
 .stg-overlay.open{display:block;}
 .stg-overlay-head{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 14px) 16px 14px;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:1;}
@@ -2407,6 +2430,77 @@ if('serviceWorker' in navigator){
   </div>
 
 
+<div class="stg-state-ov" id="stg-state-ov">
+  <div class="stg-state-head">
+    <span class="stg-state-title">State Code Year Guide</span>
+    <button class="stg-state-close" onclick="closeStateGuide()">&#x2715;</button>
+  </div>
+  <div class="stg-state-intro">
+    <strong>Find your state below</strong> to see which code year to select. Most states are currently on the <strong>2023</strong> edition. Always verify with your local Authority Having Jurisdiction (AHJ) — local amendments may apply.
+  </div>
+
+  <div class="stg-state-grp-hd yr2023"><span>2023</span> Select 2023 for these states</div>
+  <div class="stg-state-list">
+    <div class="stg-state-item"><div class="stg-state-name">California</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">CA Electrical Code, effective 1/1/2026. 2026 review in progress.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Colorado</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Currently on 2023. 2026 review expected later this year.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Delaware</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">2023 edition effective 1/1/2026.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Georgia</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 1/1/2025.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Idaho</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 7/1/2024.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Iowa</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">On 2023. 2026 update process has commenced.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Kentucky</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">On 2023. 2026 update process has commenced.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Maine</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 7/1/2024.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Maryland</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 3/1/2025.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Massachusetts</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">On 2023. Targeting 2026 adoption July 1, 2026.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Michigan</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Residential update complete 8/29/2025.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Minnesota</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">On 2023. 2026 update process has commenced.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Nebraska</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">On 2023. 2026 update process has commenced.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">New Hampshire</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 7/1/2025.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">New York</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 12/31/2025.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">North Dakota</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">On 2023. 2026 update process has commenced.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Ohio</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective April 2024.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Oklahoma</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 9/14/2024.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Oregon</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">On 2023. Targeting 2026 adoption Oct 1, 2026.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Pennsylvania</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">2023 edition effective 1/1/2026.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Rhode Island</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 12/1/2025.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">South Dakota</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 11/12/2024.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Texas</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">On 2023. Targeting 2026 adoption Sept 1, 2026.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Utah</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 7/1/2025.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Washington</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">On 2023. Targeting 2026 adoption Dec 31, 2026.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Wyoming</div><span class="stg-state-badge yr2023">2023</span><div class="stg-state-comment">Effective 7/1/2023.</div></div>
+  </div>
+
+  <div class="stg-state-grp-hd yr2020"><span>2020</span> Select 2020 for these states</div>
+  <div class="stg-state-list">
+    <div class="stg-state-item"><div class="stg-state-name">Alabama</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">No current move announced.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Alaska</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">Continuous enforcement of 2020 edition.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Arkansas</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">Still on 2020 with state amendments.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Connecticut</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">2023 update process underway — not yet adopted.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Florida</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">2023 review in progress for next cycle.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Hawaii</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">State review for 2023 is ongoing.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Louisiana</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">Verify locally — update timeline unclear.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Montana</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">No current move to newer edition announced.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">New Jersey</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">2023 update currently in committee.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">New Mexico</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">Still on 2020. No update announced.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">North Carolina</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">2023 expected July 1, 2026 — verify locally.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">South Carolina</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">2023 update process underway.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Vermont</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">2020 edition in effect.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Virginia</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">2023 update process underway.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">West Virginia</div><span class="stg-state-badge yr2020">2020</span><div class="stg-state-comment">Effective 8/1/2022.</div></div>
+  </div>
+
+  <div class="stg-state-grp-hd yrlocal"><span>Local / Other</span> No statewide standard — verify locally</div>
+  <div class="stg-state-list" style="padding-bottom:40px;">
+    <div class="stg-state-item"><div class="stg-state-name">Arizona</div><span class="stg-state-badge yrlocal">Local</span><div class="stg-state-comment">No statewide adoption. Most cities use 2020 or 2023 — check your AHJ.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Illinois</div><span class="stg-state-badge yrlocal">Local</span><div class="stg-state-comment">2008 baseline for state buildings. Local jurisdictions vary widely.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Indiana</div><span class="stg-state-badge yrlocal">Other</span><div class="stg-state-comment">Currently on 2008/2017. Active process to adopt 2023 — check locally.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Kansas</div><span class="stg-state-badge yrlocal">Other</span><div class="stg-state-comment">2008 statewide baseline. Mostly governed by local jurisdictions.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Mississippi</div><span class="stg-state-badge yrlocal">Local</span><div class="stg-state-comment">No statewide adoption. Check your local jurisdiction.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Missouri</div><span class="stg-state-badge yrlocal">Local</span><div class="stg-state-comment">No statewide adoption. Check your local jurisdiction.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Nevada</div><span class="stg-state-badge yrlocal">Other</span><div class="stg-state-comment">State is on 2017. Local jurisdictions typically lead with newer editions.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Tennessee</div><span class="stg-state-badge yrlocal">Other</span><div class="stg-state-comment">On 2017 edition, effective 10/1/2018. No current update announced.</div></div>
+    <div class="stg-state-item"><div class="stg-state-name">Wisconsin</div><span class="stg-state-badge yrlocal">Other</span><div class="stg-state-comment">Currently on 2017. 2023 update process underway.</div></div>
+  </div>
+</div>
 <div class="stg-overlay" id="stg-overlay">
   <div class="stg-overlay-head"><span class="stg-overlay-title">&#9881; Settings</span><button class="stg-overlay-close" onclick="closeSettings()">&#x2715;</button></div>
   <div class="stg-inner">
@@ -2504,6 +2598,14 @@ if('serviceWorker' in navigator){
               <button class="stg-cy-btn" id="stg-cy-2026" onclick="setCodeYear('2026')">2026</button>
             </div>
           </div>
+        </div>
+        <div class="stg-card stg-action-row" onclick="openStateGuide()">
+          <span class="stg-action-icon">&#x1F5FA;</span>
+          <div class="stg-row-info">
+            <div class="stg-row-title">State Code Year Guide</div>
+            <div class="stg-row-sub">Find out which year your state is on</div>
+          </div>
+          <span class="stg-action-arrow">&#8250;</span>
         </div>
       </div>
 
@@ -8752,6 +8854,8 @@ function calculateEV() {
 // ── Dwelling Unit Service Sizing Wizard ──────────────────────────────────────
 var _svcMethod='std';
 
+function openStateGuide(){document.getElementById('stg-state-ov').classList.add('open');}
+function closeStateGuide(){document.getElementById('stg-state-ov').classList.remove('open');}
 function svcSetMethod(m,btn){
   _svcMethod=m;
   document.querySelectorAll('.svc-method-btn').forEach(function(b){b.classList.remove('active');});
