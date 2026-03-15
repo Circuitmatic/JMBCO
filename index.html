@@ -1518,8 +1518,8 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-svc" onclick="switchTab('svc',this)">Service</button>
     <button class="tab-btn" id="tab-btn-gnd" onclick="switchTab('gnd',this)">Ground</button>
     <button class="tab-btn" id="tab-btn-xfmr" onclick="switchTab('xfmr',this)">Transformer</button>
-    <button class="tab-btn" id="tab-btn-pn" onclick="switchTab('pn',this)">Panel<span>Schedule</span></button>
-    <button class="tab-btn" id="tab-btn-feeder" onclick="switchTab('feeder',this)">Feeder<span>Sizing</span></button>
+    <button class="tab-btn" id="tab-btn-pn" onclick="switchTab('pn',this)">Panel Sched</button>
+    <button class="tab-btn" id="tab-btn-feeder" onclick="switchTab('feeder',this)">Feeder Sz</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -3191,7 +3191,11 @@ if('serviceWorker' in navigator){
       <button class="btn btn-calc" onclick="calculatePN()">Calculate</button>
       <button class="btn btn-reset" onclick="resetPN()">Reset</button>
     </div>
-    <div class="section-la<div class="tab-panel" id="tab-charts">
+    <div id="pn-phase-section"></div>
+    <div id="pn-results-label" class="section-label" style="display:none;"></div>
+    <div id="pn-results"></div>
+  </div>
+  <div class="tab-panel" id="tab-charts">
     <div class="charts-hdr">
       <div class="charts-hdr-title">Reference Charts</div>
       <div class="charts-hdr-sub">Tap any section to expand</div>
@@ -4424,17 +4428,6 @@ if('serviceWorker' in navigator){
       </div>
     </div>
 
-
-    <!-- Fire Alarm: Detector Spacing -->
-
-    <div class="cht-spacer"></div>
-  </div>d splicing methods. IDC and NAC circuits must be supervised &mdash; open or short must generate a trouble signal.</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-      </div>
-    </div>
 
     <div class="cht-spacer"></div>
   </div>
