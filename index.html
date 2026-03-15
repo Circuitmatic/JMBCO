@@ -9313,41 +9313,41 @@ var _SVC_INFO={
   bf_devcond:{t:'Device Conductor AWG',b:'This is the size of the largest wire that connects to or passes through any device (yoke) in the box. The NEC bases the two-allowance device volume on this wire size.\n\nIn most residential work this will match your circuit conductor — 14 AWG on a 15A circuit, 12 AWG on a 20A circuit.\n\nIf different devices in the box have different wire sizes connected to them, use the largest one.',r:'NEC §314.16(B)(4)'},
   bf_egc:{t:'EGC Count',b:'EGC stands for Equipment Grounding Conductor — the bare copper or green-insulated ground wire in the cable or conduit.\n\nNo matter how many EGCs are in the box, they all together count as only ONE conductor allowance (based on the size of the largest EGC). This is one of the few places in box fill where quantity does not increase the count.\n\nCount every bare copper and green wire entering the box — from each cable or conduit run.',r:'NEC §314.16(B)(5)'},
   bf_egcawg:{t:'Largest EGC',b:'Select the wire gauge of the largest equipment grounding conductor (bare copper or green wire) in the box.\n\nThis size is used to look up the volume allowance for all EGCs combined. In most residential work, this matches your circuit conductor size — 14 AWG on a 15A circuit, 12 AWG on a 20A circuit.\n\nIf you have multiple circuits entering the box with different EGC sizes, pick the largest (smallest AWG number).',r:'NEC Table 314.16(B)'},
-  ev_l1:{t:'Level 1 — 12A / 120V',b:'The simplest EV charging option — plugs into a standard 3-prong household outlet (NEMA 5-15R). No special wiring required.
+  ev_l1:{t:'Level 1 — 12A / 120V',b:'Standard 3-prong household outlet (NEMA 5-15R). No special wiring required.
 
 Charge rate: ~1.4 kW — adds roughly 4–5 miles of range per hour.
 
-Best for: overnight charging, plug-in hybrids, or drivers with low daily mileage (under 40 miles/day).
+Best for: overnight charging, plug-in hybrids, or low daily mileage (under 40 miles/day).
 
-Circuit needed: Any existing 15A or 20A, 120V general-purpose outlet. A dedicated circuit is recommended to avoid tripping breakers.',r:'NEC §625.10 / §210.8'},
+Circuit needed: Any 15A or 20A, 120V general-purpose outlet. Dedicated circuit recommended.',r:'NEC §625.10 / §210.8'},
   ev_l2b:{t:'L2 Basic — 16A / 240V',b:'Entry-level Level 2 charging on a 240V circuit. Faster than Level 1 but requires a dedicated 240V outlet or hardwired EVSE.
 
 Charge rate: ~3.8 kW — adds roughly 10–12 miles of range per hour.
 
-Best for: apartments, condos, or installs where a full 40A circuit isn't available or practical.
+Best for: apartments or installs where a full 40A circuit is not available.
 
 Circuit needed: Dedicated 20A double-pole breaker, 12 AWG wire minimum, 240V outlet (NEMA 6-20 or 14-20) or hardwired.',r:'NEC §625.17 / §210.19(A)'},
-  ev_l2s:{t:'L2 Standard — 32A / 240V',b:'The most common residential Level 2 installation. Works with virtually all home EVSE chargers (ChargePoint, JuiceBox, Wallbox, etc.).
+  ev_l2s:{t:'L2 Standard — 32A / 240V',b:'The most common residential Level 2 install. Works with virtually all home EVSE chargers (ChargePoint, JuiceBox, Wallbox, etc.).
 
-Charge rate: ~7.7 kW — adds roughly 20–25 miles of range per hour. A full charge overnight for most EVs.
+Charge rate: ~7.7 kW — adds roughly 20–25 miles of range per hour. Full charge overnight for most EVs.
 
 Best for: most homeowners — the sweet spot between cost and speed.
 
-Circuit needed: Dedicated 40A double-pole breaker (32A continuous × 125% = 40A), 8 AWG copper wire minimum, NEMA 14-50 outlet or hardwired EVSE.',r:'NEC §625.17 / §210.19(A)'},
+Circuit needed: Dedicated 40A double-pole breaker (32A × 125%), 8 AWG copper minimum, NEMA 14-50 or hardwired EVSE.',r:'NEC §625.17 / §210.19(A)'},
   ev_l2f:{t:'L2 Fast — 40A / 240V',b:'High-output home charger for vehicles that can accept higher charge rates.
 
 Charge rate: ~9.6 kW — adds roughly 25–30 miles of range per hour.
 
-Best for: long-range EVs, high daily mileage drivers, or when faster turnaround time matters.
+Best for: long-range EVs, high daily mileage, or when faster turnaround matters.
 
-Circuit needed: Dedicated 50A double-pole breaker (40A continuous × 125% = 50A), 6 AWG copper wire minimum, hardwired EVSE or NEMA 14-50. Verify your vehicle's onboard charger can accept 40A before sizing up.',r:'NEC §625.17 / §210.19(A)'},
-  ev_l2m:{t:'L2 Max — 48A / 240V',b:'Maximum Level 2 residential charging. Delivers the fastest possible home charge rate available on a single-phase 240V circuit.
+Circuit needed: Dedicated 50A double-pole breaker (40A × 125%), 6 AWG copper minimum, hardwired EVSE or NEMA 14-50.',r:'NEC §625.17 / §210.19(A)'},
+  ev_l2m:{t:'L2 Max — 48A / 240V',b:'Maximum Level 2 residential charging on a single-phase 240V circuit.
 
 Charge rate: ~11.5 kW — adds roughly 30–35 miles of range per hour.
 
-Best for: large-battery EVs (80+ kWh), households with two EVs sharing a charger on a schedule, or when charge time must be minimized.
+Best for: large-battery EVs (80+ kWh), households with two EVs, or when charge time must be minimized.
 
-Circuit needed: Dedicated 60A double-pole breaker (48A continuous × 125% = 60A), 6 AWG copper minimum, hardwired EVSE. Most smart EVSE units top out at 48A.',r:'NEC §625.17 / §210.19(A)'},
+Circuit needed: Dedicated 60A double-pole breaker (48A × 125%), 6 AWG copper minimum, hardwired EVSE.',r:'NEC §625.17 / §210.19(A)'},
   mc_nameplate:{t:'Where to Find Motor Information',b:'Everything you need for this calculator is on the motor nameplate — the metal data plate bolted to the motor frame (usually on the side or end).\n\nWhat to look for:\n\n• Horsepower (HP) — listed as "HP"\n• Voltage — listed as "VOLTS" — may show multiple voltages like 230/460\n• Phase — listed as "PH" — 1 for single-phase, 3 for three-phase\n• Motor Type — usually identified by NEMA Design letter (A, B, C, D) or "Squirrel Cage." If not listed, assume Squirrel Cage (Design B) — it is by far the most common\n• Service Factor (SF) — listed as "S.F." — if 1.15 or higher, overload protection is set to 125%; if not listed or below 1.15, use 115%\n\nIf the nameplate is missing or unreadable, check the motor spec sheet or the original equipment documentation.',r:'NEC §430.7 (Nameplate Requirements)'}
 };
 function svcInfo(key){
