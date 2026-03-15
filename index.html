@@ -4229,6 +4229,188 @@ if('serviceWorker' in navigator){
       </div>
     </div>
 
+
+    <!-- Fire Alarm: Detector Spacing -->
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-fa-spacing')">
+        <span class="cht-icon">&#x1F6A8;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Fire Alarm &mdash; Detector Spacing</div><div class="cht-sub">NFPA 72 smoke &amp; heat detector placement rules</div></div>
+        <span class="cht-chev" id="cht-fa-spacing-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-fa-spacing">
+
+        <div class="cht-section-lbl">Smoke Detectors &mdash; Smooth Ceiling (NFPA 72 &sect;17.6.3)</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Rule</th><th>Value</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Max spacing (listed)</td><td>30 ft</td><td>Default listed spacing used by most manufacturers. Use listed spacing if less than 30 ft.</td></tr>
+              <tr><td>Max coverage area</td><td>900 sq ft</td><td>30 ft &times; 30 ft grid. Reduce for irregular rooms.</td></tr>
+              <tr><td>Max distance from wall</td><td>S &divide; 2</td><td>No detector more than half the listed spacing (15 ft) from any wall or partition.</td></tr>
+              <tr><td>Corridor &le;5 ft wide</td><td>30 ft apart</td><td>Single row on ceiling centerline. End walls: detector within 15 ft of the end.</td></tr>
+              <tr><td>Corridor 5&ndash;10 ft wide</td><td>Standard spacing</td><td>Use smooth ceiling rules; detector within 5 ft of each end wall.</td></tr>
+              <tr><td>Min ceiling height</td><td>No min</td><td>Max ceiling height per listing &mdash; typically 12 ft for standard detectors.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cht-section-lbl">Smoke Detectors &mdash; Beamed / Solid-Joist Ceilings (NFPA 72 &sect;17.6.3.5)</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Beam Depth</th><th>Beam Spacing</th><th>Rule</th></tr></thead>
+            <tbody>
+              <tr><td>Less than 4 in</td><td>Any</td><td>Treat as smooth ceiling &mdash; standard spacing applies.</td></tr>
+              <tr><td>4 in or deeper</td><td>3 ft or less</td><td>Treat as smooth ceiling &mdash; standard spacing applies.</td></tr>
+              <tr><td>4 in or deeper</td><td>More than 3 ft</td><td>Locate detectors on the ceiling in each beam bay (the space between beams). Space along the bay per smooth ceiling rules.</td></tr>
+              <tr><td>More than 12 in deep</td><td>More than 12 ft apart</td><td>Each beam bay acts as a separate room for detector placement purposes.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cht-section-lbl">Smoke Detectors &mdash; Sloped / Cathedral Ceilings (NFPA 72 &sect;17.6.3.6)</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Situation</th><th>Requirement</th></tr></thead>
+            <tbody>
+              <tr><td>Peak / ridge of sloped ceiling</td><td>First detector within 3 ft horizontally of the peak. Hot gases rise and collect at the apex first.</td></tr>
+              <tr><td>Spacing below the peak</td><td>Measure from the peak downward; additional detectors spaced per listed spacing along the slope.</td></tr>
+              <tr><td>Peaked ceiling &gt;10 ft at peak</td><td>Consider adding detectors on the lower portions &mdash; the high peak area is covered, but lower combustibles may not activate it fast enough.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cht-section-lbl">Heat Detectors (NFPA 72 &sect;17.6.4)</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Rule</th><th>Standard Spacing</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Max spacing (smooth ceiling, 10 ft high)</td><td>50 ft / 2,500 sq ft</td><td>Most fixed-temp and rate-of-rise detectors are listed at 50 ft spacing on smooth ceilings &le;10 ft.</td></tr>
+              <tr><td>Ceiling 10&ndash;12 ft</td><td>0.91 &times; listed</td><td>Multiply listed spacing by 0.91 for ceilings 10&ndash;12 ft high.</td></tr>
+              <tr><td>Ceiling 12&ndash;14 ft</td><td>0.84 &times; listed</td><td>Multiply by 0.84.</td></tr>
+              <tr><td>Ceiling 14&ndash;16 ft</td><td>0.77 &times; listed</td><td>Multiply by 0.77.</td></tr>
+              <tr><td>Ceiling 16&ndash;18 ft</td><td>0.71 &times; listed</td><td>Multiply by 0.71.</td></tr>
+              <tr><td>Ceiling 18&ndash;20 ft</td><td>0.64 &times; listed</td><td>Multiply by 0.64. Above 20 ft: consult manufacturer listing.</td></tr>
+              <tr><td>Max distance from wall</td><td>S &divide; 2</td><td>Same rule as smoke: no detector more than half the spacing from any wall.</td></tr>
+              <tr><td>Fixed-temp vs rate-of-rise</td><td>Same spacing rules</td><td>Rate-of-rise detectors will not activate in slowly developing fires (e.g., smoldering). Fixed-temp activates at rated temp regardless of rise rate. Combination type covers both.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cht-section-lbl">Required Detector Locations &mdash; Residential (NFPA 72 &sect;29)</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Location</th><th>Required?</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Each sleeping room</td><td>Yes</td><td>Smoke alarm inside every bedroom (2002+ NFPA 72 / most state codes)</td></tr>
+              <tr><td>Outside each sleeping area</td><td>Yes</td><td>In hallway or area immediately outside bedroom doors</td></tr>
+              <tr><td>Each level of dwelling</td><td>Yes</td><td>Including basement; excluding unfinished attics and crawl spaces</td></tr>
+              <tr><td>Kitchen</td><td>Not required in sleeping area</td><td>Keep smoke detector &ge;10 ft from cooking appliances to reduce nuisance alarms (20 ft recommended if ionization type)</td></tr>
+              <tr><td>Garage</td><td>Heat detector recommended</td><td>Smoke detectors prone to false alarms from exhaust; heat detectors preferred</td></tr>
+              <tr><td>Basement</td><td>Yes &mdash; near stairway</td><td>Locate at bottom of stairway leading to upper floors</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Fire Alarm: Article 760 Wiring Reference -->
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-fa-wiring')">
+        <span class="cht-icon">&#x1F9EF;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Fire Alarm &mdash; Article 760 Wiring</div><div class="cht-sub">PLFA &amp; NPLFA cable types, Class A/B, CI requirements</div></div>
+        <span class="cht-chev" id="cht-fa-wiring-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-fa-wiring">
+
+        <div class="cht-section-lbl">Circuit Types &mdash; PLFA vs NPLFA (NEC Art. 760)</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Type</th><th>Power Source</th><th>Wire Size Min</th><th>Key Rule</th></tr></thead>
+            <tbody>
+              <tr><td><strong>PLFA</strong><br>Power-Limited</td><td>Listed PLFA power supply &le;250V, &le;100VA</td><td>26 AWG minimum (listed cable)</td><td>May use listed PLFA cable (FPL, FPLR, FPLP). Cannot share raceway with non-FA conductors except as permitted in &sect;760.136.</td></tr>
+              <tr><td><strong>NPLFA</strong><br>Non-Power-Limited</td><td>Unlimited power source (standard panel circuit)</td><td>18 AWG initiating; 12 AWG if &gt;2A notification</td><td>Must use wiring methods for the location (NM-B, conduit, etc.) same as branch circuits. Cannot share raceway with power/lighting circuits.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cht-section-lbl">PLFA Cable Types &mdash; Substitution Hierarchy</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Cable Type</th><th>Rating</th><th>Where Permitted</th><th>Can Substitute For</th></tr></thead>
+            <tbody>
+              <tr><td><strong>FPLP</strong></td><td>Plenum</td><td>Air-handling spaces, plenum ceilings, ducts</td><td>FPLR, FPL (anywhere below)</td></tr>
+              <tr><td><strong>FPLR</strong></td><td>Riser</td><td>Vertical runs in shafts, between floors</td><td>FPL (general use)</td></tr>
+              <tr><td><strong>FPL</strong></td><td>General</td><td>General use &mdash; not in plenums or risers</td><td>&mdash; (cannot substitute up)</td></tr>
+              <tr><td><strong>FPLCI</strong></td><td>Circuit Integrity</td><td>Circuits required to operate during fire (2-hr rating)</td><td>Can substitute for FPL/FPLR/FPLP in CI applications</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:4px 14px 10px;font-size:10.5px;color:var(--muted);line-height:1.6;">
+          &#9650; Higher-rated cable can always substitute for lower. FPLP is top of hierarchy. Rule: you can use a better cable, never a worse one.
+        </div>
+
+        <div class="cht-section-lbl">Circuit Integrity (CI) &mdash; When Required (NFPA 72 &sect;12.4 / NEC &sect;760.130(B))</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Circuit</th><th>CI Required?</th><th>Rating</th></tr></thead>
+            <tbody>
+              <tr><td>Sprinkler supervisory circuits</td><td>Yes &mdash; where required to operate during fire</td><td>2-hour fire rating</td></tr>
+              <tr><td>Fire pump control wiring</td><td>Yes</td><td>2-hour fire rating</td></tr>
+              <tr><td>Elevator recall (Phase I)</td><td>Yes</td><td>2-hour fire rating</td></tr>
+              <tr><td>Emergency voice/alarm communication</td><td>Yes (high-rise buildings)</td><td>2-hour fire rating</td></tr>
+              <tr><td>Standard initiating device circuits</td><td>No (unless AHJ requires)</td><td>N/A</td></tr>
+              <tr><td>Standard notification appliance circuits</td><td>No (unless AHJ requires)</td><td>N/A</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div style="padding:4px 14px 10px;font-size:10.5px;color:var(--muted);line-height:1.6;">
+          CI cables (FPLCI) or equivalent metallic raceway with listed fire-rated fittings satisfy the 2-hour requirement. Verify with AHJ &mdash; some jurisdictions require CI on all circuits in high-rise or assembly occupancies.
+        </div>
+
+        <div class="cht-section-lbl">Class A vs Class B Circuits (NFPA 72 &sect;12.3)</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Class</th><th>Topology</th><th>Fault Behavior</th><th>Typical Use</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Class B</strong></td><td>Single-path (home run to panel)</td><td>Open fault disables all devices beyond the fault point. Ground fault: trouble only.</td><td>Residential, small commercial. Less wire, simpler install.</td></tr>
+              <tr><td><strong>Class A</strong></td><td>Loop / ring (both ends return to panel)</td><td>Single open fault: system stays fully operational. Ground fault: trouble, no device loss.</td><td>High-rise, hospitals, assembly occupancies where loss of coverage is not acceptable.</td></tr>
+              <tr><td><strong>Class X</strong></td><td>Loop with isolators</td><td>Single short or open: no device loss. Isolator modules contain the fault.</td><td>Critical occupancies. Most robust; requires isolator at each device or group.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cht-section-lbl">NPLFA Conductor Sizing (NEC &sect;760.49)</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Application</th><th>Min Conductor Size</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Initiating device circuits (IDC)</td><td>18 AWG</td><td>Smoke detectors, pull stations, heat detectors, supervisory devices</td></tr>
+              <tr><td>Notification appliance circuits &le;2A</td><td>18 AWG</td><td>Horn/strobe circuits with total current &le;2A</td></tr>
+              <tr><td>Notification appliance circuits &gt;2A</td><td>12 AWG</td><td>Larger NAC loops, speaker circuits; size for ampacity per Table 310.16</td></tr>
+              <tr><td>Control unit power supply conductors</td><td>14 AWG minimum</td><td>Must also comply with Article 310 ampacity for the load</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cht-section-lbl">Common Field Notes</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Topic</th><th>Rule / Note</th></tr></thead>
+            <tbody>
+              <tr><td>Raceway fill</td><td>PLFA cables in conduit: fill per Chapter 9 like any conductor. Separate from power/lighting unless Chapter 3 wiring methods used for the PLFA circuit.</td></tr>
+              <tr><td>Color code (common)</td><td>Red jacket = fire alarm industry convention. Not NEC-required but nearly universal. Helps identify FA circuits during inspections.</td></tr>
+              <tr><td>Tamper protection</td><td>NFPA 72 requires concealed or protected wiring in accessible areas to prevent tampering. Conduit preferred in public spaces.</td></tr>
+              <tr><td>Labeling</td><td>FA circuit conductors must be labeled or marked at each end and where accessible per &sect;760.30(B). Helps first responders and inspectors.</td></tr>
+              <tr><td>Separation from power</td><td>PLFA cables must maintain &ge;2 in separation from power and lighting conductors unless separated by a barrier, unless in a listed enclosure, or unless in conduit.</td></tr>
+              <tr><td>Splicing</td><td>All splices in junction boxes. Twist-on connectors permitted for NPLFA. PLFA cable: use listed splicing methods. IDC and NAC circuits must be supervised &mdash; open or short must generate a trouble signal.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
     <div class="cht-spacer"></div>
   </div>
   <div class="tab-panel" id="tab-scan">
