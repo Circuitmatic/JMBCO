@@ -185,6 +185,8 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #ffffff; border-ra
 .quiz-score-pass{color:#4ade80;}
 .quiz-score-fail{color:#f87171;}
 .quiz-restart{width:100%;padding:14px;background:#f0c020;color:#1a1200;border:none;border-radius:9px;font-weight:900;font-family:'Roboto Mono',monospace;cursor:pointer;text-transform:uppercase;letter-spacing:1px;font-size:0.82rem;margin-top:8px;}
+.quiz-export-btn{background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:12px;padding:12px 18px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;line-height:1.3;text-align:center;min-width:72px;-webkit-tap-highlight-color:transparent;}
+.quiz-export-btn:active{opacity:.8;}
 .quiz-restart:hover{background:#ffe066;}
 .quiz-hint-btn{background:none;border:none;color:#334155;font-size:0.68rem;font-weight:500;padding:2px 0;cursor:pointer;font-family:'Roboto Mono',monospace;margin-bottom:10px;transition:color .15s;letter-spacing:.3px;opacity:0.6;}
 .quiz-hint-btn:hover{color:#64748b;opacity:1;}
@@ -4502,7 +4504,10 @@ if('serviceWorker' in navigator){
           <div class="quiz-score-num" id="qz-pct">0%</div>
           <div class="quiz-score-label" id="qz-fraction"></div>
           <div class="quiz-score-msg" id="qz-msg"></div>
-          <button class="quiz-restart" onclick="qzStart()">↺ Retake Exam</button>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:4px;">
+            <button class="quiz-restart" onclick="qzStart()">↺ Retake Exam</button>
+            <button class="quiz-export-btn" onclick="qzExportPDF()">&#8681; Export<br>Results</button>
+          </div>
         </div>
       </div>
     </div>
@@ -7099,7 +7104,7 @@ function jcExportAllNotes(){
 var _exportData=null;
 function _fmtDate(ms){var d=ms?new Date(ms):new Date();return (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear()+' '+d.toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'});}
 function _fmtDateShort(ms){var d=ms?new Date(ms):new Date();return (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear();}
-function buildPrintHTML(reportTitle,subtitle,bodyHTML){
+function buildPrintHTML(reportTitle,subtitle,bodyHTML,compact){
   var now=_fmtDate();
   var co=getCompany();
   var proj=_activeProjectId?getProjList().find(function(x){return x.id===_activeProjectId;}):null;
@@ -7142,6 +7147,8 @@ function buildPrintHTML(reportTitle,subtitle,bodyHTML){
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+reportTitle+'</title><style>'+
     '*{box-sizing:border-box;margin:0;padding:0;}'+
     'body{font-family:"Helvetica Neue",Arial,sans-serif;color:#1a1a1a;background:#fff;font-size:13px;}'+
+    (compact?'body{font-size:11px;}@page{size:8.5in 10.5in;margin:0.45in 0.55in;}table{font-size:10px;}thead th{padding:7px 10px;}tbody td{padding:7px 10px;}':'')+
++
     '.rpt-header{background:#07090f;color:#f0c020;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;}'+
     '.rpt-brand{display:flex;align-items:center;gap:12px;}'+
     '.rpt-brand-text{display:flex;flex-direction:column;justify-content:center;}'+
@@ -12427,9 +12434,9 @@ var _qzBank=[
   {c:'AFCI 2023',q:'Which dwelling location was added to the AFCI protection requirements in the 2023 NEC?',a:'Laundry areas',o:['Garages','Utility rooms','Laundry areas','Hallways'],r:'210.12(B)(13)',t:'New in 2023: laundry areas were added to the AFCI-required list. The 2020 NEC already required AFCI for kitchens, bedrooms, living areas, hallways, and more — laundry was the notable 2023 addition.',y:'2023'},
   {c:'ESS 2023',q:'Under the 2023 NEC, unused current transformers (CTs) associated with potentially energized circuits shall be ___.',a:'Short-circuited',o:['Disconnected and tagged','Removed from service','Short-circuited','Labeled with a warning'],r:'110.23',t:'Unused CTs on energized circuits must be shorted — an open CT secondary with primary current flowing can generate dangerously high voltage across the open terminals.',y:'2023'}
 ];
-var _qzSet=[],_qzCur=0,_qzScore=0,_qzTotal=50;
+var _qzSet=[],_qzCur=0,_qzScore=0,_qzTotal=50,_qzLog=[];
 function qzStart(){
-  _qzCur=0;_qzScore=0;
+  _qzCur=0;_qzScore=0;_qzLog=[];
   var yr=_codeYear||'2026';
   var filtered=_qzBank.filter(function(q){
     var qy=q.y||'all';
@@ -12475,6 +12482,7 @@ function qzPick(choice,btn,q){
   document.querySelectorAll('.quiz-opt').forEach(function(b){b.disabled=true;});
   document.getElementById('qz-hint-btn').style.display='none';
   document.getElementById('qz-hint-reveal').style.display='none';
+  _qzLog.push({q:q,chosen:choice,correct:choice===q.a});
   if(choice===q.a){
     btn.classList.add('qz-ok');_qzScore++;
   } else {
@@ -12509,11 +12517,90 @@ function qzFinish(){
   document.getElementById('qz-correct').textContent=_qzScore;
   document.getElementById('qz-score').textContent=pct+'%';
   var msg=document.getElementById('qz-msg');
-  var vetNote='<br><span style="font-size:0.75rem;color:#64748b;margin-top:6px;display:inline-block;">★ Veterans: 65% may qualify with 5% preference credit — verify with your state licensing board.</span>';
+  var vetNote='';
   if(pct>=80){msg.innerHTML='<span class="quiz-score-pass">★ EXCELLENT — Exam Ready!</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score ≥ 80% — Strong command of 2026 NEC code. Keep it up.</span>'+vetNote;}
   else if(pct>=70){msg.innerHTML='<span class="quiz-score-pass">PASSING — Good Standing.</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score 70–79% — Solid foundation. Review weak categories before exam day.</span>'+vetNote;}
-  else if(pct>=65){msg.innerHTML='<span style="color:#f0c020;">BORDERLINE — Veterans May Qualify.</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score 65–69% — Below standard passing. Veterans with 5% preference may qualify — confirm with your board.</span>'+vetNote;}
+  else if(pct>=65){msg.innerHTML='<span style="color:#f0c020;">BORDERLINE — More Review Needed.</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score 65–69% — Below standard passing. Review GFCI, Grounding, Box Fill, and recent code changes.</span>';}
   else{msg.innerHTML='<span class="quiz-score-fail">BELOW PASSING — More Review Needed.</span><br><span style="font-size:0.8rem;color:#94a3b8;">Score &lt; 65% — Focus on GFCI, Grounding, Box Fill, and 2026 code changes.</span>'+vetNote;}
+}
+
+function qzExportPDF(){
+  if(!_qzLog.length){alert('Complete the exam first.');return;}
+  var pct=Math.round(_qzScore/_qzTotal*100);
+  var yr=_codeYear||'2026';
+  var now=new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+  var passMark=70;
+  var passed=pct>=passMark;
+
+  // ── Results summary block ──
+  var scoreColor=pct>=80?'#15803d':pct>=70?'#1d4ed8':pct>=65?'#b45309':'#dc2626';
+  var scoreBg=pct>=80?'#f0fdf4':pct>=70?'#eff6ff':pct>=65?'#fffbeb':'#fef2f2';
+  var passLabel=pct>=80?'EXCELLENT \u2014 Exam Ready':pct>=70?'PASSING \u2014 Good Standing':pct>=65?'BORDERLINE \u2014 More Review Needed':'BELOW PASSING \u2014 More Study Required';
+
+  var summaryHTML=
+    '<div style="background:'+scoreBg+';border:2px solid '+scoreColor+';border-radius:10px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;">' +
+      '<div style="text-align:center;min-width:72px;">' +
+        '<div style="font-size:42px;font-weight:900;color:'+scoreColor+';line-height:1;">'+pct+'%</div>' +
+        '<div style="font-size:11px;font-weight:700;color:'+scoreColor+';margin-top:2px;">'+_qzScore+' / '+_qzTotal+' correct</div>' +
+      '</div>' +
+      '<div style="flex:1;">' +
+        '<div style="font-size:15px;font-weight:800;color:'+scoreColor+';">'+passLabel+'</div>' +
+        '<div style="font-size:11px;color:#6b7280;margin-top:5px;line-height:1.6;">' +
+          'NEC Code Year: <strong>'+yr+'</strong> &nbsp;&middot;&nbsp; Date: <strong>'+now+'</strong><br>' +
+          'Questions: <strong>'+_qzTotal+'</strong> &nbsp;&middot;&nbsp; Correct: <strong>'+_qzScore+'</strong> &nbsp;&middot;&nbsp; Incorrect: <strong>'+(_qzTotal-_qzScore)+'</strong>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  // ── Per-question breakdown ──
+  var qHTML='<div class="sec-hd">Question Review ('+_qzTotal+' questions)</div>';
+  _qzLog.forEach(function(entry,i){
+    var q=entry.q;
+    var ok=entry.correct;
+    var rowBg=ok?'#f0fdf4':'#fef2f2';
+    var markColor=ok?'#15803d':'#dc2626';
+    var mark=ok?'\u2713':'\u2717';
+    qHTML+=
+      '<div style="background:'+rowBg+';border:1px solid '+(ok?'#bbf7d0':'#fecaca')+';border-radius:8px;padding:10px 14px;margin-bottom:7px;page-break-inside:avoid;">' +
+        // Header row: number + category + mark
+        '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px;">' +
+          '<div style="display:flex;align-items:baseline;gap:8px;">' +
+            '<span style="font-size:10px;font-weight:700;color:#9ca3af;min-width:22px;">'+(i+1)+'.</span>' +
+            '<span style="font-size:9px;font-weight:700;background:#e5e7eb;color:#374151;border-radius:4px;padding:1px 7px;">'+escHtml(q.c)+'</span>' +
+          '</div>' +
+          '<span style="font-size:13px;font-weight:900;color:'+markColor+';">'+mark+'</span>' +
+        '</div>' +
+        // Question text
+        '<div style="font-size:11px;color:#111827;line-height:1.5;margin-bottom:6px;font-weight:600;">'+escHtml(q.q)+'</div>' +
+        // Answer row
+        '<div style="font-size:10px;line-height:1.6;">' +
+          (ok
+            ? '<span style="color:#15803d;font-weight:700;">\u2713 '+escHtml(entry.chosen)+'</span>'
+            : '<span style="color:#dc2626;font-weight:700;">\u2717 Your answer: '+escHtml(entry.chosen)+'</span>' +
+              '&nbsp;&nbsp;<span style="color:#15803d;font-weight:700;">\u2713 Correct: '+escHtml(q.a)+'</span>'
+          ) +
+        '</div>' +
+        // Reference + explanation
+        '<div style="margin-top:5px;padding-top:5px;border-top:1px solid '+(ok?'#bbf7d0':'#fecaca')+';font-size:10px;color:#6b7280;line-height:1.5;">' +
+          '<span style="font-weight:700;color:#374151;">Ref: '+escHtml(q.r||'NEC '+yr)+'</span>' +
+          (q.t?'&nbsp;&mdash;&nbsp;'+escHtml(q.t):'') +
+        '</div>' +
+      '</div>';
+  });
+
+  var html=buildPrintHTML(
+    'Exam Results \u2014 NEC '+yr,
+    pct+'% \u00b7 '+_qzScore+'/'+_qzTotal+' correct \u00b7 '+now,
+    summaryHTML+qHTML,
+    true  // compact flag
+  );
+
+  // Share or open
+  var w=window.open('','_blank');
+  if(w){
+    w.document.write(html+'<scr'+'ipt>setTimeout(function(){window.print();},400);<\/scr'+'ipt>');
+    w.document.close();
+  }
 }
 
 // ── PDF Scanner ──────────────────────────────────────────────────
