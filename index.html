@@ -3036,7 +3036,83 @@ if('serviceWorker' in navigator){
       </div>
     </div>
 
-    <!-- 2. Conductor Ampacity -->
+    <!-- 2. Working Space -->
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-working')">
+        <span class="cht-icon">&#x26A0;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Working Space — NEC 110.26</div><div class="cht-sub">Depth · Width · Height · Dedicated Space</div></div>
+        <span class="cht-chev" id="cht-working-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-working">
+        <div class="cht-section-lbl">The Three Conditions — What's on the Other Side</div>
+        <div class="sup-grid" style="grid-template-columns:1fr;gap:6px;padding:0 12px 10px;">
+          <div class="sup-card">
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:start;">
+              <span style="font-size:11px;font-weight:800;font-family:'Roboto Mono',monospace;color:#f0c020;">C1</span>
+              <span style="font-size:11px;font-family:'Inter',sans-serif;color:var(--text);">Exposed live parts one side — <strong>no live parts or insulated parts</strong> on other side (concrete wall, grounded metal, etc.)</span>
+              <span style="font-size:11px;font-weight:800;font-family:'Roboto Mono',monospace;color:#f0c020;">C2</span>
+              <span style="font-size:11px;font-family:'Inter',sans-serif;color:var(--text);">Exposed live parts one side — <strong>grounded parts</strong> (metal conduit, enclosures) on the other side</span>
+              <span style="font-size:11px;font-weight:800;font-family:'Roboto Mono',monospace;color:#f0c020;">C3</span>
+              <span style="font-size:11px;font-family:'Inter',sans-serif;color:var(--text);">Exposed live parts on <strong>both sides</strong> — most hazardous, largest clearance required</span>
+            </div>
+          </div>
+        </div>
+        <div class="cht-section-lbl">Required Depth — Table 110.26(A)(1)</div>
+        <div class="cht-scroll" style="padding:0 12px 10px;">
+          <table class="cht-tbl">
+            <thead>
+              <tr><th style="text-align:left;">Voltage to Ground</th><th>Cond. 1</th><th>Cond. 2</th><th>Cond. 3</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>0 – 150 V</td><td>3 ft</td><td>3 ft</td><td>3 ft</td></tr>
+              <tr><td>151 – 600 V</td><td>3 ft</td><td>3.5 ft</td><td>4 ft</td></tr>
+              <tr><td>601 – 2,500 V</td><td>4 ft</td><td>4.5 ft</td><td>5 ft</td></tr>
+              <tr><td>2,501 – 9,000 V</td><td>5 ft</td><td>6 ft</td><td>9 ft</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cht-note" style="margin:0 12px 10px;">Residential 120/240V panels → 0–150V row. Commercial 277/480V → 151–600V row. Depth measured from exposed live part or equipment front.</div>
+        <div class="cht-section-lbl">Additional Requirements — 110.26</div>
+        <div class="sup-grid" style="padding:0 12px 12px;">
+          <div class="sup-card">
+            <div class="sup-name">Width</div>
+            <div class="sup-row"><span class="sup-lbl">Minimum</span><span class="sup-val">30"</span></div>
+            <div class="sup-row"><span class="sup-lbl">If equipment wider</span><span class="sup-val">Match width</span></div>
+            <div class="sup-note">Doors and covers must be able to open fully. §110.26(A)(2)</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">Headroom</div>
+            <div class="sup-row"><span class="sup-lbl">Minimum</span><span class="sup-val">6.5 ft</span></div>
+            <div class="sup-row"><span class="sup-lbl">If equipment taller</span><span class="sup-val">Match height</span></div>
+            <div class="sup-note">Measured floor to ceiling over working space. §110.26(A)(3)</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">Dedicated Electrical Space</div>
+            <div class="sup-row"><span class="sup-lbl">Above panel</span><span class="sup-val">6 ft or ceiling</span></div>
+            <div class="sup-row"><span class="sup-lbl">Foreign systems</span><span class="sup-val">NOT permitted</span></div>
+            <div class="sup-note">No pipes, ducts, or non-electrical equipment within the footprint of the panel extending up to structural ceiling or 6 ft above, whichever is less. §110.26(F)(1)</div>
+          </div>
+          <div class="sup-card">
+            <div class="sup-name">Egress</div>
+            <div class="sup-row"><span class="sup-lbl">Trigger</span><span class="sup-val">&gt;1,200A &amp; &gt;6 ft wide</span></div>
+            <div class="sup-row"><span class="sup-lbl">Room &gt;25 ft long</span><span class="sup-val">Exit each end</span></div>
+            <div class="sup-note">Switchgear / MCC lineups over 25 ft require an exit door at both ends of the working space. §110.26(C)(2)</div>
+          </div>
+          <div class="sup-card" style="grid-column:span 2;">
+            <div class="sup-name">Common Inspection Fails</div>
+            <div class="sup-note" style="margin-top:4px;line-height:1.6;">
+              ▸ Storage or shelving in front of panels — anything blocking the depth clearance<br>
+              ▸ Water pipes / HVAC ducts running through dedicated space above panel<br>
+              ▸ Panel door swings into or is blocked by a wall or door<br>
+              ▸ Less than 30" width — tight utility rooms and finished basements<br>
+              ▸ Working space measured to face of open cover, not closed door
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Conductor Ampacity -->
     <div class="cht-card">
       <div class="cht-hd" onclick="toggleCht('cht-ampacity')">
         <span class="cht-icon">&#x26A1;</span>
