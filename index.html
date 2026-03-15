@@ -4375,6 +4375,8 @@ function setUnits(u, init) {
   document.querySelectorAll('.unit-label-dist, [data-unit-label="dist"]').forEach(function(el) { el.textContent = u; });
   // Update any field labels that say "One-Way Length (ft)" or similar
   document.querySelectorAll('.field-label').forEach(function(el) {
+    // Skip labels that contain child elements (e.g. info buttons) — use text nodes only
+    if (el.querySelector('button,a,span')) return;
     var text = el.getAttribute('data-orig') || el.textContent;
     if (!el.getAttribute('data-orig')) el.setAttribute('data-orig', text);
     var orig = el.getAttribute('data-orig');
