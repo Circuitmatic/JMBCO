@@ -510,8 +510,6 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.fail::before { background: var(--red); }
   .result-block.neutral { border-color: var(--accent-bdr); background: var(--accent-lt); }
   .result-block.neutral::before { background: var(--accent); }
-  .result-block.warn { border-color: var(--amber-bdr); background: var(--amber-bg); }
-  .result-block.warn::before { background: var(--amber); }
 
   .result-head { display:flex; align-items:center; justify-content:space-between; padding:9px 12px 3px 16px; }
   .result-lbl {
@@ -525,7 +523,6 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.pass .result-lbl { color: var(--green); }
   .result-block.fail .result-lbl { color: var(--red); }
   .result-block.neutral .result-lbl { color: var(--accent); }
-  .result-block.warn .result-lbl { color: var(--amber); }
 
   .result-badge {
     font-family: 'Roboto Mono', monospace;
@@ -541,7 +538,6 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.pass .result-badge { color:var(--green); border-color:var(--green-bdr); background:rgba(5,150,105,.07); }
   .result-block.fail .result-badge { color:var(--red); border-color:var(--red-bdr); background:rgba(220,38,38,.07); }
   .result-block.neutral .result-badge { color:var(--accent); border-color:var(--accent-bdr); background:rgba(37,99,235,.07); }
-  .result-block.warn .result-badge { color:var(--amber); border-color:var(--amber-bdr); background:rgba(180,83,9,.07); }
 
   .result-val {
     font-family: 'Inter', sans-serif;
@@ -555,7 +551,6 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.pass .result-val { color: var(--green); }
   .result-block.fail .result-val { color: var(--red); }
   .result-block.neutral .result-val { color: var(--accent); }
-  .result-block.warn .result-val { color: var(--amber); }
 
   .result-sub {
     font-family: 'Inter', sans-serif;
@@ -567,7 +562,6 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.pass .result-sub { color: #047857; }
   .result-block.fail .result-sub { color: #b91c1c; }
   .result-block.neutral .result-sub { color: var(--muted); }
-  .result-block.warn .result-sub { color: #92400e; }
 
   /* ── Engineering panel ── */
   .eng-panel { margin:10px 20px 0; background:var(--surface); border:1.5px solid var(--border); border-radius:10px; overflow:hidden; }
@@ -6093,7 +6087,7 @@ function buildPrintHTML(reportTitle,subtitle,bodyHTML){
   var co=getCompany();
   var proj=_activeProjectId?getProjList().find(function(x){return x.id===_activeProjectId;}):null;
   var coLogoHtml=co.logo?'<img src="'+co.logo+'" style="height:40px;max-width:120px;object-fit:contain;margin-right:14px;">':'';
-  var coNameHtml=co.name?'<div style="font-size:15px;font-weight:800;color:#f0c020;letter-spacing:1px;">'+co.name+'</div>':'<div class="rpt-logo">⚡ CIRCUITMATIC</div>';
+  var coNameHtml=co.name?'<div style="font-size:15px;font-weight:800;color:#f0c020;letter-spacing:1px;">'+co.name+'</div>':'<div class="rpt-logo">⚡ CIRCUITMATIC<span></div>';
   var coInfoLines=[];
   if(co.address)coInfoLines.push(co.address);
   if(co.phone)coInfoLines.push(co.phone+(co.fax?' &nbsp;|&nbsp; Fax: '+co.fax:''));
@@ -6102,6 +6096,8 @@ function buildPrintHTML(reportTitle,subtitle,bodyHTML){
   var coInfoHtml=coInfoLines.length?'<div style="font-size:10px;color:#9ca3af;line-height:1.6;margin-top:3px;">'+coInfoLines.join('<br>')+'</div>':'';
   var projInfoHtml='';
   if(proj){projInfoHtml='<div style="font-size:10px;color:#9ca3af;line-height:1.8;text-align:right;">'+escHtml(proj.name)+(proj.po?'<br>PO: '+escHtml(proj.po):'')+(proj.foreman?'<br>Foreman: '+escHtml(proj.foreman):'')+'</div>';}
+  var projBannerHtml='';
+  if(proj){var _pb=[];if(proj.name)_pb.push('<strong>'+escHtml(proj.name)+'</strong>');if(proj.po)_pb.push('PO#: '+escHtml(proj.po));if(proj.foreman)_pb.push('Foreman: '+escHtml(proj.foreman));if(_pb.length)projBannerHtml='<div style="border-bottom:1px solid #e5e7eb;padding:8px 0 14px;margin-bottom:14px;font-size:12px;color:#374151;">'+_pb.join(' &middot; ')+'</div>';}
   return '<!DOCTYPE html><html><head><meta charset="utf-8"><title>'+reportTitle+'</title><style>'+
     '*{box-sizing:border-box;margin:0;padding:0;}'+
     'body{font-family:"Helvetica Neue",Arial,sans-serif;color:#1a1a1a;background:#fff;font-size:13px;}'+
@@ -6139,14 +6135,13 @@ function buildPrintHTML(reportTitle,subtitle,bodyHTML){
     '<button class="print-again-btn" onclick="window.print()">Print / Save PDF</button>'+
   '</div>'+
   '<div class="rpt-header">'+
-    '<div style="display:flex;align-items:center;">'+coLogoHtml+'<div>'+coNameHtml+coInfoHtml+'</div></div>'+
-    '<div class="rpt-hd-right">'+reportTitle+'<br>'+now+(projInfoHtml?'</div><div style="flex-shrink:0;">'+projInfoHtml:'')+'</div>'+
+    '<div style="display:flex;align-items:center;gap:10px;"><img src="icon.svg" style="height:36px;width:36px;object-fit:contain;flex-shrink:0;">'+coLogoHtml+'<div>'+coNameHtml+coInfoHtml+'</div></div>'+
+    '<div class="rpt-hd-right">'+now+(projInfoHtml?'</div><div style="flex-shrink:0;">'+projInfoHtml:'')+'</div>'+
   '</div>'+
   '<div class="rpt-body">'+
     '<div class="rpt-title">'+reportTitle+'</div>'+
     '<div class="rpt-subtitle">'+subtitle+'</div>'+
     projBannerHtml+
-    bodyHTML+
     '<div class="rpt-footer">Generated by Circuitmatic &nbsp;·&nbsp; Code '+(_codeYear||'2026')+'&nbsp;·&nbsp;'+now+'</div>'+
   '</div>'+
   '</body></html>';
@@ -9228,24 +9223,24 @@ function calculateEV() {
   var blocks = [];
 
   // Power output info first — useful context
-  blocks.push(makeBlock('pass', 'EVSE Output', '',
+  blocks.push(makeBlock('ok', 'EVSE Output', '',
     kw + ' kW <span class="ev-kw-badge">~' + milesPerHr + ' mi/hr</span>',
     nameplate + 'A × ' + voltage + 'V · ~' + milesPerHr + ' miles of range per hour of charging'));
 
   // Min circuit ampacity
-  blocks.push(makeBlock('pass', 'Min. Circuit Ampacity', '§625.41',
+  blocks.push(makeBlock('ok', 'Min. Circuit Ampacity', '§625.41',
     minCircuit.toFixed(0) + 'A',
     nameplate + 'A nameplate × 125% (continuous load)'));
 
   // Breaker size
-  blocks.push(makeBlock('pass', 'Breaker / OCPD', '§240.6(A)',
+  blocks.push(makeBlock('ok', 'Breaker / OCPD', '§240.6(A)',
     breaker + 'A',
     'Next standard size at or above ' + minCircuit.toFixed(1) + 'A'));
 
   // Wire size
   if (wire) {
     var tempLabel = ins === 'comm90' ? '90°C' : ins === 'residential' ? '60°C' : '75°C';
-    blocks.push(makeBlock('pass', 'Min. Conductor Size', '§310.16 ' + tempLabel,
+    blocks.push(makeBlock('ok', 'Min. Conductor Size', '§310.16 ' + tempLabel,
       sizeLabel(wire.size) + ' ' + (cond === 'copper' ? 'Cu' : 'Al'),
       wire.amp + 'A ampacity — sized to carry ' + breaker + 'A OCPD rating'));
   } else {
@@ -9254,14 +9249,14 @@ function calculateEV() {
   }
 
   // Dedicated circuit
-  blocks.push(makeBlock(needDedicated ? 'warn' : 'pass', 'Dedicated Circuit', '§625.40',
+  blocks.push(makeBlock(needDedicated ? 'warn' : 'ok', 'Dedicated Circuit', '§625.40',
     needDedicated ? 'Required' : 'Not required',
     needDedicated
       ? 'EVSE above 16A or above 120V must have its own branch circuit'
       : 'Level 1 ≤16A at 120V may share a circuit in some cases — verify with AHJ'));
 
   // Cable length
-  blocks.push(makeBlock('pass', 'Max Cable Length', '§625.17(C)',
+  blocks.push(makeBlock('ok', 'Max Cable Length', '§625.17(C)',
     '25 ft',
     'Without a listed cable management system as part of the EVSE'));
 
@@ -9274,7 +9269,7 @@ function calculateEV() {
 
   // 210.17 EV-ready outlet for new construction (2023/2026)
   if (_codeYear !== '2020' && nameplate <= 40 && voltage >= 240) {
-    blocks.push(makeBlock('pass', '§210.17 EV-Ready Outlet', '2023/2026',
+    blocks.push(makeBlock('ok', '§210.17 EV-Ready Outlet', '2023/2026',
       '40A min. branch circuit',
       'New construction dwelling units must include at least one EV-ready outlet in the garage or parking area.'));
   }
@@ -9313,41 +9308,41 @@ var _SVC_INFO={
   bf_devcond:{t:'Device Conductor AWG',b:'This is the size of the largest wire that connects to or passes through any device (yoke) in the box. The NEC bases the two-allowance device volume on this wire size.\n\nIn most residential work this will match your circuit conductor — 14 AWG on a 15A circuit, 12 AWG on a 20A circuit.\n\nIf different devices in the box have different wire sizes connected to them, use the largest one.',r:'NEC §314.16(B)(4)'},
   bf_egc:{t:'EGC Count',b:'EGC stands for Equipment Grounding Conductor — the bare copper or green-insulated ground wire in the cable or conduit.\n\nNo matter how many EGCs are in the box, they all together count as only ONE conductor allowance (based on the size of the largest EGC). This is one of the few places in box fill where quantity does not increase the count.\n\nCount every bare copper and green wire entering the box — from each cable or conduit run.',r:'NEC §314.16(B)(5)'},
   bf_egcawg:{t:'Largest EGC',b:'Select the wire gauge of the largest equipment grounding conductor (bare copper or green wire) in the box.\n\nThis size is used to look up the volume allowance for all EGCs combined. In most residential work, this matches your circuit conductor size — 14 AWG on a 15A circuit, 12 AWG on a 20A circuit.\n\nIf you have multiple circuits entering the box with different EGC sizes, pick the largest (smallest AWG number).',r:'NEC Table 314.16(B)'},
-  ev_l1:{t:'Level 1 — 12A / 120V',b:'Standard 3-prong household outlet (NEMA 5-15R). No special wiring required.
+  ev_l1:{t:'Level 1 — 12A / 120V',b:'The simplest EV charging option — plugs into a standard 3-prong household outlet (NEMA 5-15R). No special wiring required.
 
 Charge rate: ~1.4 kW — adds roughly 4–5 miles of range per hour.
 
-Best for: overnight charging, plug-in hybrids, or low daily mileage (under 40 miles/day).
+Best for: overnight charging, plug-in hybrids, or drivers with low daily mileage (under 40 miles/day).
 
-Circuit needed: Any 15A or 20A, 120V general-purpose outlet. Dedicated circuit recommended.',r:'NEC §625.10 / §210.8'},
+Circuit needed: Any existing 15A or 20A, 120V general-purpose outlet. A dedicated circuit is recommended to avoid tripping breakers.',r:'NEC §625.10 / §210.8'},
   ev_l2b:{t:'L2 Basic — 16A / 240V',b:'Entry-level Level 2 charging on a 240V circuit. Faster than Level 1 but requires a dedicated 240V outlet or hardwired EVSE.
 
 Charge rate: ~3.8 kW — adds roughly 10–12 miles of range per hour.
 
-Best for: apartments or installs where a full 40A circuit is not available.
+Best for: apartments, condos, or installs where a full 40A circuit isn't available or practical.
 
 Circuit needed: Dedicated 20A double-pole breaker, 12 AWG wire minimum, 240V outlet (NEMA 6-20 or 14-20) or hardwired.',r:'NEC §625.17 / §210.19(A)'},
-  ev_l2s:{t:'L2 Standard — 32A / 240V',b:'The most common residential Level 2 install. Works with virtually all home EVSE chargers (ChargePoint, JuiceBox, Wallbox, etc.).
+  ev_l2s:{t:'L2 Standard — 32A / 240V',b:'The most common residential Level 2 installation. Works with virtually all home EVSE chargers (ChargePoint, JuiceBox, Wallbox, etc.).
 
-Charge rate: ~7.7 kW — adds roughly 20–25 miles of range per hour. Full charge overnight for most EVs.
+Charge rate: ~7.7 kW — adds roughly 20–25 miles of range per hour. A full charge overnight for most EVs.
 
 Best for: most homeowners — the sweet spot between cost and speed.
 
-Circuit needed: Dedicated 40A double-pole breaker (32A × 125%), 8 AWG copper minimum, NEMA 14-50 or hardwired EVSE.',r:'NEC §625.17 / §210.19(A)'},
+Circuit needed: Dedicated 40A double-pole breaker (32A continuous × 125% = 40A), 8 AWG copper wire minimum, NEMA 14-50 outlet or hardwired EVSE.',r:'NEC §625.17 / §210.19(A)'},
   ev_l2f:{t:'L2 Fast — 40A / 240V',b:'High-output home charger for vehicles that can accept higher charge rates.
 
 Charge rate: ~9.6 kW — adds roughly 25–30 miles of range per hour.
 
-Best for: long-range EVs, high daily mileage, or when faster turnaround matters.
+Best for: long-range EVs, high daily mileage drivers, or when faster turnaround time matters.
 
-Circuit needed: Dedicated 50A double-pole breaker (40A × 125%), 6 AWG copper minimum, hardwired EVSE or NEMA 14-50.',r:'NEC §625.17 / §210.19(A)'},
-  ev_l2m:{t:'L2 Max — 48A / 240V',b:'Maximum Level 2 residential charging on a single-phase 240V circuit.
+Circuit needed: Dedicated 50A double-pole breaker (40A continuous × 125% = 50A), 6 AWG copper wire minimum, hardwired EVSE or NEMA 14-50. Verify your vehicle's onboard charger can accept 40A before sizing up.',r:'NEC §625.17 / §210.19(A)'},
+  ev_l2m:{t:'L2 Max — 48A / 240V',b:'Maximum Level 2 residential charging. Delivers the fastest possible home charge rate available on a single-phase 240V circuit.
 
 Charge rate: ~11.5 kW — adds roughly 30–35 miles of range per hour.
 
-Best for: large-battery EVs (80+ kWh), households with two EVs, or when charge time must be minimized.
+Best for: large-battery EVs (80+ kWh), households with two EVs sharing a charger on a schedule, or when charge time must be minimized.
 
-Circuit needed: Dedicated 60A double-pole breaker (48A × 125%), 6 AWG copper minimum, hardwired EVSE.',r:'NEC §625.17 / §210.19(A)'},
+Circuit needed: Dedicated 60A double-pole breaker (48A continuous × 125% = 60A), 6 AWG copper minimum, hardwired EVSE. Most smart EVSE units top out at 48A.',r:'NEC §625.17 / §210.19(A)'},
   mc_nameplate:{t:'Where to Find Motor Information',b:'Everything you need for this calculator is on the motor nameplate — the metal data plate bolted to the motor frame (usually on the side or end).\n\nWhat to look for:\n\n• Horsepower (HP) — listed as "HP"\n• Voltage — listed as "VOLTS" — may show multiple voltages like 230/460\n• Phase — listed as "PH" — 1 for single-phase, 3 for three-phase\n• Motor Type — usually identified by NEMA Design letter (A, B, C, D) or "Squirrel Cage." If not listed, assume Squirrel Cage (Design B) — it is by far the most common\n• Service Factor (SF) — listed as "S.F." — if 1.15 or higher, overload protection is set to 125%; if not listed or below 1.15, use 115%\n\nIf the nameplate is missing or unreadable, check the motor spec sheet or the original equipment documentation.',r:'NEC §430.7 (Nameplate Requirements)'}
 };
 function svcInfo(key){
@@ -9551,25 +9546,18 @@ function calculateSVC(){
 
   // Build result-block cards
   var html='';
-  // Hazard / compliance checks
-  var svcHazard='';
-  if(svcSize<100){svcHazard='<div class="warn-msg show" style="margin:0 0 10px;">⚠ §230.79(C) — Single-family dwellings require a minimum 100A service. This calculated size is below the code minimum.</div>';}
-  var loadPct=Math.round((minAmps/svcSize)*100);
-  var loadState=loadPct>=95?'fail':loadPct>=80?'warn':'pass';
-  var loadBadge=loadPct>=95?'⚠ NEAR CAPACITY':loadPct>=80?'↑ HIGH LOAD':'✓ WITHIN CAPACITY';
-  html+=svcHazard;
-  html+=makeBlock(loadState,'Total Calculated Load',(_svcMethod==='std'?'Standard Method':'Optional Method'),
+  html+=makeBlock('neutral','Total Calculated Load',(_svcMethod==='std'?'Standard Method':'Optional Method'),
     Math.round(totalVA).toLocaleString()+' VA',
-    loadBadge+' — '+loadPct+'% of '+svcSize+'A service ('+minAmps+'A min required)');
-  html+=makeBlock(svcSize<100?'fail':'pass','Minimum Service',
+    'All loads after demand factors applied');
+  html+=makeBlock('neutral','Minimum Service',
     'NEC §230.79',
     svcSize+' A',
-    'Calculated minimum: '+minAmps+' A at 240V · Next standard size: '+svcSize+' A'+(svcSize<100?' · ⚠ Below 100A code minimum':''));
-  html+=makeBlock('pass','Service Entrance Conductor',
+    'Calculated minimum: '+minAmps+' A at 240V · Next standard size: '+svcSize+' A');
+  html+=makeBlock('neutral','Service Entrance Conductor',
     'Table 310.16 · 75°C',
     '#'+wireSize+' '+cond.charAt(0).toUpperCase()+cond.slice(1),
     'Sized to carry '+svcSize+' A service');
-  html+=makeBlock('pass','Grounding Electrode Conductor',
+  html+=makeBlock('neutral','Grounding Electrode Conductor',
     'Table 250.66',
     '#'+gecSize+' Copper',
     'Based on service entrance conductor size');
