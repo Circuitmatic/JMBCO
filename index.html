@@ -667,6 +667,10 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .pc-bar-L{justify-content:flex-end;}
   .pc-bar-R{justify-content:flex-start;}
   .pc-bus{width:2px;background:#374151;flex-shrink:0;}
+  .pc-export-row{display:flex;gap:8px;margin:10px 12px 4px;}
+  .pc-export-btn{flex:1;padding:11px 6px;border:none;border-radius:9px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .pc-export-sms,.pc-export-email{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+  .pc-export-pdf{background:#f0c020;color:#1a1200;}
 
   /* ── Light-mode tab-panel overrides ── */
   body.light-mode .tab-panel.active input.fi, body.light-mode .tab-panel.active select.fi {
@@ -2184,14 +2188,14 @@ if('serviceWorker' in navigator){
     <div class="section-label">Deductions &amp; Fittings</div>
     <div class="fields">
       <div class="field-row">
-        <div class="field-label">Internal Clamps</div>
+        <div class="field-label">Internal Clamps <button class="svc-ib" onclick="svcInfo('bf_clamps')">ⓘ</button></div>
         <div class="sel-wrap"><select class="fi" id="bf-clamps">
           <option value="0">None</option>
           <option value="1">Present — 1 allowance (314.16(B)(2))</option>
         </select></div>
       </div>
       <div class="field-row">
-        <div class="field-label">Support Fittings</div>
+        <div class="field-label">Support Fittings <button class="svc-ib" onclick="svcInfo('bf_studs')">ⓘ</button></div>
         <div class="sel-wrap"><select class="fi" id="bf-studs">
           <option value="0">None</option>
           <option value="1">1 stud or hickey</option>
@@ -2200,7 +2204,7 @@ if('serviceWorker' in navigator){
         </select></div>
       </div>
       <div class="field-row">
-        <div class="field-label">Devices / Yokes</div>
+        <div class="field-label">Devices / Yokes <button class="svc-ib" onclick="svcInfo('bf_devices')">ⓘ</button></div>
         <div class="sel-wrap"><select class="fi" id="bf-devices">
           <option value="0">None</option>
           <option value="1">1 device (2 allowances)</option>
@@ -2210,7 +2214,7 @@ if('serviceWorker' in navigator){
         </select></div>
       </div>
       <div class="field-row">
-        <div class="field-label">Device Conductor AWG</div>
+        <div class="field-label">Device Conductor AWG <button class="svc-ib" onclick="svcInfo('bf_devcond')">ⓘ</button></div>
         <div class="sel-wrap"><select class="fi" id="bf-device-awg">
           <option value="14" selected>14 AWG</option>
           <option value="12">12 AWG</option>
@@ -2220,7 +2224,7 @@ if('serviceWorker' in navigator){
         </select></div>
       </div>
       <div class="field-row">
-        <div class="field-label">EGC Count</div>
+        <div class="field-label">EGC Count <button class="svc-ib" onclick="svcInfo('bf_egc')">ⓘ</button></div>
         <div class="sel-wrap"><select class="fi" id="bf-egc">
           <option value="0">None</option>
           <option value="1">1 EGC</option>
@@ -2234,7 +2238,7 @@ if('serviceWorker' in navigator){
         </select></div>
       </div>
       <div class="field-row">
-        <div class="field-label">Largest EGC</div>
+        <div class="field-label">Largest EGC <button class="svc-ib" onclick="svcInfo('bf_egcawg')">ⓘ</button></div>
         <div class="sel-wrap"><select class="fi" id="bf-egc-awg">
           <option value="14" selected>14 AWG</option>
           <option value="12">12 AWG</option>
@@ -2261,7 +2265,7 @@ if('serviceWorker' in navigator){
        TAB 5 — MOTOR CIRCUIT
   ══════════════════════════════════════════════ -->
   <div class="tab-panel" id="tab-mc">
-    <div class="section-label">Motor</div>
+    <div class="section-label">Motor <button class="svc-ib" onclick="svcInfo('mc_nameplate')">ⓘ</button></div>
     <div class="fields">
       <div class="field-row">
         <div class="field-label">Phase</div>
@@ -2899,6 +2903,11 @@ if('serviceWorker' in navigator){
         <div class="pc-head">277/480V · 43–84</div>
         <div class="pc-grid" id="pc-hi-b"></div>
       </div>
+    </div>
+    <div class="pc-export-row">
+      <button class="pc-export-btn pc-export-sms" onclick="pcShareSMS()">SMS</button>
+      <button class="pc-export-btn pc-export-email" onclick="pcShareEmail()">Email</button>
+      <button class="pc-export-btn pc-export-pdf" onclick="pcGeneratePDF()">Export PDF</button>
     </div>
     <div class="btn-row">
       <button class="btn btn-calc" onclick="window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;">↑ Back to Top</button>
@@ -6814,11 +6823,11 @@ function calculateVD(){
     updateEng(r,xl,K,sinT,pf,Tv,cur,ph);
   } else if(obj==='minwire'){
     if(isNaN(D)||D<=0){showVDErr('Enter a valid Distance (ft).');return;}
-    var found=null,fVD,fPct,fR,fXL,fK,fSin,fT;
-    for(var i=0;i<WIRE_ORDER.length;i++){var sz=WIRE_ORDER[i],Kw,rw,xlw,sTw,Tw;if(cur==='dc'){rw=getDcR(cond,sz);if(rw===null)continue;Kw=rw;xlw=0;sTw=0;Tw=75;}else{var acw=getAcParams(cond,sz,type,inst);if(!acw)continue;var kkw=calcK(acw.r,acw.xl,pf);Kw=kkw.K;rw=acw.r;xlw=acw.xl;sTw=kkw.sinT;Tw=acw.T;}if(checkPar(sz,par))continue;var v2=calcVD(ph,Kw,I,D,par),p2=(v2/V)*100;if(p2<=thr){found=sz;fVD=v2;fPct=p2;fR=rw;fXL=xlw;fK=Kw;fSin=sTw;fT=Tw;break;}}
-    if(!found){showVDErr('No conductor up to 1000 kcmil meets '+thr+'%. Try shorter run or more parallels.');return;}
+    var found=null,fVD,fPct,fR,fXL,fK,fSin,fT,vdOnly=null;
+    for(var i=0;i<WIRE_ORDER.length;i++){var sz=WIRE_ORDER[i],Kw,rw,xlw,sTw,Tw;if(cur==='dc'){rw=getDcR(cond,sz);if(rw===null)continue;Kw=rw;xlw=0;sTw=0;Tw=75;}else{var acw=getAcParams(cond,sz,type,inst);if(!acw)continue;var kkw=calcK(acw.r,acw.xl,pf);Kw=kkw.K;rw=acw.r;xlw=acw.xl;sTw=kkw.sinT;Tw=acw.T;}if(checkPar(sz,par))continue;var v2=calcVD(ph,Kw,I,D,par),p2=(v2/V)*100;if(p2<=thr){if(!checkAmp16(cond,sz,type,I,par)){found=sz;fVD=v2;fPct=p2;fR=rw;fXL=xlw;fK=Kw;fSin=sTw;fT=Tw;break;}if(!vdOnly)vdOnly=sz;}}
+    if(!found&&!vdOnly){showVDErr('No conductor up to 1000 kcmil meets '+thr+'%. Try shorter run or more parallels.');return;}
+    if(!found&&vdOnly){showVDErr('⚠ UNSAFE — '+sizeLabel(vdOnly)+' meets the '+thr+'% voltage drop limit but cannot safely carry '+I+' A. Add parallel sets or reduce the load.');return;}
     if(checkPar(found,par))document.getElementById('warnParallel').className='warn-msg show';
-    if(checkAmp16(cond,found,type,I,par))document.getElementById('warnAmpacity').className='warn-msg show';
     showVDResults([makeBlock('pass','Minimum Conductor Size','✓ WITHIN '+thr+'%',sizeLabel(found),cond+' · '+phL+' · '+D+' ft'+pfL+parL),makeBlock('pass','Resulting Voltage Drop','✓ '+fPct.toFixed(2)+'%',fVD.toFixed(2)+' V',ctN+' — max '+thr+'%')]);
     updateEng(fR,fXL,fK,fSin,pf,fT,cur,ph);
   } else {
@@ -8601,7 +8610,8 @@ function resUpdate(){
     var be=document.getElementById('res-band-'+i);
     var le=document.getElementById('res-lbl-'+i);
     if(!be)continue;
-    if(pos[i][0]===999){be.setAttribute('fill','transparent');be.removeAttribute('stroke');continue;}
+    if(pos[i][0]===999){be.setAttribute('fill','transparent');be.removeAttribute('stroke');if(le)le.setAttribute('visibility','hidden');continue;}
+    if(le)le.setAttribute('visibility','visible');
     be.setAttribute('x',pos[i][0]);
     be.setAttribute('fill',bands[i].c);
     if(bands[i].s)be.setAttribute('stroke',bands[i].s);else be.removeAttribute('stroke');
@@ -8705,6 +8715,84 @@ function buildPhaseCharts(){
   buildHalf('pc-lo-b',lo,43);
   buildHalf('pc-hi-a',hi,1);
   buildHalf('pc-hi-b',hi,43);
+}
+
+function pcHexRgb(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+function pcBuildSMS(){
+  return'CIRCUITMATIC \u2014 Phase Color Chart\n\n120/208V\nA = Black  B = Red  C = Blue\n\n277/480V\nA = Brown  B = Orange  C = Yellow\n\nCircuits pair by twos (1-2=A, 3-4=B, 5-6=C...) same A-B-C repeating pattern through 1\u201384 for each voltage.\n\nSent from Circuitmatic';
+}
+function pcBuildEmail(){
+  var lo=['A=Black','B=Red','C=Blue'],hi=['A=Brown','B=Orange','C=Yellow'],phs=['A','B','C'];
+  var lines=['CIRCUITMATIC \u2014 PHASE COLOR CHART','='.repeat(44),''];
+  [{label:'120/208V \u00B7 Circuits 1\u201342',legend:lo,start:1},{label:'120/208V \u00B7 Circuits 43\u201384',legend:lo,start:43},{label:'277/480V \u00B7 Circuits 1\u201342',legend:hi,start:1},{label:'277/480V \u00B7 Circuits 43\u201384',legend:hi,start:43}].forEach(function(sec){
+    lines.push(sec.label);lines.push('-'.repeat(30));lines.push(sec.legend.join('  '));
+    for(var i=0;i<21;i++){var lc=sec.start+i*2;lines.push('Ckts '+lc+'\u2013'+(lc+1)+': Phase '+phs[i%3]);}
+    lines.push('');
+  });
+  lines.push('Phase colors are industry standard \u2014 not NEC-mandated for ungrounded conductors.');
+  lines.push('Verify with your AHJ and employer color code policy.');
+  lines.push('\nGenerated by Circuitmatic');
+  return lines.join('\n');
+}
+function pcShareSMS(){window.location.href='sms:?body='+encodeURIComponent(pcBuildSMS());}
+function pcShareEmail(){window.location.href='mailto:?subject='+encodeURIComponent('Phase Color Chart \u2014 Circuitmatic')+'&body='+encodeURIComponent(pcBuildEmail());}
+function pcGeneratePDF(){
+  if(!window.jspdf||!window.jspdf.jsPDF){alert('PDF library not loaded yet. Try again in a moment.');return;}
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'portrait',unit:'pt',format:'letter'});
+  var lo=[{c:'#1f2937',n:'Black',ph:'A'},{c:'#c41a1a',n:'Red',ph:'B'},{c:'#1d4ed8',n:'Blue',ph:'C'}];
+  var hi=[{c:'#5c2009',n:'Brown',ph:'A'},{c:'#c2410c',n:'Orange',ph:'B'},{c:'#ca8a00',n:'Yellow',ph:'C'}];
+  var sections=[
+    {title:'120/208V \u00B7 Circuits 1\u201342',phases:lo,start:1},
+    {title:'120/208V \u00B7 Circuits 43\u201384',phases:lo,start:43},
+    {title:'277/480V \u00B7 Circuits 1\u201342',phases:hi,start:1},
+    {title:'277/480V \u00B7 Circuits 43\u201384',phases:hi,start:43}
+  ];
+  var lM=60,pgW=612,pgH=792,usable=492,numW=32,gap=3,busW=6,barW=205;
+  var lNumX=lM,lBarX=lM+numW+gap,busX=lBarX+barW+gap,rBarX=busX+busW+gap,rNumX=rBarX+barW+gap;
+  var rowH=20,tableTop=132;
+  sections.forEach(function(sec,sIdx){
+    if(sIdx>0)doc.addPage();
+    doc.setFillColor(26,18,0);doc.rect(0,0,pgW,52,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(20);doc.setTextColor(240,192,32);
+    doc.text('CIRCUITMATiC',pgW/2,24,{align:'center'});
+    doc.setFontSize(10);doc.setTextColor(200,170,80);
+    doc.text('Phase Color Chart',pgW/2,40,{align:'center'});
+    doc.setFillColor(243,244,246);doc.setDrawColor(55,65,81);doc.setLineWidth(1.5);
+    doc.roundedRect(lM,62,usable,26,4,4,'FD');
+    doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(30,41,59);
+    doc.text(sec.title,pgW/2,80,{align:'center'});
+    doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(107,114,128);
+    doc.text('PHASE LEGEND:',lM,107);
+    [0,1,2].forEach(function(pi){
+      var rgb=pcHexRgb(sec.phases[pi].c);
+      var lx=lM+96+pi*110;
+      doc.setFillColor(rgb[0],rgb[1],rgb[2]);doc.rect(lx,96,14,12,'F');
+      doc.setFont('helvetica','bold');doc.setTextColor(30,41,59);
+      doc.text('Ph '+sec.phases[pi].ph+' = '+sec.phases[pi].n,lx+18,107);
+    });
+    for(var i=0;i<21;i++){
+      var lc=sec.start+i*2,rc=lc+1;
+      var ph=sec.phases[i%3],rgb=pcHexRgb(ph.c);
+      var ry=tableTop+i*rowH,isSep=i>0&&i%3===0;
+      doc.setFillColor(243,244,246);doc.rect(lM,ry,usable,rowH,'F');
+      if(i>0){doc.setDrawColor(isSep?55:210,isSep?65:210,isSep?81:210);doc.setLineWidth(isSep?1:0.4);doc.line(lM,ry,lM+usable,ry);}
+      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(55,65,81);
+      doc.text(String(lc),lNumX+numW-2,ry+14,{align:'right'});
+      doc.setFillColor(rgb[0],rgb[1],rgb[2]);doc.rect(lBarX,ry+1,barW,rowH-2,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(255,255,255);
+      doc.text(ph.ph,lBarX+barW/2,ry+14,{align:'center'});
+      doc.setFillColor(55,65,81);doc.rect(busX,ry,busW,rowH,'F');
+      doc.setFillColor(rgb[0],rgb[1],rgb[2]);doc.rect(rBarX,ry+1,barW,rowH-2,'F');
+      doc.setTextColor(255,255,255);doc.text(ph.ph,rBarX+barW/2,ry+14,{align:'center'});
+      doc.setTextColor(55,65,81);doc.text(String(rc),rNumX+3,ry+14,{align:'left'});
+    }
+    doc.setDrawColor(55,65,81);doc.setLineWidth(1.5);doc.rect(lM,tableTop,usable,21*rowH,'S');
+    doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(150,150,150);
+    doc.text('Phase colors are industry standard \u2014 not NEC-mandated for ungrounded conductors. Verify with AHJ and employer color policy.',pgW/2,pgH-26,{align:'center'});
+    doc.text('Generated by Circuitmatic  \u00B7  Page '+(sIdx+1)+' of 4',pgW/2,pgH-14,{align:'center'});
+  });
+  doc.save('Circuitmatic_Phase_Chart.pdf');
 }
 
 // ── Panel Schedule ────────────────────────────────────────────────────────────
@@ -9053,7 +9141,14 @@ var _SVC_INFO={
   heat:{t:'Electric Heat (W)',b:'Enter the total nameplate load for all electric resistance heating in watts.\n\nHow to find it: Add up the wattage from all baseboard heaters, electric furnace, or heat strips. Each unit has a data plate. Electric furnaces are typically 10,000–20,000 W. Baseboard heaters are typically 500–2,000 W each.\n\nHeat pump users: Enter the emergency/auxiliary heat strip rating, not the compressor load.\n\nNote: Only the LARGER of A/C or electric heat is included per §220.60.',r:'NEC §220.60 / §120.60'},
   wh:{t:'Water Heater (W)',b:'Enter the nameplate wattage of the electric water heater.\n\nHow to find it: Look on the label on the side of the tank, usually near the top. Standard residential units are 3,500–4,500 W. Tanks with two elements still typically show only the upper element rating since they don\'t run simultaneously.\n\nIf unknown: Use 4,500 W as a conservative default.\n\nGas, propane, or tankless gas = 0 W.',r:'NEC §220.53'},
   other:{t:'Other Fixed Loads (W)',b:'Enter the combined wattage of any other permanently installed fixed appliances not already listed above.\n\nCommon examples: dishwasher (1,200–1,500 W), garbage disposal (500–900 W), well pump (750–1,500 W), trash compactor (500 W), pool pump or hot tub equipment.\n\nHow to find it: Add the nameplate wattages from each appliance\'s data plate. If you have 4 or more fixed appliances, Standard Method applies a 75% demand factor automatically.\n\nDo not include EV chargers here — use the EV tab for those.',r:'NEC §220.53'},
-  wc_conds:{t:'Working Space Conditions',b:'The condition is determined by what is on the OPPOSITE side of the working space from the exposed live parts.\n\nCondition 1: No live or uninsulated parts on the opposite side — concrete wall, brick, grounded metal wall, etc. Lowest hazard, smallest required depth.\n\nCondition 2: Grounded parts on the opposite side — grounded metal conduit, enclosures, structural steel. Moderate hazard.\n\nCondition 3: Exposed live parts on BOTH sides of the working space. Highest hazard, largest required depth.\n\nMost residential and light commercial panels face a wall → Condition 1. Switchgear rows facing each other → Condition 3.',r:'NEC Table 110.26(A)(1)'}
+  wc_conds:{t:'Working Space Conditions',b:'The condition is determined by what is on the OPPOSITE side of the working space from the exposed live parts.\n\nCondition 1: No live or uninsulated parts on the opposite side — concrete wall, brick, grounded metal wall, etc. Lowest hazard, smallest required depth.\n\nCondition 2: Grounded parts on the opposite side — grounded metal conduit, enclosures, structural steel. Moderate hazard.\n\nCondition 3: Exposed live parts on BOTH sides of the working space. Highest hazard, largest required depth.\n\nMost residential and light commercial panels face a wall → Condition 1. Switchgear rows facing each other → Condition 3.',r:'NEC Table 110.26(A)(1)'},
+  bf_clamps:{t:'Internal Clamps',b:'Internal cable clamps are the built-in clamping fittings inside a metal box that grip and secure the cable as it enters — the little tabs or saddles that hold your Romex or MC in place without needing a separate connector.\n\nIf your box has any internal clamps (even just one), the NEC requires you to add one conductor-worth of volume to the fill calculation. It does not matter how many clamps are in the box — it is always just one allowance total.\n\nIf you are using external connectors (like knock-out connectors that go through the hole from outside), those do not count — select None.',r:'NEC §314.16(B)(2)'},
+  bf_studs:{t:'Support Fittings (Studs & Hickeys)',b:'Support fittings are mounting hardware inside the box used to hang a light fixture or ceiling fan — typically a fixture stud (a short threaded rod in the center of the box) or a hickey (an L-shaped adapter that screws onto the stud).\n\nEach stud or hickey in the box takes one conductor-worth of volume based on the largest wire in the box.\n\nMost standard switch and outlet boxes have none. Ceiling boxes for fixtures almost always have a stud. Count only the hardware that is physically inside the box.',r:'NEC §314.16(B)(3)'},
+  bf_devices:{t:'Devices / Yokes',b:'A yoke (also called a strap) is the flat metal bracket that a device — outlet, switch, GFCI, AFCI, dimmer — is mounted on. It is what screws to the box ears.\n\nEach yoke in the box counts as TWO conductor allowances, based on the largest wire connected to that device.\n\nExample: A standard duplex outlet = 1 yoke = 2 allowances. A box with a switch and an outlet = 2 yokes = 4 allowances.\n\nPigtailed devices still count — if a yoke is physically in the box, count it.',r:'NEC §314.16(B)(4)'},
+  bf_devcond:{t:'Device Conductor AWG',b:'This is the size of the largest wire that connects to or passes through any device (yoke) in the box. The NEC bases the two-allowance device volume on this wire size.\n\nIn most residential work this will match your circuit conductor — 14 AWG on a 15A circuit, 12 AWG on a 20A circuit.\n\nIf different devices in the box have different wire sizes connected to them, use the largest one.',r:'NEC §314.16(B)(4)'},
+  bf_egc:{t:'EGC Count',b:'EGC stands for Equipment Grounding Conductor — the bare copper or green-insulated ground wire in the cable or conduit.\n\nNo matter how many EGCs are in the box, they all together count as only ONE conductor allowance (based on the size of the largest EGC). This is one of the few places in box fill where quantity does not increase the count.\n\nCount every bare copper and green wire entering the box — from each cable or conduit run.',r:'NEC §314.16(B)(5)'},
+  bf_egcawg:{t:'Largest EGC',b:'Select the wire gauge of the largest equipment grounding conductor (bare copper or green wire) in the box.\n\nThis size is used to look up the volume allowance for all EGCs combined. In most residential work, this matches your circuit conductor size — 14 AWG on a 15A circuit, 12 AWG on a 20A circuit.\n\nIf you have multiple circuits entering the box with different EGC sizes, pick the largest (smallest AWG number).',r:'NEC Table 314.16(B)'},
+  mc_nameplate:{t:'Where to Find Motor Information',b:'Everything you need for this calculator is on the motor nameplate — the metal data plate bolted to the motor frame (usually on the side or end).\n\nWhat to look for:\n\n• Horsepower (HP) — listed as "HP"\n• Voltage — listed as "VOLTS" — may show multiple voltages like 230/460\n• Phase — listed as "PH" — 1 for single-phase, 3 for three-phase\n• Motor Type — usually identified by NEMA Design letter (A, B, C, D) or "Squirrel Cage." If not listed, assume Squirrel Cage (Design B) — it is by far the most common\n• Service Factor (SF) — listed as "S.F." — if 1.15 or higher, overload protection is set to 125%; if not listed or below 1.15, use 115%\n\nIf the nameplate is missing or unreadable, check the motor spec sheet or the original equipment documentation.',r:'NEC §430.7 (Nameplate Requirements)'}
 };
 function svcInfo(key){
   var d=_SVC_INFO[key];
