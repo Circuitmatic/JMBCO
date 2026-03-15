@@ -777,6 +777,14 @@ body.light-mode .svc-info-modal-body{color:#374151;}
 .notes-toolbar-title{font-size:13px;font-weight:700;color:#374151;font-family:'Inter',sans-serif;}
 .notes-add-btn{background:#f0c020;color:#1a1200;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;letter-spacing:.2px;}
 .notes-add-btn:active{opacity:.85;}
+.notes-search-row{padding:8px 12px 9px;background:var(--surface2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.notes-srch-inp{width:100%;box-sizing:border-box;background:var(--card);border:1.5px solid var(--border2);border-radius:8px;padding:8px 12px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);outline:none;}
+.notes-srch-inp:focus{border-color:#f0c020;}
+.notes-srch-inp::placeholder{color:var(--muted);}
+body.light-mode .notes-search-row{background:#f3f4f6;border-top-color:#e5e7eb;border-bottom-color:#e5e7eb;}
+body.light-mode .notes-srch-inp{background:#ffffff;border-color:#d1d5db;color:#111827;}
+.proj-edit-btn{background:none;border:1px solid var(--border2);border-radius:7px;color:var(--sub);font-size:14px;cursor:pointer;padding:4px 9px;line-height:1;flex-shrink:0;margin-left:auto;}
+.proj-edit-btn:active{background:var(--surface2);}
 /* Note pin / flag */
 .note-pin-btn,.note-flag-btn{background:none;border:none;font-size:20px;cursor:pointer;padding:2px 3px;color:#d1d5db;flex-shrink:0;line-height:1;-webkit-tap-highlight-color:transparent;}
 .note-pin-btn.pinned{color:#f0c020;}.note-flag-btn.flagged{color:#dc2626;}
@@ -2723,6 +2731,7 @@ if('serviceWorker' in navigator){
           <div class="proj-detail-po" id="proj-detail-po"></div>
           <div class="proj-detail-foreman" id="proj-detail-foreman"></div>
         </div>
+        <button class="proj-edit-btn" onclick="openEditProjModal()" title="Edit project info">✎ Edit</button>
       </div>
       <div class="res-subnav">
         <button class="res-sub active" id="res-sub-notes" onclick="resSub('notes',this)">Notes</button>
@@ -2733,6 +2742,9 @@ if('serviceWorker' in navigator){
         <div class="notes-toolbar">
           <span class="notes-toolbar-title">Saved Notes</span>
           <button class="notes-add-btn" onclick="openNoteTplSheet()">+ Add Note</button>
+        </div>
+        <div class="notes-search-row">
+          <input class="notes-srch-inp" id="notes-srch" type="text" placeholder="Search notes, dates, keywords…" oninput="renderNotes()" autocomplete="off">
         </div>
         <div id="notes-list"></div>
       </div>
@@ -5522,6 +5534,33 @@ function openNewProjModal(){
   setTimeout(function(){document.getElementById('np-name').focus();},120);
 }
 function closeNewProjModal(){document.getElementById('new-proj-ov').classList.remove('open');}
+function openEditProjModal(){
+  if(_activeProjectId===null)return;
+  var p=getProjList().find(function(x){return x.id===_activeProjectId;});if(!p)return;
+  document.getElementById('ep-name').value=p.name||'';
+  document.getElementById('ep-foreman').value=p.foreman||'';
+  document.getElementById('ep-po').value=p.po||'';
+  document.getElementById('ep-start').value=p.startDate||'';
+  document.getElementById('edit-proj-ov').classList.add('open');
+  setTimeout(function(){document.getElementById('ep-name').focus();},120);
+}
+function closeEditProjModal(){document.getElementById('edit-proj-ov').classList.remove('open');}
+function saveEditProj(){
+  var name=document.getElementById('ep-name').value.trim();
+  if(!name){document.getElementById('ep-name').focus();return;}
+  var foreman=document.getElementById('ep-foreman').value.trim();
+  var po=document.getElementById('ep-po').value.trim();
+  var startDate=document.getElementById('ep-start').value||'';
+  var projects=getProjList();
+  var idx=projects.findIndex(function(x){return x.id===_activeProjectId;});
+  if(idx===-1)return;
+  projects[idx]=Object.assign(projects[idx],{name:name,foreman:foreman,po:po,startDate:startDate});
+  saveProjList(projects);
+  closeEditProjModal();
+  document.getElementById('proj-detail-name').textContent=name;
+  document.getElementById('proj-detail-po').textContent=po?'PO: '+po:'';
+  document.getElementById('proj-detail-foreman').textContent=foreman?'Foreman: '+foreman:'';
+}
 function confirmNewProj(){
   var name=document.getElementById('np-name').value.trim();
   if(!name){document.getElementById('np-name').focus();return;}
@@ -5542,7 +5581,26 @@ function renderNotes(){
   var notes=JSON.parse(localStorage.getItem('jc_notes')||'[]');
   if(_activeProjectId!==null)notes=notes.filter(function(n){return n.projectId===_activeProjectId;});
   notes.sort(function(a,b){if(a.pinned&&!b.pinned)return -1;if(!a.pinned&&b.pinned)return 1;return 0;});
-  if(!notes.length){el.innerHTML='<div class="notes-empty">No notes yet.<br>Run a calculation and tap <strong>Save</strong>,<br>or tap <strong>+ Add Note</strong> to write your own.</div>';return;}
+  var srchEl=document.getElementById('notes-srch');
+  var q=srchEl?(srchEl.value||'').trim().toLowerCase():'';
+  if(q){
+    notes=notes.filter(function(n){
+      var hay=[
+        n.title||'',n.tabName||'',n.annotation||'',
+        n.ts?new Date(n.ts).toLocaleDateString():'',
+        n.ts?new Date(n.ts).toLocaleString():''
+      ];
+      if(n.lines&&n.lines.length)n.lines.forEach(function(l){
+        hay.push(typeof l==='string'?l:((l.lbl||'')+' '+(l.val||'')+' '+(l.sub||'')));
+      });
+      if(n.checklist&&n.checklist.length)n.checklist.forEach(function(c){hay.push(c.text||'');});
+      if(n.tableData&&n.tableData.columns)hay=hay.concat(n.tableData.columns);
+      if(n.tableData&&n.tableData.rows)n.tableData.rows.forEach(function(r){if(r.cells)hay=hay.concat(r.cells);});
+      var combined=hay.join(' ').toLowerCase();
+      return combined.indexOf(q)!==-1;
+    });
+  }
+  if(!notes.length){el.innerHTML='<div class="notes-empty">'+(q?'No notes match "'+escHtml(q)+'".':'No notes yet.<br>Run a calculation and tap <strong>Save</strong>,<br>or tap <strong>+ Add Note</strong> to write your own.')+'</div>';return;}
   el.innerHTML=notes.map(function(n){
     if(n.type==='manual')return renderManualNoteCard(n);
     var d=new Date(n.ts);
@@ -5609,7 +5667,7 @@ function openManualNote(tpl){
   var tableData=null;
   if(tpl==='material'){
     title='Material Order';
-    tableData={columns:['Item / Description','Qty','Unit','Supplier','Unit Cost','Notes'],rows:[]};
+    tableData={columns:['Item / Description','Qty','Part Number','Supplier','Unit Cost','Notes'],rows:[]};
   } else if(tpl==='inspection'){
     title='Site Inspection';
     ['Panel condition OK','Grounding verified','GFCI/AFCI checked','Conduit secured','J-box covers on','Labels updated','Work area clean'].forEach(function(t,i){cl.push({id:now+i+1,text:t,done:false});});
@@ -5916,14 +5974,30 @@ function jcExportNote(id){
   var bodyHTML='',txt,csv;
   if(n.type==='manual'){
     var cl=n.checklist||[];
+    var td=n.tableData||null;
     txt=[title,'Type: Note','Created: '+created,'─'.repeat(36),'',n.body||''];
     if(cl.length){txt.push('','Checklist ('+cl.filter(function(c){return c.done;}).length+'/'+cl.length+' done):');cl.forEach(function(c){txt.push((c.done?'[x] ':'[ ] ')+c.text);});}
+    if(td&&td.columns){
+      txt.push('','Table: '+title);
+      txt.push(td.columns.join('\t'));
+      (td.rows||[]).forEach(function(r){txt.push((r.cells||[]).join('\t'));});
+    }
     if(n.photos&&n.photos.length)txt.push('','Photos: '+n.photos.length+' attached');
     txt.push('','Generated by Circuitmatic');
     csv='Field,Value\nTitle,"'+title.replace(/"/g,'""')+'"\nCreated,'+created+'\nBody,"'+(n.body||'').replace(/"/g,'""')+'"';
     if(cl.length)csv+='\n\nChecklist Item,Done\n'+cl.map(function(c){return '"'+c.text.replace(/"/g,'""')+'",'+(c.done?'Yes':'No');}).join('\n');
-    bodyHTML='<div style="background:#fffef5;border-left:3px solid #f0c020;border-radius:8px;padding:16px 18px;font-size:14px;font-family:\'Inter\',sans-serif;line-height:1.7;color:#111827;white-space:pre-wrap;">'+escHtml(n.body||'')+'</div>';
+    if(td&&td.columns){
+      csv+='\n\n'+td.columns.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');
+      (td.rows||[]).forEach(function(r){csv+='\n'+(r.cells||[]).map(function(c){return '"'+String(c||'').replace(/"/g,'""')+'"';}).join(',');});
+    }
+    bodyHTML='';
+    if(n.body)bodyHTML='<div style="background:#fffef5;border-left:3px solid #f0c020;border-radius:8px;padding:16px 18px;font-size:14px;font-family:\'Inter\',sans-serif;line-height:1.7;color:#111827;white-space:pre-wrap;">'+escHtml(n.body)+'</div>';
     if(cl.length){var clDoneC=cl.filter(function(c){return c.done;}).length;bodyHTML+='<div class="sec-hd">Checklist ('+clDoneC+'/'+cl.length+')</div><table class="kv-table"><tbody>'+cl.map(function(c){return '<tr><td style="width:24px;text-align:center;">'+(c.done?'<strong style="color:#16a34a;">✓</strong>':'○')+'</td><td style="'+(c.done?'text-decoration:line-through;color:#9ca3af;':'')+'">'+escHtml(c.text)+'</td></tr>';}).join('')+'</tbody></table>';}
+    if(td&&td.columns){
+      var thCells=td.columns.map(function(c){return '<th>'+escHtml(c)+'</th>';}).join('');
+      var tdRows=(td.rows||[]).map(function(r){return '<tr>'+(r.cells||[]).map(function(c){return '<td>'+escHtml(c||'')+'</td>';}).join('')+'</tr>';}).join('');
+      bodyHTML+='<div class="sec-hd">'+escHtml(title)+'</div><div style="overflow-x:auto;"><table class="kv-table"><thead><tr>'+thCells+'</tr></thead><tbody>'+tdRows+'</tbody></table></div>';
+    }
     if(n.photos&&n.photos.length){var _npc2=n.photos.length===1?'rpt-photo-solo':'rpt-photo';bodyHTML+='<div class="sec-hd">Photos ('+n.photos.length+')</div><div class="rpt-photo-grid">'+n.photos.map(function(p){return '<img src="'+p+'" class="'+_npc2+'">';}).join('')+'</div>';}
     var html=buildPrintHTML(title,'Note · Created '+created,bodyHTML);
     openExportSheet(title,txt.join('\n'),csv,html);
@@ -6559,7 +6633,7 @@ function openPunchModal(){
   document.getElementById('punch-modal-ov').classList.add('open');
   setTimeout(function(){document.getElementById('pm-desc').focus();},100);
 }
-function closePunchModal(){document.getElementById('punch-modal-ov').classList.remove('open');}
+function closePunchModal(){if(document.activeElement)document.activeElement.blur();document.getElementById('punch-modal-ov').classList.remove('open');}
 function pmPhotoChange(inp){
   if(!inp.files||!inp.files[0])return;
   resizePhoto(inp.files[0],function(data){
@@ -6575,7 +6649,9 @@ function savePunchModal(){
   var item={id:Date.now(),title:title,catId:catId,done:false,notes:notes,photos:_pmPhoto?[_pmPhoto]:[],ts:Date.now(),projectId:_activeProjectId};
   items.unshift(item);
   localStorage.setItem('jc_punch',JSON.stringify(items));
+  var _sy=window.scrollY||document.documentElement.scrollTop;
   closePunchModal();renderPunch();
+  window.scrollTo(0,_sy);
 }
 function openPunchOpts(){
   renderPunchCats();
@@ -9866,6 +9942,25 @@ function gfciRender() {
     <div class="ts-aw-btns">
       <button class="ts-aw-cancel" onclick="closeNewProjModal()">Cancel</button>
       <button class="ts-aw-confirm" onclick="confirmNewProj()">Create Project</button>
+    </div>
+  </div>
+</div>
+<!-- Edit Project Modal -->
+<div class="ts-aw-ov" id="edit-proj-ov" onclick="closeEditProjModal()">
+  <div class="ts-aw-modal" onclick="event.stopPropagation()">
+    <div class="ts-aw-title">Edit Project</div>
+    <div class="ts-aw-sub">Update project information</div>
+    <div class="ts-aw-label">Project Name</div>
+    <input class="ts-aw-inp" id="ep-name" type="text" placeholder="Project name…" autocomplete="off">
+    <div class="ts-aw-label">Foreman</div>
+    <input class="ts-aw-inp" id="ep-foreman" type="text" placeholder="Foreman name…" autocomplete="off">
+    <div class="ts-aw-label">PO Number</div>
+    <input class="ts-aw-inp" id="ep-po" type="text" placeholder="PO #…" autocomplete="off">
+    <div class="ts-aw-label">Project Start Date</div>
+    <input class="ts-aw-inp" id="ep-start" type="date" onkeydown="if(event.key==='Enter')saveEditProj()">
+    <div class="ts-aw-btns">
+      <button class="ts-aw-cancel" onclick="closeEditProjModal()">Cancel</button>
+      <button class="ts-aw-confirm" onclick="saveEditProj()">Save Changes</button>
     </div>
   </div>
 </div>
