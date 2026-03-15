@@ -510,6 +510,8 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.fail::before { background: var(--red); }
   .result-block.neutral { border-color: var(--accent-bdr); background: var(--accent-lt); }
   .result-block.neutral::before { background: var(--accent); }
+  .result-block.warn { border-color: var(--amber-bdr); background: var(--amber-bg); }
+  .result-block.warn::before { background: var(--amber); }
 
   .result-head { display:flex; align-items:center; justify-content:space-between; padding:9px 12px 3px 16px; }
   .result-lbl {
@@ -523,6 +525,7 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.pass .result-lbl { color: var(--green); }
   .result-block.fail .result-lbl { color: var(--red); }
   .result-block.neutral .result-lbl { color: var(--accent); }
+  .result-block.warn .result-lbl { color: var(--amber); }
 
   .result-badge {
     font-family: 'Roboto Mono', monospace;
@@ -538,6 +541,7 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.pass .result-badge { color:var(--green); border-color:var(--green-bdr); background:rgba(5,150,105,.07); }
   .result-block.fail .result-badge { color:var(--red); border-color:var(--red-bdr); background:rgba(220,38,38,.07); }
   .result-block.neutral .result-badge { color:var(--accent); border-color:var(--accent-bdr); background:rgba(37,99,235,.07); }
+  .result-block.warn .result-badge { color:var(--amber); border-color:var(--amber-bdr); background:rgba(180,83,9,.07); }
 
   .result-val {
     font-family: 'Inter', sans-serif;
@@ -551,6 +555,7 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.pass .result-val { color: var(--green); }
   .result-block.fail .result-val { color: var(--red); }
   .result-block.neutral .result-val { color: var(--accent); }
+  .result-block.warn .result-val { color: var(--amber); }
 
   .result-sub {
     font-family: 'Inter', sans-serif;
@@ -562,6 +567,7 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .result-block.pass .result-sub { color: #047857; }
   .result-block.fail .result-sub { color: #b91c1c; }
   .result-block.neutral .result-sub { color: var(--muted); }
+  .result-block.warn .result-sub { color: #92400e; }
 
   /* ── Engineering panel ── */
   .eng-panel { margin:10px 20px 0; background:var(--surface); border:1.5px solid var(--border); border-radius:10px; overflow:hidden; }
@@ -9221,24 +9227,24 @@ function calculateEV() {
   var blocks = [];
 
   // Power output info first — useful context
-  blocks.push(makeBlock('ok', 'EVSE Output', '',
+  blocks.push(makeBlock('pass', 'EVSE Output', '',
     kw + ' kW <span class="ev-kw-badge">~' + milesPerHr + ' mi/hr</span>',
     nameplate + 'A × ' + voltage + 'V · ~' + milesPerHr + ' miles of range per hour of charging'));
 
   // Min circuit ampacity
-  blocks.push(makeBlock('ok', 'Min. Circuit Ampacity', '§625.41',
+  blocks.push(makeBlock('pass', 'Min. Circuit Ampacity', '§625.41',
     minCircuit.toFixed(0) + 'A',
     nameplate + 'A nameplate × 125% (continuous load)'));
 
   // Breaker size
-  blocks.push(makeBlock('ok', 'Breaker / OCPD', '§240.6(A)',
+  blocks.push(makeBlock('pass', 'Breaker / OCPD', '§240.6(A)',
     breaker + 'A',
     'Next standard size at or above ' + minCircuit.toFixed(1) + 'A'));
 
   // Wire size
   if (wire) {
     var tempLabel = ins === 'comm90' ? '90°C' : ins === 'residential' ? '60°C' : '75°C';
-    blocks.push(makeBlock('ok', 'Min. Conductor Size', '§310.16 ' + tempLabel,
+    blocks.push(makeBlock('pass', 'Min. Conductor Size', '§310.16 ' + tempLabel,
       sizeLabel(wire.size) + ' ' + (cond === 'copper' ? 'Cu' : 'Al'),
       wire.amp + 'A ampacity — sized to carry ' + breaker + 'A OCPD rating'));
   } else {
@@ -9247,14 +9253,14 @@ function calculateEV() {
   }
 
   // Dedicated circuit
-  blocks.push(makeBlock(needDedicated ? 'warn' : 'ok', 'Dedicated Circuit', '§625.40',
+  blocks.push(makeBlock(needDedicated ? 'warn' : 'pass', 'Dedicated Circuit', '§625.40',
     needDedicated ? 'Required' : 'Not required',
     needDedicated
       ? 'EVSE above 16A or above 120V must have its own branch circuit'
       : 'Level 1 ≤16A at 120V may share a circuit in some cases — verify with AHJ'));
 
   // Cable length
-  blocks.push(makeBlock('ok', 'Max Cable Length', '§625.17(C)',
+  blocks.push(makeBlock('pass', 'Max Cable Length', '§625.17(C)',
     '25 ft',
     'Without a listed cable management system as part of the EVSE'));
 
@@ -9267,7 +9273,7 @@ function calculateEV() {
 
   // 210.17 EV-ready outlet for new construction (2023/2026)
   if (_codeYear !== '2020' && nameplate <= 40 && voltage >= 240) {
-    blocks.push(makeBlock('ok', '§210.17 EV-Ready Outlet', '2023/2026',
+    blocks.push(makeBlock('pass', '§210.17 EV-Ready Outlet', '2023/2026',
       '40A min. branch circuit',
       'New construction dwelling units must include at least one EV-ready outlet in the garage or parking area.'));
   }
@@ -9544,18 +9550,25 @@ function calculateSVC(){
 
   // Build result-block cards
   var html='';
-  html+=makeBlock('neutral','Total Calculated Load',(_svcMethod==='std'?'Standard Method':'Optional Method'),
+  // Hazard / compliance checks
+  var svcHazard='';
+  if(svcSize<100){svcHazard='<div class="warn-msg show" style="margin:0 0 10px;">⚠ §230.79(C) — Single-family dwellings require a minimum 100A service. This calculated size is below the code minimum.</div>';}
+  var loadPct=Math.round((minAmps/svcSize)*100);
+  var loadState=loadPct>=95?'fail':loadPct>=80?'warn':'pass';
+  var loadBadge=loadPct>=95?'⚠ NEAR CAPACITY':loadPct>=80?'↑ HIGH LOAD':'✓ WITHIN CAPACITY';
+  html+=svcHazard;
+  html+=makeBlock(loadState,'Total Calculated Load',(_svcMethod==='std'?'Standard Method':'Optional Method'),
     Math.round(totalVA).toLocaleString()+' VA',
-    'All loads after demand factors applied');
-  html+=makeBlock('neutral','Minimum Service',
+    loadBadge+' — '+loadPct+'% of '+svcSize+'A service ('+minAmps+'A min required)');
+  html+=makeBlock(svcSize<100?'fail':'pass','Minimum Service',
     'NEC §230.79',
     svcSize+' A',
-    'Calculated minimum: '+minAmps+' A at 240V · Next standard size: '+svcSize+' A');
-  html+=makeBlock('neutral','Service Entrance Conductor',
+    'Calculated minimum: '+minAmps+' A at 240V · Next standard size: '+svcSize+' A'+(svcSize<100?' · ⚠ Below 100A code minimum':''));
+  html+=makeBlock('pass','Service Entrance Conductor',
     'Table 310.16 · 75°C',
     '#'+wireSize+' '+cond.charAt(0).toUpperCase()+cond.slice(1),
     'Sized to carry '+svcSize+' A service');
-  html+=makeBlock('neutral','Grounding Electrode Conductor',
+  html+=makeBlock('pass','Grounding Electrode Conductor',
     'Table 250.66',
     '#'+gecSize+' Copper',
     'Based on service entrance conductor size');
