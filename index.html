@@ -4144,7 +4144,7 @@ if('serviceWorker' in navigator){
         <input class="fi" id="svc-sqft" type="number" min="1" placeholder="e.g. 1800"/>
       </div>
       <div class="field-row">
-        <div class="field-label">Range / Oven (kW) <button class="svc-ib" onclick="svcInfo('range')">ⓘ</button></div>
+        <div class="field-label" style="white-space:nowrap;width:auto;">Range / Oven (kW) <button class="svc-ib" onclick="svcInfo('range')">ⓘ</button></div>
         <div style="display:flex;gap:8px;align-items:center;flex:1;flex-wrap:wrap;">
           <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="checkbox" id="svc-has-range" checked onchange="svcRangeToggle()"> Present</label>
           <input class="fi" id="svc-range-kw" type="number" min="1" max="60" placeholder="kW" value="12" style="max-width:72px;"/>
@@ -4170,7 +4170,7 @@ if('serviceWorker' in navigator){
         <input class="fi" id="svc-wh-w" type="number" min="0" value="4500" style="max-width:90px;"/>
       </div>
       <div class="field-row">
-        <div class="field-label">Other Fixed Loads (W) <button class="svc-ib" onclick="svcInfo('other')">ⓘ</button></div>
+        <div class="field-label" style="white-space:nowrap;width:auto;">Other Fixed Loads (W) <button class="svc-ib" onclick="svcInfo('other')">ⓘ</button></div>
         <input class="fi" id="svc-other-w" type="number" min="0" value="0" style="max-width:90px;"/>
       </div>
       <div class="field-row">
