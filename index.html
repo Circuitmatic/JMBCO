@@ -4497,6 +4497,8 @@ if('serviceWorker' in navigator){
       <button class="gnd-subtab-btn" id="gnd-sub-gec" onclick="gndSetSub('gec',this)">GEC<span>Grounding Electrode</span></button>
       <button class="gnd-subtab-btn" id="gnd-sub-sbj" onclick="gndSetSub('sbj',this)">SBJ<span>System Bonding</span></button>
       <button class="gnd-subtab-btn" id="gnd-sub-ssbj" onclick="gndSetSub('ssbj',this)">SSBJ<span>Supply-Side Bond</span></button>
+      <button class="gnd-subtab-btn" id="gnd-sub-ebj" onclick="gndSetSub('ebj',this)">EBJ<span>Equipment Bonding</span></button>
+      <button class="gnd-subtab-btn" id="gnd-sub-bond" onclick="gndSetSub('bond',this)">Bonding<span>Water / Structural</span></button>
     </div>
     <div id="gnd-egc-panel">
       <div class="section-label">Equipment Grounding Conductor Sizing</div>
@@ -4737,6 +4739,102 @@ if('serviceWorker' in navigator){
         <div class="disclaimer-text">SSBJ sized per NEC §250.102(C) and Table 250.102(C)(1). Installed in the supply-side raceway or cable between the utility service point and the service disconnect. For parallel conductors in multiple raceways, each raceway requires its own SSBJ sized per §250.102(C)(2). For conductors larger than 1100 kcmil copper or 1750 kcmil aluminum, the 12½% rule applies — consult a licensed engineer. Design guidance only — verify with AHJ.</div>
       </div>
       <div class="code-note" id="ssbj-note"></div>
+    </div>
+
+    <div id="gnd-ebj-panel" style="display:none;">
+      <div class="section-label">Equipment Bonding Jumper Sizing <button class="svc-ib" onclick="svcInfo('ebj_what')">&#9432;</button></div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">OCPD Rating (Amps)</div>
+          <input class="fi" id="ebj-ocpd" type="number" min="1" max="6000" placeholder="e.g. 20, 100, 200"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">EBJ Material</div>
+          <div class="sel-wrap"><select class="fi" id="ebj-mat">
+            <option value="copper" selected>Copper</option>
+            <option value="aluminum">Aluminum / CCA</option>
+          </select></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="err-msg" id="ebj-err"></div>
+      <div class="btn-row">
+        <button class="btn btn-calc" onclick="calculateEBJ()">Calculate</button>
+        <button class="btn btn-reset" onclick="resetEBJ()">Reset</button>
+      </div>
+      <div class="section-label" id="ebj-results-label" style="display:none;">Results</div>
+      <div class="results" id="ebj-results"></div>
+      <div class="disclaimer" id="ebj-disclaimer" style="display:none;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">EBJ sized per NEC §250.102(D) referencing Table 250.122. The EBJ bonds equipment enclosures, raceways, and metallic parts on the load side of the service. For parallel conductors in a single raceway, size the EBJ per §250.102(D) exception. Aluminum EBJs must be 10 AWG or larger and must not contact masonry or earth. Design guidance only — verify with AHJ.</div>
+      </div>
+      <div class="code-note" id="ebj-note"></div>
+    </div>
+
+    <div id="gnd-bond-panel" style="display:none;">
+      <div class="section-label">Metal Water Pipe &amp; Structural Steel Bonding <button class="svc-ib" onclick="svcInfo('bond_what')">&#9432;</button></div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Service Entrance Conductor Size</div>
+          <div class="sel-wrap"><select class="fi" id="bond-svc-size">
+            <optgroup label="AWG">
+              <option value="4">4 AWG</option>
+              <option value="3">3 AWG</option>
+              <option value="2">2 AWG</option>
+              <option value="1">1 AWG</option>
+              <option value="1/0">1/0 AWG</option>
+              <option value="2/0">2/0 AWG</option>
+              <option value="3/0" selected>3/0 AWG</option>
+              <option value="4/0">4/0 AWG</option>
+            </optgroup>
+            <optgroup label="kcmil">
+              <option value="250">250 kcmil</option>
+              <option value="300">300 kcmil</option>
+              <option value="350">350 kcmil</option>
+              <option value="400">400 kcmil</option>
+              <option value="500">500 kcmil</option>
+              <option value="600">600 kcmil</option>
+              <option value="750">750 kcmil</option>
+              <option value="1000">1000 kcmil</option>
+            </optgroup>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Service Conductor Material</div>
+          <div class="sel-wrap"><select class="fi" id="bond-svc-mat">
+            <option value="copper" selected>Copper</option>
+            <option value="aluminum">Aluminum / CCA</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Bonding Jumper Material</div>
+          <div class="sel-wrap"><select class="fi" id="bond-mat">
+            <option value="copper" selected>Copper</option>
+            <option value="aluminum">Aluminum / CCA</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Bonding Target <button class="svc-ib" onclick="svcInfo('bond_target')">&#9432;</button></div>
+          <div class="sel-wrap"><select class="fi" id="bond-target">
+            <option value="water" selected>Interior Metal Water Piping (§250.104(A))</option>
+            <option value="structural">Structural Metal (§250.104(C))</option>
+            <option value="both">Both Water &amp; Structural</option>
+          </select></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="err-msg" id="bond-err"></div>
+      <div class="btn-row">
+        <button class="btn btn-calc" onclick="calculateBond()">Calculate</button>
+        <button class="btn btn-reset" onclick="resetBond()">Reset</button>
+      </div>
+      <div class="section-label" id="bond-results-label" style="display:none;">Results</div>
+      <div class="results" id="bond-results"></div>
+      <div class="disclaimer" id="bond-disclaimer" style="display:none;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">Bonding jumper sized per NEC §250.104 and Table 250.102(C)(1) based on the largest service entrance conductor. Interior metal water piping must be bonded per §250.104(A) at the point where it enters the building. Structural metal must be bonded per §250.104(C) when it is likely to become energized. The bonding connection must be accessible and made with listed fittings. Design guidance only — verify with AHJ.</div>
+      </div>
+      <div class="code-note" id="bond-note"></div>
     </div>
   </div>
 
@@ -5406,6 +5504,8 @@ function setCodeYear(year){
   if(document.getElementById('gec-results-label')&&document.getElementById('gec-results-label').style.display!=='none')calculateGEC();
   if(document.getElementById('sbj-results-label')&&document.getElementById('sbj-results-label').style.display!=='none')calculateSBJ();
   if(document.getElementById('ssbj-results-label')&&document.getElementById('ssbj-results-label').style.display!=='none')calculateSSBJ();
+  if(document.getElementById('ebj-results-label')&&document.getElementById('ebj-results-label').style.display!=='none')calculateEBJ();
+  if(document.getElementById('bond-results-label')&&document.getElementById('bond-results-label').style.display!=='none')calculateBond();
   // Update quiz title immediately regardless of which tab is active
   var qzTitleEl=document.getElementById('qz-title');
   if(qzTitleEl) qzTitleEl.textContent='⚡ CODE '+year+' — EXAM PREP';
@@ -9797,6 +9897,9 @@ var _SVC_INFO={
   sbj_app:{t:'Service Equipment vs. Separately Derived System',b:'Service Equipment:\nThe SBJ is installed inside the main service panel or service disconnect. It bonds the neutral bar to the enclosure (EGC) and to the grounding electrode conductor (GEC). It is the only point in the entire system where neutral and ground are connected together. All sub-panels downstream must NOT have this bond — neutral and ground bars must be separated.\n\nSeparately Derived System (SDS):\nAn SDS is a source that has no direct electrical connection to conductors from another system — examples: step-down transformer secondary, standby generator output, solar inverter output. Each SDS needs its own SBJ connecting the secondary neutral to the EGC at the source. An SDS also requires its own GEC connecting to a grounding electrode near the source (§250.30). Key difference: the SBJ for an SDS may be located at either the source or the first disconnecting means for the SDS — but not both.',r:'NEC §250.28, §250.30'},
   ssbj_what:{t:'Supply-Side Bonding Jumper (SSBJ) — What It Is',b:'The Supply-Side Bonding Jumper bonds the metal enclosures, conduit, and raceways on the supply side of the service disconnect back to the grounded (neutral) conductor.\n\nWhere it goes: In the raceway or cable that runs from the utility service entrance point (meter base, weatherhead, or service entrance cable) to the service disconnect. It is installed on the SUPPLY side of the main breaker or fused disconnect.\n\nWhy it is needed: On the supply side of the service disconnect, the EGC system does not yet exist. If a fault energizes the service entrance conduit or meter enclosure, the SSBJ provides the fault current return path to clear the overcurrent device.\n\nKey difference from SBJ: The SBJ is at the disconnect/panel where neutral-ground bond is made. The SSBJ is in the supply-side raceway before the disconnect. Both may be required in the same installation (e.g., a large service with long service entrance raceways).',r:'NEC §250.102(A)(B)'},
   ssbj_parallel:{t:'Parallel Raceways — SSBJ Sizing',b:'When the service entrance conductors are run in parallel in multiple raceways or cables (common for large services), each individual raceway or cable must have its own SSBJ.\n\nHow to size each one: Per §250.102(C)(2), each SSBJ is sized based on the equivalent size of the largest ungrounded conductor in that raceway — using Table 250.102(C)(1). If all parallel conductors are the same size, all SSBJs are the same size.\n\nExample: 500 kcmil copper in each of 3 raceways → each raceway gets a 1/0 AWG copper SSBJ (3 total).\n\nVery large conductors: If phase conductors exceed 1100 kcmil copper or 1750 kcmil aluminum, the SSBJ must be at least 12½% of the conductor\'s cross-sectional area per the table note. At that scale, the design should be reviewed by a licensed engineer.',r:'NEC §250.102(C)(2)'},
+  ebj_what:{t:'Equipment Bonding Jumper (EBJ) — What It Is',b:'The Equipment Bonding Jumper bonds equipment enclosures, raceways, conduit, and metallic parts on the LOAD SIDE of the service disconnect back to the EGC system.\n\nSized the same as the EGC: Table 250.122 based on the OCPD protecting the circuit or feeder.\n\nCommon uses:\n• Motor disconnects and motor frames\n• Panelboard and subpanel enclosures\n• Metal conduit and raceway runs to equipment\n• Large appliances and HVAC equipment\n• Metal wireways, gutters, and cable trays\n\nEBJ vs EGC: The EGC runs inside the raceway alongside the circuit conductors and handles fault current continuously. The EBJ is a supplemental connection that bonds the enclosure or equipment itself. In many installations the EGC also serves as the EBJ — but for parallel conductors in a single raceway or equipment with multiple feeds, a separate EBJ may be required.',r:'NEC §250.102(D)'},
+  bond_what:{t:'Metal Water Pipe &amp; Structural Steel Bonding',b:'NEC requires certain metal systems in buildings to be bonded to the electrical grounding system to prevent dangerous voltage differences if a fault occurs.\n\n► Interior Metal Water Piping (§250.104(A))\nRequired on ALL buildings with metal water pipe. The bonding jumper connects the metal water piping system to the service equipment enclosure, grounded service conductor, GEC, or grounding electrode. Must be bonded at the point where the water pipe enters the building or at the nearest accessible location inside. Why: If a live wire contacts metal water pipe anywhere in the building, bonding ensures the fault current returns through the electrical system (clearing the breaker) rather than through a person touching a faucet.\n\n► Structural Metal Framing (§250.104(C))\nRequired when structural steel is interconnected as a building frame AND is likely to become energized. Most common in commercial and industrial steel-frame buildings where electrical equipment is mounted on or near the steel. The bonding jumper connects the steel frame to the service grounded conductor, EGC, GEC, or grounding electrode at the building.\n\nBoth are sized per Table 250.102(C)(1) based on the service entrance conductors — the same table used for GEC and SBJ sizing.',r:'NEC §250.104(A)(C)'},
+  bond_target:{t:'Bonding Target — Water Pipe vs Structural Steel',b:'Interior Metal Water Piping: Select this for the bonding jumper that connects the metal water supply pipe to the grounding system. Required on virtually every residential, commercial, and industrial building that has copper, galvanized, or other metal water pipe. Plastic (PVC, PEX) water piping does not require this bond.\n\nStructural Metal: Select this for the bonding jumper that ties a steel building frame or interconnected structural metal to the grounding system. More common in commercial and industrial construction. Not typically required in wood-frame residences.\n\nBoth: Select this if you need bonding jumpers for both in the same installation. Both are sized identically from Table 250.102(C)(1) — the calculator will show a result card for each.',r:'NEC §250.104'},
   mc_nameplate:{t:'Where to Find Motor Information',b:'Everything you need for this calculator is on the motor nameplate — the metal data plate bolted to the motor frame (usually on the side or end).\n\nWhat to look for:\n\n• Horsepower (HP) — listed as "HP"\n• Voltage — listed as "VOLTS" — may show multiple voltages like 230/460\n• Phase — listed as "PH" — 1 for single-phase, 3 for three-phase\n• Motor Type — usually identified by NEMA Design letter (A, B, C, D) or "Squirrel Cage." If not listed, assume Squirrel Cage (Design B) — it is by far the most common\n• Service Factor (SF) — listed as "S.F." — if 1.15 or higher, overload protection is set to 125%; if not listed or below 1.15, use 115%\n\nIf the nameplate is missing or unreadable, check the motor spec sheet or the original equipment documentation.',r:'NEC §430.7 (Nameplate Requirements)'}
 };
 function svcInfo(key){
@@ -10104,6 +10207,8 @@ function gndSetSub(sub,btn){
   document.getElementById('gnd-gec-panel').style.display=sub==='gec'?'':'none';
   document.getElementById('gnd-sbj-panel').style.display=sub==='sbj'?'':'none';
   document.getElementById('gnd-ssbj-panel').style.display=sub==='ssbj'?'':'none';
+  document.getElementById('gnd-ebj-panel').style.display=sub==='ebj'?'':'none';
+  document.getElementById('gnd-bond-panel').style.display=sub==='bond'?'':'none';
 }
 
 // ── EGC ──────────────────────────────────────────────────────────────────────
@@ -10345,6 +10450,89 @@ function calculateSSBJ(){
   document.getElementById('ssbj-disclaimer').style.display='block';
   document.getElementById('ssbj-note').textContent='NEC '+yr+' \u00a7250.102(C) \u00b7 Table 250.102(C)(1) \u00b7 '+phMatLbl+' phase \u00b7 '+bjMatLbl+' SSBJ \u00b7 '+nRac+' raceway(s) \u00b7 Design guidance only \u00b7 Verify with AHJ';
   if(typeof jcResultsReady==='function')jcResultsReady('gnd','SSBJ Sizing');
+}
+
+// ── EBJ (Equipment Bonding Jumper) ───────────────────────────────────────────
+function resetEBJ(){
+  document.getElementById('ebj-ocpd').value='';
+  document.getElementById('ebj-mat').value='copper';
+  document.getElementById('ebj-err').className='err-msg';
+  document.getElementById('ebj-results').innerHTML='';
+  document.getElementById('ebj-results-label').style.display='none';
+  document.getElementById('ebj-disclaimer').style.display='none';
+  document.getElementById('ebj-note').textContent='';
+}
+function calculateEBJ(){
+  var errEl=document.getElementById('ebj-err');
+  errEl.className='err-msg';
+  var ocpd=parseFloat(document.getElementById('ebj-ocpd').value);
+  var mat=document.getElementById('ebj-mat').value;
+  if(!ocpd||ocpd<=0||ocpd>6000){errEl.innerHTML='Enter a valid OCPD rating (1\u20136000A).';errEl.className='err-msg show';return;}
+  var row=null;
+  for(var i=0;i<_EGC_TBL.length;i++){if(_EGC_TBL[i][0]>=ocpd){row=_EGC_TBL[i];break;}}
+  if(!row){errEl.innerHTML='OCPD exceeds table maximum (6000A). Consult a licensed engineer.';errEl.className='err-msg show';return;}
+  var isCu=mat==='copper';
+  var ebjSize=isCu?row[1]:row[2];
+  var matLbl=isCu?'Copper':'Aluminum / CCA';
+  var yr=_codeYear||'2026';
+  var blocks=[];
+  blocks.push(makeBlock('pass','Min. EBJ Size','\u00a7250.102(D) Table 250.122',sizeLabel(ebjSize)+' '+matLbl,'Based on OCPD \u2264 '+row[0]+'A \u2014 '+ocpd+'A breaker/fuse'));
+  var prevRow=row[0]>15?_EGC_TBL[_EGC_TBL.indexOf(row)-1]:null;
+  var rowRange=prevRow?'OCPD > '+prevRow[0]+'A \u2013 \u2264 '+row[0]+'A':'OCPD \u2264 '+row[0]+'A';
+  blocks.push(makeBlock('neutral','Table Row','250.122',rowRange,isCu?'Cu EBJ: '+sizeLabel(row[1])+'  |  Al EBJ: '+sizeLabel(row[2]):'Al EBJ: '+sizeLabel(row[2])+'  |  Cu EBJ: '+sizeLabel(row[1])));
+  blocks.push(makeBlock('neutral','EBJ vs EGC','\u00a7250.102(D)','Load-side bonding jumper','The EBJ bonds equipment enclosures, raceways, and metal parts on the LOAD side of the service. It is sized the same as the EGC (Table 250.122) for the OCPD protecting that circuit or feeder. Common uses: motor disconnects, subpanel enclosures, conduit runs, and equipment that could become energized.'));
+  if(!isCu){
+    blocks.push(makeBlock('neutral','Aluminum EBJ Note','\u00a7250.102(D)','10 AWG or larger only','Aluminum bonding jumpers must be 10 AWG or larger and must not be in direct contact with masonry or earth.'));
+  }
+  document.getElementById('ebj-results-label').style.display='block';
+  document.getElementById('ebj-results').innerHTML=blocks.join('');
+  document.getElementById('ebj-disclaimer').style.display='block';
+  document.getElementById('ebj-note').textContent='NEC '+yr+' \u00a7250.102(D) \u00b7 Table 250.122 \u00b7 '+matLbl+' EBJ \u00b7 Design guidance only \u00b7 Verify with AHJ';
+  if(typeof jcResultsReady==='function')jcResultsReady('gnd','EBJ Sizing');
+}
+
+// ── Metal Water Pipe & Structural Steel Bonding ───────────────────────────────
+function resetBond(){
+  document.getElementById('bond-svc-size').value='3/0';
+  document.getElementById('bond-svc-mat').value='copper';
+  document.getElementById('bond-mat').value='copper';
+  document.getElementById('bond-target').value='water';
+  document.getElementById('bond-err').className='err-msg';
+  document.getElementById('bond-results').innerHTML='';
+  document.getElementById('bond-results-label').style.display='none';
+  document.getElementById('bond-disclaimer').style.display='none';
+  document.getElementById('bond-note').textContent='';
+}
+function calculateBond(){
+  var errEl=document.getElementById('bond-err');
+  errEl.className='err-msg';
+  var svcSz=document.getElementById('bond-svc-size').value;
+  var svcMat=document.getElementById('bond-svc-mat').value;
+  var bjMat=document.getElementById('bond-mat').value;
+  var target=document.getElementById('bond-target').value;
+  var yr=_codeYear||'2026';
+  var res=_sbjLookup(svcSz,svcMat,bjMat);
+  if(!res){errEl.innerHTML='Select a valid service conductor size.';errEl.className='err-msg show';return;}
+  var bjMatLbl=bjMat==='copper'?'Copper':'Aluminum / CCA';
+  var svcMatLbl=svcMat==='copper'?'Copper':'Aluminum / CCA';
+  var blocks=[];
+  if(target==='water'||target==='both'){
+    blocks.push(makeBlock('pass','Water Pipe Bonding Jumper','\u00a7250.104(A) Table 250.102(C)(1)',sizeLabel(res.size)+' '+bjMatLbl,'Service '+svcMatLbl+' '+sizeLabel(svcSz)+' \u2192 bonding jumper '+sizeLabel(res.size)+' '+bjMatLbl));
+    blocks.push(makeBlock('neutral','Water Pipe Bonding Rule','\u00a7250.104(A)','Required on all metal water pipe','Interior metal water piping must be bonded at the point where it enters the building or at the nearest accessible location. Bond to the service equipment enclosure, the grounded conductor at the service, the GEC, or the GEC itself. The jumper must be accessible after installation.'));
+  }
+  if(target==='structural'||target==='both'){
+    blocks.push(makeBlock('pass','Structural Metal Bonding Jumper','\u00a7250.104(C) Table 250.102(C)(1)',sizeLabel(res.size)+' '+bjMatLbl,'Service '+svcMatLbl+' '+sizeLabel(svcSz)+' \u2192 bonding jumper '+sizeLabel(res.size)+' '+bjMatLbl));
+    blocks.push(makeBlock('neutral','Structural Metal Rule','\u00a7250.104(C)','When likely to become energized','Structural metal that is interconnected to form a building frame must be bonded where it is likely to become energized. This is common in commercial and industrial buildings with steel framing near electrical equipment. Connect to the service grounded conductor, EGC, GEC, or grounding electrode.'));
+  }
+  if(target==='both'){
+    blocks.push(makeBlock('neutral','Both Targets','Same size applies',sizeLabel(res.size)+' '+bjMatLbl,'Water pipe and structural metal bonding jumpers are sized the same way \u2014 Table 250.102(C)(1) based on the service entrance conductor. A single run may serve both if it bonds each consecutively and the conductor is continuous or spliced with listed connectors.'));
+  }
+  blocks.push(makeBlock('neutral','Both Material Options','\u00a7250.104 Table 250.102(C)(1)','Cu: '+sizeLabel(res.cu)+'  |  Al: '+sizeLabel(res.al),'Minimum sizes for '+svcMatLbl+' service conductors'));
+  document.getElementById('bond-results-label').style.display='block';
+  document.getElementById('bond-results').innerHTML=blocks.join('');
+  document.getElementById('bond-disclaimer').style.display='block';
+  document.getElementById('bond-note').textContent='NEC '+yr+' \u00a7250.104 \u00b7 Table 250.102(C)(1) \u00b7 '+svcMatLbl+' service \u00b7 '+bjMatLbl+' jumper \u00b7 Design guidance only \u00b7 Verify with AHJ';
+  if(typeof jcResultsReady==='function')jcResultsReady('gnd','Bonding Jumper Sizing');
 }
 
 // ── GFCI / AFCI Lookup ───────────────────────────────────────────────────────
