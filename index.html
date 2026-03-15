@@ -243,6 +243,11 @@ body.light-mode .ev-preset-btn.active,body.light-mode .ev-preset-btn:hover{borde
 .svc-method-btn.active,.svc-method-btn:hover{border-color:#f0c020;color:#f0c020;background:rgba(240,192,32,.08);}
 body.light-mode .svc-method-btn{background:#f8fafc;border-color:#e2e8f0;color:#64748b;}
 body.light-mode .svc-method-btn.active,body.light-mode .svc-method-btn:hover{border-color:#d4a000;color:#b45309;background:rgba(240,192,32,.06);}
+.gnd-subtab-row{display:flex;gap:10px;padding:16px 16px 4px;}
+.gnd-subtab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:11px 8px;background:var(--surface);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;color:var(--sub);cursor:pointer;gap:2px;-webkit-tap-highlight-color:transparent;}
+.gnd-subtab-btn.active,.gnd-subtab-btn:hover{border-color:#d4a000;color:#b45309;background:rgba(240,192,32,.06);}
+.gnd-subtab-btn span{font-size:9px;font-weight:500;letter-spacing:.3px;color:var(--muted);}
+.gnd-subtab-btn.active span,.gnd-subtab-btn:hover span{color:#b45309;}
 .svc-ib{background:none;border:none;color:rgba(240,192,32,0.65);font-size:11px;font-weight:700;cursor:pointer;padding:0 0 0 4px;line-height:1;font-family:'Inter',sans-serif;vertical-align:middle;display:inline;}
 .svc-ib:hover{color:#f0c020;}
 .svc-info-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;}
@@ -1509,6 +1514,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-gfci" onclick="switchTab('gfci',this)">GFCI/AFCI</button>
     <button class="tab-btn" id="tab-btn-ev" onclick="switchTab('ev',this)">EV</button>
     <button class="tab-btn" id="tab-btn-svc" onclick="switchTab('svc',this)">Service</button>
+    <button class="tab-btn" id="tab-btn-gnd" onclick="switchTab('gnd',this)">Ground</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -4483,6 +4489,122 @@ if('serviceWorker' in navigator){
     <div class="code-note" id="svc-note"></div>
   </div>
 
+  <!-- ── GROUNDING TAB ── -->
+  <div class="tab-panel" id="tab-gnd">
+    <!-- Sub-tab row -->
+    <div class="gnd-subtab-row">
+      <button class="gnd-subtab-btn active" id="gnd-sub-egc" onclick="gndSetSub('egc',this)">EGC<span>Equipment Grounding</span></button>
+      <button class="gnd-subtab-btn" id="gnd-sub-gec" onclick="gndSetSub('gec',this)">GEC<span>Grounding Electrode</span></button>
+    </div>
+    <div id="gnd-egc-panel">
+      <div class="section-label">Equipment Grounding Conductor Sizing</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">OCPD Rating (Amps)</div>
+          <input class="fi" id="egc-ocpd" type="number" min="1" max="6000" placeholder="e.g. 20, 100, 200"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">EGC Material</div>
+          <div class="sel-wrap"><select class="fi" id="egc-mat">
+            <option value="copper" selected>Copper</option>
+            <option value="aluminum">Aluminum / CCA</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Conductor Upsized for VD?</div>
+          <div class="sel-wrap"><select class="fi" id="egc-vd">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes — upsized for voltage drop</option>
+          </select></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="err-msg" id="egc-err"></div>
+      <div class="btn-row">
+        <button class="btn btn-calc" onclick="calculateEGC()">Calculate</button>
+        <button class="btn btn-reset" onclick="resetEGC()">Reset</button>
+      </div>
+      <div class="section-label" id="egc-results-label" style="display:none;">Results</div>
+      <div class="results" id="egc-results"></div>
+      <div class="disclaimer" id="egc-disclaimer" style="display:none;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">EGC sized per NEC Table 250.122. The EGC must be increased in size when ungrounded conductors are increased from minimum size for voltage drop — increase EGC proportionally per §250.122(B). Conduit and metallic raceways may serve as EGC per §250.118. For design guidance only — verify with AHJ before installation.</div>
+      </div>
+      <div class="code-note" id="egc-note"></div>
+    </div>
+    <div id="gnd-gec-panel" style="display:none;">
+      <div class="section-label">Grounding Electrode Conductor Sizing</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Service Entrance Conductor Size</div>
+          <div class="sel-wrap"><select class="fi" id="gec-svc-size">
+            <optgroup label="AWG">
+              <option value="4">4 AWG</option>
+              <option value="3">3 AWG</option>
+              <option value="2">2 AWG</option>
+              <option value="1">1 AWG</option>
+              <option value="1/0">1/0 AWG</option>
+              <option value="2/0">2/0 AWG</option>
+              <option value="3/0" selected>3/0 AWG</option>
+              <option value="4/0">4/0 AWG</option>
+            </optgroup>
+            <optgroup label="kcmil">
+              <option value="250">250 kcmil</option>
+              <option value="300">300 kcmil</option>
+              <option value="350">350 kcmil</option>
+              <option value="400">400 kcmil</option>
+              <option value="500">500 kcmil</option>
+              <option value="600">600 kcmil</option>
+              <option value="750">750 kcmil</option>
+              <option value="1000">1000 kcmil</option>
+            </optgroup>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Service Conductor Material</div>
+          <div class="sel-wrap"><select class="fi" id="gec-svc-mat">
+            <option value="copper" selected>Copper</option>
+            <option value="aluminum">Aluminum / CCA</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">GEC Material</div>
+          <div class="sel-wrap"><select class="fi" id="gec-mat">
+            <option value="copper" selected>Copper</option>
+            <option value="aluminum">Aluminum / CCA</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Electrode Type</div>
+          <div class="sel-wrap"><select class="fi" id="gec-electrode">
+            <option value="system" selected>Electrode System / Multiple Electrodes</option>
+            <option value="concrete">Concrete-Encased Electrode</option>
+            <option value="rod">Rod, Pipe, or Plate Electrode</option>
+            <option value="ring">Ground Ring</option>
+          </select></div>
+        </div>
+        <div style="padding:0 14px 4px;">
+          <div style="font-size:9.5px;color:var(--muted);line-height:1.5;">
+            Electrode type affects the maximum GEC size that may be required per §250.66(A–C). Select the primary electrode connected to this GEC.
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="err-msg" id="gec-err"></div>
+      <div class="btn-row">
+        <button class="btn btn-calc" onclick="calculateGEC()">Calculate</button>
+        <button class="btn btn-reset" onclick="resetGEC()">Reset</button>
+      </div>
+      <div class="section-label" id="gec-results-label" style="display:none;">Results</div>
+      <div class="results" id="gec-results"></div>
+      <div class="disclaimer" id="gec-disclaimer" style="display:none;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">GEC sized per NEC Table 250.66 based on the largest service entrance conductor. Size caps apply per §250.66(A) for rod/pipe/plate electrodes (Cu max 6 AWG, Al max 4 AWG) and §250.66(B) for concrete-encased electrodes (Cu max 4 AWG). For parallel service conductors, use total equivalent cross-sectional area. For design guidance only — verify with AHJ.</div>
+      </div>
+      <div class="code-note" id="gec-note"></div>
+    </div>
+  </div>
+
   <div class="app-footer">
     <span style="font-family:'Roboto Mono',monospace; font-size:8px; letter-spacing:1px;">© 2026 Circuitmatic · circuitmatic.app · For reference only — verify with licensed electrician and local AHJ.</span>
   </div>
@@ -5142,6 +5264,11 @@ function setCodeYear(year){
   document.querySelectorAll('.opt-2026').forEach(function(o){o.style.display=year==='2026'?'':'none';});
   // Refresh GFCI/AFCI tab (guard: data arrays must be initialized first)
   if(typeof gfciRender==='function' && typeof _GFCI_DW!=='undefined' && _GFCI_DW && document.getElementById('gfci-dw-tbody')) gfciRender();
+  // Auto-refresh calculators that depend on code year
+  if(document.getElementById('ev-results-label')&&document.getElementById('ev-results-label').style.display!=='none')calculateEV();
+  if(document.getElementById('svc-results-label')&&document.getElementById('svc-results-label').style.display!=='')calculateSVC();
+  if(document.getElementById('egc-results-label')&&document.getElementById('egc-results-label').style.display!=='none')calculateEGC();
+  if(document.getElementById('gec-results-label')&&document.getElementById('gec-results-label').style.display!=='none')calculateGEC();
   // Update quiz title immediately regardless of which tab is active
   var qzTitleEl=document.getElementById('qz-title');
   if(qzTitleEl) qzTitleEl.textContent='⚡ CODE '+year+' — EXAM PREP';
@@ -9805,6 +9932,159 @@ function calculateSVC(){
   var mLabel=_svcMethod==='std'?'Standard Method':'Optional Method';
   document.getElementById('svc-note').textContent=mLabel+' · NEC '+yr+(is2026?' Art.120':' Art.220')+' · 240V single-phase · '+vaPerSqFt+' VA/sq ft general lighting · Values in volt-amperes';
   if(typeof jcResultsReady==='function') jcResultsReady('svc','Service Sizing');
+}
+
+// ── Grounding Calculators (EGC / GEC) ──────────────────────────────────────────────
+
+// Table 250.122 — [maxOCPD, Cu AWG, Al AWG]
+var _EGC_TBL=[
+  [15,'14','12'],[20,'12','10'],[60,'10','8'],[100,'8','6'],
+  [200,'6','4'],[300,'4','2'],[400,'3','1'],[500,'2','1/0'],
+  [600,'1','2/0'],[800,'1/0','3/0'],[1000,'2/0','4/0'],
+  [1200,'3/0','250'],[1600,'4/0','350'],[2000,'250','400'],
+  [2500,'350','600'],[3000,'400','600'],[4000,'500','800'],
+  [5000,'700','1200'],[6000,'800','1200']
+];
+
+// Wire area index for Table 250.66 comparisons
+var _WIDX={'14':1,'12':2,'10':3,'8':4,'6':5,'4':6,'3':7,'2':8,'1':9,'1/0':10,'2/0':11,'3/0':12,'4/0':13,'250':14,'300':15,'350':16,'400':17,'500':18,'600':19,'700':20,'750':21,'800':22,'900':23,'1000':24};
+
+// Table 250.66 rows for COPPER service conductors: [maxIdx, gecCu, gecAl]
+var _GEC_CU=[[8,'8','6'],[10,'6','4'],[12,'4','2'],[16,'2','1/0'],[19,'1/0','3/0'],[24,'2/0','4/0'],[999,'3/0','250']];
+// Table 250.66 rows for ALUMINUM service conductors: [maxIdx, gecCu, gecAl]
+var _GEC_AL=[[10,'8','6'],[12,'6','4'],[14,'4','2'],[18,'2','1/0'],[23,'1/0','3/0'],[24,'2/0','4/0'],[999,'3/0','250']];
+
+function gndSetSub(sub,btn){
+  document.querySelectorAll('.gnd-subtab-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  document.getElementById('gnd-egc-panel').style.display=sub==='egc'?'':'none';
+  document.getElementById('gnd-gec-panel').style.display=sub==='gec'?'':'none';
+}
+
+// ── EGC ──────────────────────────────────────────────────────────────────────
+function resetEGC(){
+  document.getElementById('egc-ocpd').value='';
+  document.getElementById('egc-mat').value='copper';
+  document.getElementById('egc-vd').value='no';
+  document.getElementById('egc-err').className='err-msg';
+  document.getElementById('egc-results').innerHTML='';
+  document.getElementById('egc-results-label').style.display='none';
+  document.getElementById('egc-disclaimer').style.display='none';
+  document.getElementById('egc-note').textContent='';
+}
+function calculateEGC(){
+  var errEl=document.getElementById('egc-err');
+  errEl.className='err-msg';
+  var ocpd=parseFloat(document.getElementById('egc-ocpd').value);
+  var mat=document.getElementById('egc-mat').value;
+  var vd=document.getElementById('egc-vd').value;
+  if(!ocpd||ocpd<=0||ocpd>6000){errEl.innerHTML='Enter a valid OCPD rating (1–6000A).';errEl.className='err-msg show';return;}
+  // Find table row: first row where maxOCPD >= ocpd
+  var row=null;
+  for(var i=0;i<_EGC_TBL.length;i++){if(_EGC_TBL[i][0]>=ocpd){row=_EGC_TBL[i];break;}}
+  if(!row){errEl.innerHTML='OCPD rating exceeds table maximum (6000A). Consult a licensed engineer.';errEl.className='err-msg show';return;}
+  var isCu=mat==='copper';
+  var egcSize=isCu?row[1]:row[2];
+  var matLabel=isCu?'Copper':'Aluminum / CCA';
+  var yr=_codeYear||'2026';
+  var blocks=[];
+  blocks.push(makeBlock('pass','Min. EGC Size','§250.122 Table',sizeLabel(egcSize)+' '+matLabel,'Based on OCPD ≤ '+row[0]+'A — '+ocpd+'A breaker/fuse'));
+  // Table row context
+  var prevRow=row[0]>15?_EGC_TBL[_EGC_TBL.indexOf(row)-1]:null;
+  var rowRange=prevRow?'OCPD > '+prevRow[0]+'A – ≤ '+row[0]+'A':'OCPD ≤ '+row[0]+'A';
+  blocks.push(makeBlock('neutral','Table Row','250.122',rowRange,isCu?'Cu: '+sizeLabel(row[1])+'  |  Al: '+sizeLabel(row[2]):'Al: '+sizeLabel(row[2])+'  |  Cu: '+sizeLabel(row[1])));
+  // VD upsize note
+  if(vd==='yes'){
+    blocks.push(makeBlock('warn','Voltage Drop Upsize Required','§250.122(B)',
+      'Proportional increase needed',
+      'When ungrounded conductors are increased for voltage drop, the EGC must be increased proportionally: EGC area / conductor area = upsized EGC area / upsized conductor area.'));
+  }
+  // Al restriction
+  if(!isCu){
+    blocks.push(makeBlock('neutral','Aluminum EGC Note','§250.122(A)','10 AWG or larger only','Aluminum EGCs must be 10 AWG or larger and must not be in contact with masonry, earth, or where subject to corrosive conditions.'));
+  }
+  document.getElementById('egc-results-label').style.display='block';
+  document.getElementById('egc-results').innerHTML=blocks.join('');
+  document.getElementById('egc-disclaimer').style.display='block';
+  document.getElementById('egc-note').textContent='NEC '+yr+' §250.122 Table 250.122 · '+matLabel+' · Design guidance only · Verify with AHJ';
+  if(typeof jcResultsReady==='function')jcResultsReady('gnd','EGC Sizing');
+}
+
+// ── GEC ──────────────────────────────────────────────────────────────────────
+function resetGEC(){
+  document.getElementById('gec-svc-size').value='3/0';
+  document.getElementById('gec-svc-mat').value='copper';
+  document.getElementById('gec-mat').value='copper';
+  document.getElementById('gec-electrode').value='system';
+  document.getElementById('gec-err').className='err-msg';
+  document.getElementById('gec-results').innerHTML='';
+  document.getElementById('gec-results-label').style.display='none';
+  document.getElementById('gec-disclaimer').style.display='none';
+  document.getElementById('gec-note').textContent='';
+}
+function calculateGEC(){
+  var errEl=document.getElementById('gec-err');
+  errEl.className='err-msg';
+  var svcSize=document.getElementById('gec-svc-size').value;
+  var svcMat=document.getElementById('gec-svc-mat').value;
+  var gecMat=document.getElementById('gec-mat').value;
+  var electrode=document.getElementById('gec-electrode').value;
+  var yr=_codeYear||'2026';
+  var idx=_WIDX[svcSize];
+  if(!idx){errEl.innerHTML='Select a valid service conductor size.';errEl.className='err-msg show';return;}
+  // Look up GEC sizes from appropriate table
+  var tbl=svcMat==='copper'?_GEC_CU:_GEC_AL;
+  var gecCu=null,gecAl=null;
+  for(var i=0;i<tbl.length;i++){if(idx<=tbl[i][0]){gecCu=tbl[i][1];gecAl=tbl[i][2];break;}}
+  if(!gecCu){gecCu='3/0';gecAl='250';}
+  var isCuGec=gecMat==='copper';
+  var rawSize=isCuGec?gecCu:gecAl;
+  var gecMatLabel=isCuGec?'Copper':'Aluminum / CCA';
+  var svcMatLabel=svcMat==='copper'?'Copper':'Aluminum / CCA';
+  // Size cap based on electrode type
+  var capSize=null,capRef='',capNote='';
+  if(electrode==='rod'){
+    capSize=isCuGec?'6':'4';
+    capRef='§250.66(A)';
+    capNote='Rod, pipe, or plate electrode: GEC need not be larger than '+(isCuGec?'6':'4')+' AWG '+gecMatLabel;
+  }else if(electrode==='concrete'){
+    if(isCuGec){capSize='4';capRef='§250.66(B)';capNote='Concrete-encased electrode: copper GEC need not be larger than 4 AWG';}
+  }else if(electrode==='ring'){
+    capNote='Ground ring: GEC must be at least as large as the ground ring conductor (§250.66(C)). Size shown is the Table 250.66 minimum — match the ring if larger.';
+  }
+  // Apply cap: if cap size is smaller (larger AWG number = smaller wire), use cap
+  var finalSize=rawSize;
+  var capped=false;
+  if(capSize){
+    var rawIdx=_WIDX[rawSize]||0;
+    var capIdx=_WIDX[capSize]||0;
+    if(rawIdx>capIdx){finalSize=capSize;capped=true;}
+  }
+  var blocks=[];
+  blocks.push(makeBlock('pass','Required GEC Size','Table 250.66',sizeLabel(finalSize)+' '+gecMatLabel,
+    capped?'Table requires '+sizeLabel(rawSize)+' but capped at '+sizeLabel(capSize)+' '+capRef:'Service '+svcMatLabel+' '+sizeLabel(svcSize)+' → GEC '+sizeLabel(finalSize)+' '+gecMatLabel));
+  // Show both material options for reference
+  blocks.push(makeBlock('neutral','Table 250.66 Reference',svcMat==='copper'?'Cu Service':'Al Service',
+    'Cu GEC: '+sizeLabel(gecCu)+'  |  Al GEC: '+sizeLabel(gecAl),
+    'Minimum sizes per Table 250.66 before electrode caps'));
+  if(capped){
+    blocks.push(makeBlock('ok','Electrode Cap Applied',capRef,sizeLabel(capSize)+' max',capNote));
+  }else if(capNote){
+    blocks.push(makeBlock('neutral','Electrode Note',capRef||'§250.66(C)',sizeLabel(finalSize),capNote));
+  }
+  // Always show electrode-specific note
+  if(electrode==='system'){
+    blocks.push(makeBlock('neutral','Electrode System','§250.50',sizeLabel(finalSize)+' minimum','No size cap applies when multiple electrodes are bonded together as a system — Table 250.66 governs.'));
+  }
+  // Al GEC restriction
+  if(!isCuGec){
+    blocks.push(makeBlock('neutral','Aluminum GEC Note','§250.64(A)','Must not contact masonry or earth','Aluminum GECs must not be used where in direct contact with masonry or the earth, or where subject to corrosive conditions.'));
+  }
+  document.getElementById('gec-results-label').style.display='block';
+  document.getElementById('gec-results').innerHTML=blocks.join('');
+  document.getElementById('gec-disclaimer').style.display='block';
+  document.getElementById('gec-note').textContent='NEC '+yr+' §250.66 Table 250.66 · '+svcMatLabel+' service · '+gecMatLabel+' GEC · Design guidance only · Verify with AHJ';
+  if(typeof jcResultsReady==='function')jcResultsReady('gnd','GEC Sizing');
 }
 
 // ── GFCI / AFCI Lookup ───────────────────────────────────────────────────────
