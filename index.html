@@ -1958,6 +1958,7 @@ if('serviceWorker' in navigator){
           <option value="fill">Conduit Fill (Power)</option>
           <option value="data">Conduit Fill (Data)</option>
           <option value="bend">Conduit Bends</option>
+          <option value="run">Run Planner</option>
         </select></div>
       </div>
     </div>
@@ -2404,6 +2405,73 @@ if('serviceWorker' in navigator){
         <div class="disclaimer-text">Calculations based on standard bender shoe radius values and industry-standard multipliers. Gain values use standard deduct tables. Field conditions, bender brand, and conduit type may affect results — always verify with bender manufacturer tables. Shrink constants: 10°=1/16"/in, 22°=3/16"/in, 30°=1/4"/in, 45°=3/8"/in, 60°=1/2"/in. For layout guidance only.</div>
       </div>
     </div>
+
+    <!-- ── RUN PLANNER MODE ── -->
+    <div id="cf-run-section" style="display:none;">
+      <div class="section-label">Conduit</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Conduit Type</div>
+          <div class="sel-wrap"><select class="fi" id="crp-type">
+            <option value="EMT">EMT</option>
+            <option value="RMC">RMC</option>
+            <option value="IMC">IMC</option>
+            <option value="PVC">PVC</option>
+            <option value="ENT">ENT (Smurf)</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Trade Size</div>
+          <div class="sel-wrap"><select class="fi" id="crp-size">
+            <option value="0.5">½"</option>
+            <option value="0.75">¾"</option>
+            <option value="1" selected>1"</option>
+            <option value="1.25">1¼"</option>
+            <option value="1.5">1½"</option>
+            <option value="2">2"</option>
+            <option value="2.5">2½"</option>
+            <option value="3">3"</option>
+            <option value="4">4"</option>
+          </select></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Add Segments</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Straight (ft)</div>
+          <input type="number" class="fi" id="crp-ft" min="0.5" max="9999" step="0.5" value="10" placeholder="ft">
+        </div>
+        <div style="padding:0 14px 8px;">
+          <button class="btn btn-reset" style="width:100%;font-size:11px;" onclick="crpAddStraight()">+ Add Straight Run</button>
+        </div>
+        <div class="field-row" style="margin-top:6px;">
+          <div class="field-label">Bend</div>
+          <div class="sel-wrap"><select class="fi" id="crp-deg">
+            <option value="22.5">22.5°</option>
+            <option value="30">30°</option>
+            <option value="45">45°</option>
+            <option value="60">60°</option>
+            <option value="90" selected>90°</option>
+          </select></div>
+        </div>
+        <div style="padding:0 14px 8px;">
+          <button class="btn btn-reset" style="width:100%;font-size:11px;" onclick="crpAddBend()">+ Add Bend</button>
+        </div>
+        <div style="padding:0 14px 8px;">
+          <button class="btn btn-reset" style="width:100%;font-size:11px;border-color:var(--gold);color:var(--gold);" onclick="crpAddPullPoint()">&#8627; Mark Pull Point</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Run</div>
+      <div id="crp-list" style="padding:0 14px;min-height:40px;font-size:13px;"></div>
+      <div id="crp-summary" style="padding:8px 14px 4px;"></div>
+      <div style="padding:4px 14px 10px;">
+        <button class="btn btn-reset" style="font-size:11px;" onclick="crpClear()">Clear All</button>
+      </div>
+      <div class="code-note" id="crp-note" style="font-size:11px;color:var(--text-dim);padding:4px 14px 8px;">Max 360° of bends between pull points — §358.26 (EMT), §344.26 (RMC), §352.26 (PVC). Mark a pull point to reset the counter for each section.</div>
+    </div>
+
 
   </div>
   <!-- ══════════════════════════════════════════════
@@ -7086,7 +7154,8 @@ var _i18n = {
       'cf-mode': {
         'Conduit Fill (Power)': 'Llenado de Conduit (Eléctrico)',
         'Conduit Fill (Data)': 'Llenado de Conduit (Datos)',
-        'Conduit Bends': 'Doblado de Conduit'
+        'Conduit Bends': 'Doblado de Conduit',
+        'Run Planner': 'Planificador de Tramo'
       },
       'cf-conduit': {
         'EMT — Art. 358': 'EMT — Art. 358',
@@ -9820,12 +9889,118 @@ function resetCF(){
   cfAddRow();
 }
 
+
+// ── Conduit Run Planner ───────────────────────────────────────────────────────
+var _crp_segs = [];  // {type:'straight'|'bend'|'pull', value, label}
+
+function crpAddStraight(){
+  var ft=parseFloat(document.getElementById('crp-ft').value);
+  if(!ft||ft<=0) return;
+  _crp_segs.push({type:'straight', value:ft, label:ft+' ft straight'});
+  crpRender();
+}
+function crpAddBend(){
+  var deg=parseFloat(document.getElementById('crp-deg').value);
+  _crp_segs.push({type:'bend', value:deg, label:deg+'° bend'});
+  crpRender();
+}
+function crpAddPullPoint(){
+  _crp_segs.push({type:'pull', value:0, label:'Pull Point'});
+  crpRender();
+}
+function crpRemove(i){
+  _crp_segs.splice(i,1);
+  crpRender();
+}
+function crpClear(){
+  _crp_segs=[];
+  crpRender();
+}
+
+function crpRender(){
+  var list=document.getElementById('crp-list');
+  var sumEl=document.getElementById('crp-summary');
+  if(!_crp_segs.length){
+    list.innerHTML='<div style="color:var(--text-dim);padding:8px 0;font-size:12px;">No segments yet — add straight runs, bends, or pull points above.</div>';
+    sumEl.innerHTML='';
+    return;
+  }
+
+  // Walk segments tracking sections (split at pull points)
+  var sections=[]; var cur={bends:0,ft:0,segs:[]};
+  for(var i=0;i<_crp_segs.length;i++){
+    var s=_crp_segs[i];
+    if(s.type==='pull'){
+      sections.push(cur);
+      cur={bends:0,ft:0,segs:[]};
+    } else {
+      if(s.type==='bend') cur.bends+=s.value;
+      if(s.type==='straight') cur.ft+=s.value;
+      cur.segs.push(i);
+    }
+  }
+  sections.push(cur);
+
+  // Build segment list HTML
+  var runBends=0; var sectionIdx=0;
+  var rows='';
+  for(var i=0;i<_crp_segs.length;i++){
+    var s=_crp_segs[i];
+    if(s.type==='pull'){
+      runBends=0; sectionIdx++;
+      rows+='<div style="display:flex;align-items:center;padding:5px 0;border-top:1px dashed var(--gold);border-bottom:1px dashed var(--gold);margin:4px 0;">'
+        +'<span style="color:var(--gold);font-size:11px;flex:1;">&#8627; PULL POINT — bend counter reset</span>'
+        +'<button class="btn btn-reset" style="padding:1px 6px;font-size:10px;" onclick="crpRemove('+i+')">✕</button></div>';
+    } else {
+      if(s.type==='bend') runBends+=s.value;
+      var icon=s.type==='bend'?'↪':'→';
+      var color=s.type==='bend'?(runBends>360?'var(--danger)':runBends>=270?'#f5a623':'var(--sub)'):'var(--sub)';
+      var badge=s.type==='bend'?(' <span style="color:'+color+';font-size:10px;">['+runBends+'° total]</span>'):'';
+      rows+='<div style="display:flex;align-items:center;padding:3px 0;border-bottom:1px solid var(--border-faint,#2a2a2a);">'
+        +'<span style="font-size:15px;margin-right:8px;color:var(--sub);">'+icon+'</span>'
+        +'<span style="flex:1;font-size:13px;">'+s.label+badge+'</span>'
+        +'<button class="btn btn-reset" style="padding:1px 6px;font-size:10px;" onclick="crpRemove('+i+')">✕</button></div>';
+    }
+  }
+  list.innerHTML=rows;
+
+  // Overall totals
+  var totalFt=0, totalBends=0;
+  for(var k=0;k<_crp_segs.length;k++){
+    if(_crp_segs[k].type==='straight') totalFt+=_crp_segs[k].value;
+    if(_crp_segs[k].type==='bend') totalBends+=_crp_segs[k].value;
+  }
+
+  // Check any section over 360°
+  var overLimit=sections.some(function(sec){return sec.bends>360;});
+  var nearLimit=sections.some(function(sec){return sec.bends>=270&&sec.bends<=360;});
+  var statusColor=overLimit?'var(--danger)':nearLimit?'#f5a623':'var(--success,#4caf50)';
+  var statusMsg=overLimit?'&#x2717; Over 360° in one section — pull point required'
+    :nearLimit?'&#x26A0; Approaching 360° — consider a pull point'
+    :'&#x2713; All sections within 360° limit';
+
+  var sectionRows=sections.filter(function(s){return s.segs.length||s.bends;}).map(function(s,i){
+    var c=s.bends>360?'var(--danger)':s.bends>=270?'#f5a623':'inherit';
+    return '<tr><td style="padding:2px 6px;">Section '+(i+1)+'</td><td style="padding:2px 6px;text-align:right;">'+s.ft.toFixed(1)+' ft</td><td style="padding:2px 6px;text-align:right;color:'+c+';">'+s.bends+'°</td></tr>';
+  }).join('');
+
+  sumEl.innerHTML='<div style="background:var(--card-bg,#1e1e1e);border-radius:8px;padding:10px;margin-top:4px;">'
+    +'<div style="font-size:12px;font-weight:600;color:'+statusColor+';margin-bottom:6px;">'+statusMsg+'</div>'
+    +(sections.length>1?'<table style="width:100%;font-size:12px;margin-bottom:8px;"><thead><tr style="color:var(--sub);"><th style="padding:2px 6px;text-align:left;">Section</th><th style="padding:2px 6px;text-align:right;">Straight</th><th style="padding:2px 6px;text-align:right;">Bends</th></tr></thead><tbody>'+sectionRows+'</tbody></table>':'')
+    +'<div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12px;">'
+    +'<span><b>Total straight:</b> '+totalFt.toFixed(1)+' ft</span>'
+    +'<span><b>Total bends:</b> '+totalBends+'°</span>'
+    +'<span><b>Sections:</b> '+sections.length+'</span>'
+    +'</div></div>';
+}
+
 // ── Conduit Mode Switch ───────────────────────────────────────────────────────
 function onCFModeChange(){
   var mode=document.getElementById('cf-mode').value;
   document.getElementById('cf-fill-section').style.display=mode==='fill'?'block':'none';
   document.getElementById('cf-data-section').style.display=mode==='data'?'block':'none';
   document.getElementById('cf-bend-section').style.display=mode==='bend'?'block':'none';
+  document.getElementById('cf-run-section').style.display=mode==='run'?'block':'none';
 }
 
 // ── Data Conduit Fill ─────────────────────────────────────────────────────────
