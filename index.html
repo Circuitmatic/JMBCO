@@ -615,7 +615,23 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   .disclaimer-text { font-size:12px; color:var(--muted); line-height:1.6; font-family:'Inter',sans-serif; }
   .code-note { padding:8px 20px 16px; font-family:'Roboto Mono',monospace; font-size:9px; color:var(--muted); line-height:1.4; text-align:center; }
 
-  /* ── Fraction Calculator ── */
+  /* ── Raceway Derating Tab ── */
+.dr-wrap{padding:12px 14px 24px;max-width:560px;margin:0 auto;}
+.dr-ccc-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.dr-ccc-inp{width:90px;background:var(--field);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:1rem;font-family:'Roboto Mono',monospace;font-weight:700;text-align:center;outline:none;}
+.dr-ccc-inp:focus{border-color:#f0c020;}
+.dr-factor-badge{display:inline-flex;align-items:center;justify-content:center;padding:6px 16px;border-radius:8px;font-size:1.1rem;font-weight:900;font-family:'Roboto Mono',monospace;background:rgba(240,192,32,.12);border:1px solid rgba(240,192,32,.35);color:#f0c020;min-width:72px;}
+.dr-section{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);margin:14px 0 6px;padding:5px 10px;background:rgba(240,192,32,.07);border-left:3px solid #f0c020;border-radius:0 6px 6px 0;}
+.dr-table{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:0.8rem;}
+.dr-table th{font-size:0.66rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--sub);padding:5px 8px;border-bottom:1px solid var(--border);text-align:left;}
+.dr-table td{padding:6px 8px;border-bottom:1px solid var(--border);color:var(--text);}
+.dr-table tr.dr-active td{background:rgba(240,192,32,.1);color:#f0c020;font-weight:700;}
+.dr-table tr:last-child td{border-bottom:none;}
+.dr-note{font-size:0.72rem;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-top:10px;line-height:1.6;}
+.dr-note strong{color:var(--text);}
+body.light-mode .dr-ccc-inp{background:#f8fafc;border-color:#e2e8f0;}
+body.light-mode .dr-note{background:#f8fafc;border-color:#e2e8f0;}
+/* ── Fraction Calculator ── */
   .fr-display { padding:8px 16px 10px; background:var(--card); }
   .fr-expr { font-family:'Roboto Mono',monospace; font-size:14px; color:var(--muted); text-align:right; min-height:18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .fr-main { font-family:'Inter',sans-serif; font-size:34px; font-weight:700; color:var(--text); text-align:right; line-height:1.05; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; letter-spacing:-1px; }
@@ -1512,6 +1528,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-cf" onclick="switchTab('cf',this)">Conduit</button>
     <button class="tab-btn" id="tab-btn-bf" onclick="switchTab('bf',this)">Box Fill</button>
     <button class="tab-btn" id="tab-btn-mc" onclick="switchTab('mc',this)">Motor</button>
+    <button class="tab-btn" id="tab-btn-dr" onclick="switchTab('dr',this)">Derate</button>
     <button class="tab-btn" id="tab-btn-fr" onclick="switchTab('fr',this)">Fracs</button>
     <button class="tab-btn" id="tab-btn-dip" onclick="switchTab('dip',this)">Dip SW</button>
     <button class="tab-btn" id="tab-btn-wc" onclick="switchTab('wc',this)">Colors</button>
@@ -2481,6 +2498,84 @@ if('serviceWorker' in navigator){
     </div>
     <div class="code-note" id="mc-note"></div>
   </div>
+  <!-- ══════════════════════════════════════════════
+       RACEWAY DERATING TAB
+  ══════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-dr">
+    <div class="dr-wrap">
+      <div class="section-label">Raceway Derating — Quick Check</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Current-Carrying Conductors <button class="svc-ib" onclick="svcInfo('dr_ccc')">&#9432;</button></div>
+          <input class="fi" id="dr-ccc" type="number" min="1" max="100" placeholder="e.g. 9" oninput="drLiveUpdate()"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Wire Size (optional — for ampacity)</div>
+          <div class="sel-wrap"><select class="fi" id="dr-size" onchange="drLiveUpdate()">
+            <option value="">— Skip (factor only) —</option>
+          <option value="14">14 AWG</option>
+          <option value="12">12 AWG</option>
+          <option value="10">10 AWG</option>
+          <option value="8">8 AWG</option>
+          <option value="6">6 AWG</option>
+          <option value="4">4 AWG</option>
+          <option value="3">3 AWG</option>
+          <option value="2">2 AWG</option>
+          <option value="1">1 AWG</option>
+          <option value="1/0">1/0 AWG</option>
+          <option value="2/0">2/0 AWG</option>
+          <option value="3/0">3/0 AWG</option>
+          <option value="4/0">4/0 AWG</option>
+          <option value="250">250 AWG kcmil</option>
+          <option value="300">300 AWG kcmil</option>
+          <option value="350">350 AWG kcmil</option>
+          <option value="400">400 AWG kcmil</option>
+          <option value="500">500 AWG kcmil</option>
+          <option value="600">600 AWG kcmil</option>
+          <option value="700">700 AWG kcmil</option>
+          <option value="750">750 AWG kcmil</option>
+          <option value="1000">1000 AWG kcmil</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Material</div>
+          <div class="sel-wrap"><select class="fi" id="dr-mat" onchange="drLiveUpdate()">
+            <option value="copper">Copper</option>
+            <option value="aluminum">Aluminum</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Temperature Rating</div>
+          <div class="sel-wrap"><select class="fi" id="dr-temp" onchange="drLiveUpdate()">
+            <option value="1">75°C — THWN / XHHW (most common)</option>
+            <option value="2">90°C — THHN / XHHW-2</option>
+            <option value="0">60°C — TW / UF</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Ambient Temp (optional) <button class="svc-ib" onclick="svcInfo('dr_amb')">&#9432;</button></div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input class="fi" id="dr-amb" type="number" min="50" max="185" placeholder="°F, default 86°F" style="flex:1;" oninput="drLiveUpdate()"/>
+            <span style="font-size:0.75rem;color:var(--muted);white-space:nowrap;">86°F = 30°C base</span>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="err-msg" id="dr-err"></div>
+      <div class="btn-row">
+        <button class="btn btn-calc" onclick="calculateDR()">Calculate</button>
+        <button class="btn btn-reset" onclick="resetDR()">Reset</button>
+      </div>
+      <div class="section-label" id="dr-results-label" style="display:none;">Results</div>
+      <div class="results" id="dr-results"></div>
+      <div class="disclaimer" id="dr-disclaimer" style="display:none;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">Adjustment factors per NEC §310.15(C)(1) (2023/2026) / §310.15(B)(3)(a) (2020). Count only current-carrying conductors (CCCs) — neutrals carrying only unbalanced current (shared neutral on multi-wire circuits) may not count. EGCs never count. Ambient correction per §310.15(C)(2) using correction formula. Verify with AHJ. Design guidance only.</div>
+      </div>
+      <div class="code-note" id="dr-note"></div>
+    </div>
+  </div>
+
   <!-- ══════════════════════════════════════════════
        TAB 6 — FRACTION CALCULATOR
   ══════════════════════════════════════════════ -->
@@ -10727,7 +10822,27 @@ var _SVC_INFO={
   ebj_what:{t:'Equipment Bonding Jumper (EBJ) — What It Is',b:'The Equipment Bonding Jumper bonds equipment enclosures, raceways, conduit, and metallic parts on the LOAD SIDE of the service disconnect back to the EGC system.\n\nSized the same as the EGC: Table 250.122 based on the OCPD protecting the circuit or feeder.\n\nCommon uses:\n• Motor disconnects and motor frames\n• Panelboard and subpanel enclosures\n• Metal conduit and raceway runs to equipment\n• Large appliances and HVAC equipment\n• Metal wireways, gutters, and cable trays\n\nEBJ vs EGC: The EGC runs inside the raceway alongside the circuit conductors and handles fault current continuously. The EBJ is a supplemental connection that bonds the enclosure or equipment itself. In many installations the EGC also serves as the EBJ — but for parallel conductors in a single raceway or equipment with multiple feeds, a separate EBJ may be required.',r:'NEC §250.102(D)'},
   bond_what:{t:'Metal Water Pipe &amp; Structural Steel Bonding',b:'NEC requires certain metal systems in buildings to be bonded to the electrical grounding system to prevent dangerous voltage differences if a fault occurs.\n\n► Interior Metal Water Piping (§250.104(A))\nRequired on ALL buildings with metal water pipe. The bonding jumper connects the metal water piping system to the service equipment enclosure, grounded service conductor, GEC, or grounding electrode. Must be bonded at the point where the water pipe enters the building or at the nearest accessible location inside. Why: If a live wire contacts metal water pipe anywhere in the building, bonding ensures the fault current returns through the electrical system (clearing the breaker) rather than through a person touching a faucet.\n\n► Structural Metal Framing (§250.104(C))\nRequired when structural steel is interconnected as a building frame AND is likely to become energized. Most common in commercial and industrial steel-frame buildings where electrical equipment is mounted on or near the steel. The bonding jumper connects the steel frame to the service grounded conductor, EGC, GEC, or grounding electrode at the building.\n\nBoth are sized per Table 250.102(C)(1) based on the service entrance conductors — the same table used for GEC and SBJ sizing.',r:'NEC §250.104(A)(C)'},
   bond_target:{t:'Bonding Target — Water Pipe vs Structural Steel',b:'Interior Metal Water Piping: Select this for the bonding jumper that connects the metal water supply pipe to the grounding system. Required on virtually every residential, commercial, and industrial building that has copper, galvanized, or other metal water pipe. Plastic (PVC, PEX) water piping does not require this bond.\n\nStructural Metal: Select this for the bonding jumper that ties a steel building frame or interconnected structural metal to the grounding system. More common in commercial and industrial construction. Not typically required in wood-frame residences.\n\nBoth: Select this if you need bonding jumpers for both in the same installation. Both are sized identically from Table 250.102(C)(1) — the calculator will show a result card for each.',r:'NEC §250.104'},
-  xfmr_voltage:{t:'Transformer Voltage — What to Enter',b:'Always enter the line-to-line voltage for 3-phase transformers and line-to-neutral (or full secondary) voltage for 1-phase.\n\nCommon primary voltages:\n• 480V — most common in commercial/industrial 3-phase services\n• 208V — when fed from a 208Y/120 distribution system\n• 240V — common for 1-phase services\n• 4,160V or 12,470V — medium-voltage primary feeds from utility\n\nCommon secondary voltages:\n• 208V (3-phase) — standard distribution in commercial buildings (208Y/120V system)\n• 480V (3-phase) — power distribution to large equipment\n• 120V or 240V (1-phase) — residential and light commercial\n• 277V — lighting transformers on 480V systems\n\nNote: For a 208Y/120V system, enter 208V (the line-to-line value). The 120V line-to-neutral is used for branch circuit calculations, not transformer sizing.',r:'NEC §450 / IEEE C57'},
+  dr_ccc:{t:'Current-Carrying Conductors',b:'Count only conductors that carry load current:
+
+✓ Count: Ungrounded (hot) conductors, grounded conductors (neutrals) that carry unbalanced current
+
+✗ Do NOT count: Equipment Grounding Conductors (EGCs / green/bare), neutrals of balanced 3-phase 4-wire circuits where the neutral carries only harmonic currents
+
+⚠ Exception: For circuits with significant non-linear loads (VFDs, computers, LEDs), the neutral may count even on a 3-phase 4-wire system.
+
+Example: 3 circuits of 12/2 NM cable in a conduit = 6 CCCs (3 hots + 3 neutrals). EGCs do not count.',r:'NEC §310.15(C)(1)'},
+  dr_amb:{t:'Ambient Temperature',b:'The ambient temperature correction applies when the surrounding air temperature differs from the standard 30°C (86°F) baseline used in NEC Table 310.16.
+
+Common situations:
+• Attic in summer: 120–140°F (49–60°C) — major derating
+• Equipment room: 95–105°F (35–41°C) — moderate derating
+• Outdoor conduit in shade: 90–100°F (32–38°C) — minor derating
+• Underground in thermal insulation: can exceed 140°F
+
+Correction formula: CF = √((T_rating − T_ambient) ÷ (T_rating − 30))
+
+Leave blank to skip ambient correction (assumes 86°F / 30°C standard).',r:'NEC §310.15(C)(2) / Table 310.15(C)(1)'},
+    xfmr_voltage:{t:'Transformer Voltage — What to Enter',b:'Always enter the line-to-line voltage for 3-phase transformers and line-to-neutral (or full secondary) voltage for 1-phase.\n\nCommon primary voltages:\n• 480V — most common in commercial/industrial 3-phase services\n• 208V — when fed from a 208Y/120 distribution system\n• 240V — common for 1-phase services\n• 4,160V or 12,470V — medium-voltage primary feeds from utility\n\nCommon secondary voltages:\n• 208V (3-phase) — standard distribution in commercial buildings (208Y/120V system)\n• 480V (3-phase) — power distribution to large equipment\n• 120V or 240V (1-phase) — residential and light commercial\n• 277V — lighting transformers on 480V systems\n\nNote: For a 208Y/120V system, enter 208V (the line-to-line value). The 120V line-to-neutral is used for branch circuit calculations, not transformer sizing.',r:'NEC §450 / IEEE C57'},
   xfmr_install:{t:'General vs. Supervised Installation',b:'This affects the maximum allowed primary overcurrent device size per Table 450.3(B).\n\n► General (Unsupervised) — the default for most installations:\nThe transformer is accessible to unqualified persons or in a location without continuous qualified supervision. Primary-only OCPD is limited to 125% of primary FLA (next standard size up). With secondary OCPD, the primary can go up to 250%.\n\n► Supervised Installation:\nThe transformer is in a locked electrical room, restricted access vault, or location accessible only to qualified electricians with continuous or regular monitoring. The primary OCPD can be sized up to 250% (or 300% for very small FLA) even without secondary OCPD. Most industrial plant electrical rooms and utility substations qualify. A typical commercial panel room does not automatically qualify — the AHJ makes the final determination.',r:'NEC Table 450.3(B)'},
   fd_voltage:{t:'System Voltage — Which to Enter',b:'Always enter the line-to-line voltage:\n\n• 120/240V 1-phase: enter 240V (the full secondary). Use 120V only when sizing a single 120V circuit.\n• 208Y/120V 3-phase: enter 208V (line-to-line).\n• 480Y/277V 3-phase: enter 480V.\n• 277V: only for single-phase lighting circuits on a 480V system.\n\nFor voltage drop, using the correct line-to-line voltage keeps the math right. Using line-to-neutral gives an overly optimistic VD result.',r:'NEC §215 / §210'},
   fd_load:{t:'Load Input Mode',b:'Choose the format that matches what you have on hand:\n\n► Amps (known FLA)\nUse this when you already know the full-load current from a nameplate, engineering schedule, or prior calculation. Most direct.\n\n► kVA\nUse this for transformer secondaries, UPS units, generators, or any load rated in kVA. The calculator converts to amps using your voltage and phase selection.\n\n► kW (with PF)\nUse this for loads rated in kilowatts — HVAC units, heaters, large motors with known power factor. The calculator divides kW by PF to get kVA, then converts to amps. If you are unsure of the actual power factor, 0.85 is a reasonable starting point for most motor-driven loads. Use 1.00 for pure resistive loads (heaters, incandescent lighting).',r:'NEC §220'},
@@ -11852,6 +11967,137 @@ function calculateFeeder(){
     ' \u00b7 '+temp+'\u00b0C terminals'+((!isNaN(dist)&&dist>0)?' \u00b7 '+dist+'ft run':'')+
     ' \u00b7 Design guidance only';
   if(typeof jcResultsReady==='function')jcResultsReady('feeder','Feeder Sizing',null,'fd-results');
+}
+
+
+// ── Raceway Derating ─────────────────────────────────────────────────────────
+var _DR_FACTORS=[
+  {min:1,  max:3,  factor:1.00, label:'1–3'},
+  {min:4,  max:6,  factor:0.80, label:'4–6'},
+  {min:7,  max:9,  factor:0.70, label:'7–9'},
+  {min:10, max:20, factor:0.50, label:'10–20'},
+  {min:21, max:30, factor:0.45, label:'21–30'},
+  {min:31, max:40, factor:0.40, label:'31–40'},
+  {min:41, max:999,factor:0.35, label:'41+'}
+];
+function drGetFactor(n){
+  for(var i=0;i<_DR_FACTORS.length;i++){
+    if(n>=_DR_FACTORS[i].min&&n<=_DR_FACTORS[i].max)return _DR_FACTORS[i];
+  }
+  return _DR_FACTORS[_DR_FACTORS.length-1];
+}
+function drAmbCF(tRating,tAmbC){
+  if(isNaN(tAmbC)||tAmbC<=30)return(tAmbC<30?Math.sqrt((tRating-tAmbC)/(tRating-30)):1);
+  if(tAmbC>=tRating)return 0;
+  return Math.sqrt((tRating-tAmbC)/(tRating-30));
+}
+function drLiveUpdate(){
+  var ccc=parseInt(document.getElementById('dr-ccc').value);
+  if(isNaN(ccc)||ccc<1)return;
+  var row=drGetFactor(ccc);
+  document.getElementById('dr-err').textContent='';
+}
+function resetDR(){
+  ['dr-ccc','dr-amb'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('dr-size').value='';
+  document.getElementById('dr-mat').value='copper';
+  document.getElementById('dr-temp').value='1';
+  document.getElementById('dr-err').textContent='';
+  document.getElementById('dr-results').innerHTML='';
+  document.getElementById('dr-results-label').style.display='none';
+  document.getElementById('dr-disclaimer').style.display='none';
+  document.getElementById('dr-note').textContent='';
+}
+function calculateDR(){
+  var errEl=document.getElementById('dr-err');
+  errEl.textContent='';
+  var ccc=parseInt(document.getElementById('dr-ccc').value);
+  if(isNaN(ccc)||ccc<1){errEl.textContent='Enter number of current-carrying conductors.';return;}
+  var sizeVal=document.getElementById('dr-size').value;
+  var mat=document.getElementById('dr-mat').value;
+  var tempIdx=parseInt(document.getElementById('dr-temp').value);
+  var ambF=document.getElementById('dr-amb').value.trim();
+  var ambC=ambF===''?null:Math.round((parseFloat(ambF)-32)*5/9*10)/10;
+  var tRatings=[60,75,90];
+  var tRating=tRatings[tempIdx];
+  var yr=_codeYear||'2026';
+
+  // Bundling factor
+  var row=drGetFactor(ccc);
+  var bf=row.factor;
+
+  // Base ampacity
+  var tbl=getAmpTbl16();
+  var baseAmp=null;
+  if(sizeVal){
+    var sizeData=tbl[mat]&&tbl[mat][sizeVal];
+    if(sizeData)baseAmp=sizeData[tempIdx];
+  }
+
+  // Ambient correction
+  var ambCF=1, ambNote='';
+  if(ambC!==null){
+    ambCF=drAmbCF(tRating,ambC);
+    if(ambCF<=0){errEl.textContent='Ambient temperature exceeds conductor rating — conductor cannot be used at this temperature.';return;}
+    ambCF=Math.round(ambCF*1000)/1000;
+    ambNote='§310.15(C)(2)';
+  }
+
+  var combinedFactor=Math.round(bf*ambCF*1000)/1000;
+  var tempLbls=['60°C','75°C','90°C'];
+  var matLbl=mat==='copper'?'Copper':'Aluminum';
+  var tempLbl=tempLbls[tempIdx];
+  var blocks=[];
+
+  // Block 1: Bundling factor
+  var bfPct=Math.round(bf*100);
+  var bfState=bf>=1?'pass':bf>=0.70?'neutral':'fail';
+  var bfLabel=bf>=1?'No Derating Required':'Derating Required';
+  blocks.push(makeBlock(bfState,'Bundling Derating Factor','§310.15(C)(1)',bfPct+'%',
+    ccc+' CCCs → '+row.label+' conductor range · NEC '+yr));
+
+  // Block 2: Base ampacity (if size given)
+  if(baseAmp!==null){
+    blocks.push(makeBlock('neutral','Base Ampacity (No Correction)',sizeVal+(sizeVal&&parseInt(sizeVal)>=250?' kcmil':' AWG')+' '+matLbl+' '+tempLbl,baseAmp+'A',
+      'NEC Table 310.16 · '+yr+' edition'));
+
+    // After bundling
+    var afterBundle=Math.round(baseAmp*bf*10)/10;
+    var abState=afterBundle<15?'fail':'neutral';
+    blocks.push(makeBlock(abState,'After Bundling Derating',bfPct+'% applied',afterBundle+'A',
+      baseAmp+'A × '+bfPct+'% = '+afterBundle+'A'));
+
+    // After ambient (if entered)
+    if(ambC!==null){
+      var ambFStr=Math.round(ambCF*1000)/1000;
+      var ambPct=Math.round(ambCF*100);
+      var afterAmb=Math.round(baseAmp*combinedFactor*10)/10;
+      var aaState=afterAmb<15?'fail':'neutral';
+      blocks.push(makeBlock('neutral','Ambient Temp Correction',ambC+'°C ('+ambF+'°F)',
+        ambPct+'%','CF = √(('+tRating+'−'+ambC+')÷('+tRating+'−30)) = '+ambFStr+' · '+ambNote));
+      var combPct=Math.round(combinedFactor*100);
+      var finalState=afterAmb<baseAmp*0.6?'fail':afterAmb<baseAmp*0.8?'neutral':'pass';
+      blocks.push(makeBlock(finalState,'Final Derated Ampacity','Combined: '+combPct+'%',afterAmb+'A',
+        baseAmp+'A × '+bfPct+'% × '+ambPct+'% = '+afterAmb+'A · Use ≤'+Math.floor(afterAmb)+'A'));
+    }
+  } else if(ambC!==null){
+    // No size but ambient given — show combined factor
+    var ambPct=Math.round(ambCF*100);
+    blocks.push(makeBlock('neutral','Ambient Correction Factor',ambC+'°C ('+ambF+'°F)',ambPct+'%',
+      'CF = √(('+tRating+'−'+ambC+')÷('+tRating+'−30)) = '+Math.round(ambCF*1000)/1000+' · '+ambNote));
+    var combPct=Math.round(combinedFactor*100);
+    var cState=combinedFactor>=0.8?'pass':combinedFactor>=0.55?'neutral':'fail';
+    blocks.push(makeBlock(cState,'Combined Derating Factor','Bundling × Ambient',combPct+'%',
+      bfPct+'% × '+ambPct+'% = '+combPct+'% · Enter wire size above to see final ampacity'));
+  }
+
+  document.getElementById('dr-results-label').style.display='block';
+  document.getElementById('dr-results').innerHTML=blocks.join('');
+  document.getElementById('dr-disclaimer').style.display='block';
+  document.getElementById('dr-note').textContent=
+    'NEC '+yr+' §310.15(C)(1) · '+ccc+' CCCs · '+matLbl+' · '+tempLbl+
+    (sizeVal?' · '+(sizeVal+(parseInt(sizeVal)>=250?' kcmil':' AWG')):'')+'· Design guidance only';
+  if(typeof jcResultsReady==='function')jcResultsReady('dr','Raceway Derating',null,'dr-results');
 }
 
 // ── GFCI / AFCI Lookup ───────────────────────────────────────────────────────
