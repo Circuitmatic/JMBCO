@@ -1650,7 +1650,6 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-charts" onclick="switchTab('charts',this)">Charts</button>
     <button class="tab-btn" id="tab-btn-scan" onclick="switchTab('scan',this)">Scan</button>
     <button class="tab-btn" id="tab-btn-quiz" onclick="switchTab('quiz',this)">Quiz</button>
-    <button class="tab-btn" id="tab-btn-gfci" onclick="switchTab('gfci',this)">GFCI/AFCI</button>
     <button class="tab-btn" id="tab-btn-ev" onclick="switchTab('ev',this)">EV</button>
     <button class="tab-btn" id="tab-btn-svc" onclick="switchTab('svc',this)">Service</button>
     <button class="tab-btn" id="tab-btn-gnd" onclick="switchTab('gnd',this)">Ground</button>
@@ -4142,253 +4141,7 @@ if('serviceWorker' in navigator){
     </div>
 
     <!-- 15. Common Wire Types -->
-    <div class="cht-card">
-      <div class="cht-hd" onclick="toggleCht('cht-torque')">
-        <span class="cht-icon">&#x1F527;</span>
-        <div class="cht-hd-txt"><div class="cht-title">Torque Reference Chart</div><div class="cht-sub">Wire terminals, lug screws &amp; bolts</div></div>
-        <span class="cht-chev" id="cht-torque-chev">&#x25B6;</span>
-      </div>
-      <div class="cht-body" id="cht-torque">
-        <div class="cht-section-lbl">Wire / Terminal Connections</div>
-        <div class="cht-scroll">
-          <table class="cht-tbl">
-            <thead><tr><th>Wire Size</th><th>Typical Torque</th><th>in&#xB7;lb Range</th><th>ft&#xB7;lb</th></tr></thead>
-            <tbody>
-              <tr><td>14 AWG</td><td>Device screws / small lugs</td><td>7 – 20 in&#xB7;lb</td><td>0.6 – 1.7</td></tr>
-              <tr><td>12 AWG</td><td>Device screws / small lugs</td><td>7 – 20 in&#xB7;lb</td><td>0.6 – 1.7</td></tr>
-              <tr><td>10 AWG</td><td>Branch circuit lugs</td><td>25 – 35 in&#xB7;lb</td><td>2.1 – 2.9</td></tr>
-              <tr><td>8 AWG</td><td>Panel / breaker lugs</td><td>35 – 45 in&#xB7;lb</td><td>2.9 – 3.8</td></tr>
-              <tr><td>6 AWG</td><td>Panel / breaker lugs</td><td>35 – 45 in&#xB7;lb</td><td>2.9 – 3.8</td></tr>
-              <tr><td>4 AWG</td><td>Breaker lugs / compression</td><td>45 – 55 in&#xB7;lb</td><td>3.8 – 4.6</td></tr>
-              <tr><td>2 AWG</td><td>Breaker lugs / compression</td><td>50 – 60 in&#xB7;lb</td><td>4.2 – 5.0</td></tr>
-              <tr><td>1 AWG</td><td>Large lugs / main breaker</td><td>100 – 125 in&#xB7;lb</td><td>8.3 – 10.4</td></tr>
-              <tr><td>1/0 AWG</td><td>Large lugs / main breaker</td><td>100 – 150 in&#xB7;lb</td><td>8.3 – 12.5</td></tr>
-              <tr><td>2/0 AWG</td><td>Main lugs / switchboard</td><td>150 – 175 in&#xB7;lb</td><td>12.5 – 14.6</td></tr>
-              <tr><td>3/0 AWG</td><td>Main lugs / switchboard</td><td>175 – 200 in&#xB7;lb</td><td>14.6 – 16.7</td></tr>
-              <tr><td>4/0 AWG</td><td>Service entrance / MDP</td><td>200 – 250 in&#xB7;lb</td><td>16.7 – 20.8</td></tr>
-              <tr><td>250 kcmil</td><td>Service entrance / MDP</td><td>250 – 300 in&#xB7;lb</td><td>20.8 – 25.0</td></tr>
-              <tr><td>350 kcmil</td><td>Service entrance / MDP</td><td>300 – 350 in&#xB7;lb</td><td>25.0 – 29.2</td></tr>
-              <tr><td>500 kcmil</td><td>Service entrance / MDP</td><td>350 – 450 in&#xB7;lb</td><td>29.2 – 37.5</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="cht-section-lbl" style="margin-top:6px;">Bolt / Stud Torque (Bus Bars, Lug Bolts)</div>
-        <div class="cht-scroll">
-          <table class="cht-tbl">
-            <thead><tr><th>Bolt Size</th><th>Grade 2 (in&#xB7;lb)</th><th>Grade 5 (in&#xB7;lb)</th><th>Grade 5 (ft&#xB7;lb)</th></tr></thead>
-            <tbody>
-              <tr><td>#8-32</td><td>18</td><td>20</td><td>1.7</td></tr>
-              <tr><td>#10-32</td><td>28</td><td>32</td><td>2.7</td></tr>
-              <tr><td>#10-24</td><td>30</td><td>35</td><td>2.9</td></tr>
-              <tr><td>1/4"-20</td><td>40</td><td>60</td><td>5.0</td></tr>
-              <tr><td>1/4"-28</td><td>45</td><td>70</td><td>5.8</td></tr>
-              <tr><td>5/16"-18</td><td>80</td><td>120</td><td>10.0</td></tr>
-              <tr><td>3/8"-16</td><td>140</td><td>200</td><td>16.7</td></tr>
-              <tr><td>3/8"-24</td><td>160</td><td>225</td><td>18.8</td></tr>
-              <tr><td>1/2"-13</td><td>270</td><td>400</td><td>33.3</td></tr>
-              <tr><td>1/2"-20</td><td>300</td><td>450</td><td>37.5</td></tr>
-              <tr><td>5/8"-11</td><td>540</td><td>800</td><td>66.7</td></tr>
-              <tr><td>3/4"-10</td><td>960</td><td>1400</td><td>116.7</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="cht-note">&#x26A0;&#xFE0F; Always check the device label or installation instructions — manufacturer torque specs take precedence. Most breaker lugs and connectors are stamped with the required torque value. Torquing to spec prevents loose connections, arcing, and fires.</div>
-      </div>
-    </div>
-
     <!-- 18. Fiber Optic Color Code -->
-
-    <!-- NEMA Configurations -->
-    <div class="cht-card">
-      <div class="cht-hd" onclick="toggleCht('cht-nema')">
-        <span class="cht-icon">&#x1F50C;</span>
-        <div class="cht-hd-txt"><div class="cht-title">NEMA Plug &amp; Receptacle Configurations</div><div class="cht-sub">Common wiring device configurations &mdash; amps, volts, poles &amp; typical use</div></div>
-        <span class="cht-chev" id="cht-nema-chev">&#x25B6;</span>
-      </div>
-      <div class="cht-body" id="cht-nema" style="display:none;">
-
-        <div class="cht-section-lbl">Straight-Blade &mdash; Non-Locking</div>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;font-size:11px;">
-            <thead>
-              <tr style="background:var(--surface2);">
-                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;letter-spacing:.05em;white-space:nowrap;">Config</th>
-                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Amps</th>
-                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Volts</th>
-                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Poles/Wires</th>
-                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;">Blade Pattern</th>
-                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;">Typical Use</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 5-15</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">15A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">2 parallel blades + round ground</td>
-                <td style="padding:5px 8px;color:var(--sub);">Standard household outlet</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 5-20</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">T-slot neutral + parallel hot + ground</td>
-                <td style="padding:5px 8px;color:var(--sub);">Kitchen, bath, garage circuits</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 6-15</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">15A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">2 parallel blades (same size) + ground</td>
-                <td style="padding:5px 8px;color:var(--sub);">Small 240V tools, equipment</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 6-20</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">1 blade rotated 90&deg; + ground</td>
-                <td style="padding:5px 8px;color:var(--sub);">Welders, compressors, 240V tools</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 6-30</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + round ground</td>
-                <td style="padding:5px 8px;color:var(--sub);">Heavy welders, EV (some older)</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 6-50</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">50A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + U-ground</td>
-                <td style="padding:5px 8px;color:var(--sub);">EV charging (Level 2), large welders</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 10-30</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-shaped neutral <span style="color:#f0c020;font-size:9px;">NO GND</span></td>
-                <td style="padding:5px 8px;color:var(--sub);">Old dryer outlet (pre-1996)</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 10-50</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">50A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-shaped neutral <span style="color:#f0c020;font-size:9px;">NO GND</span></td>
-                <td style="padding:5px 8px;color:var(--sub);">Old range outlet (pre-1996)</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 14-20</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
-                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-neutral + ground</td>
-                <td style="padding:5px 8px;color:var(--sub);">Generator outlets, industrial equipment</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 14-30</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
-                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-neutral + ground</td>
-                <td style="padding:5px 8px;color:var(--sub);">Modern dryer outlet</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 14-50</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">50A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
-                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-neutral + U-ground</td>
-                <td style="padding:5px 8px;color:var(--sub);">Range outlet, EV charging (Level 2)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="cht-section-lbl" style="margin-top:14px;">Twist-Lock (L-Series) &mdash; Common Field Configs</div>
-        <div style="overflow-x:auto;">
-          <table style="width:100%;border-collapse:collapse;font-size:11px;">
-            <thead>
-              <tr style="background:var(--surface2);">
-                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;white-space:nowrap;">Config</th>
-                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Amps</th>
-                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Volts</th>
-                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Poles/Wires</th>
-                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;">Typical Use</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L5-15</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">15A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">UPS systems, A/V equipment, IT gear</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L5-20</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">Server rooms, commercial UPS</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L6-20</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">Industrial 240V equipment, generators</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L6-30</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
-                <td style="padding:5px 8px;color:var(--sub);">Large generators, commercial HVAC</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L14-20</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
-                <td style="padding:5px 8px;color:var(--sub);">Portable generators, transfer switches</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L14-30</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
-                <td style="padding:5px 8px;color:var(--sub);">Standby generators, manual transfer switches</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L21-20</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">120/208V 3&phi;</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">4P / 5W</td>
-                <td style="padding:5px 8px;color:var(--sub);">Commercial 3-phase UPS, data centers</td>
-              </tr>
-              <tr style="background:var(--surface);">
-                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L21-30</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">120/208V 3&phi;</td>
-                <td style="padding:5px 8px;text-align:center;color:var(--sub);">4P / 5W</td>
-                <td style="padding:5px 8px;color:var(--sub);">Large 3-phase commercial loads, generators</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="cht-note" style="margin:10px 0 4px;">NEMA 10-series outlets have no separate ground &mdash; neutral and ground bonded at panel. Replaced by 14-series in 1996. Existing 10-30/10-50 installations may remain; new installs require 14-series grounded type. Twist-lock (L-series) blades rotate to lock &mdash; required where accidental disconnection is a hazard.</div>
-      </div>
-    </div>
 
     <div class="cht-cat-hdr" id="cat-conduit">Conduit & Raceways</div>
     <div class="cht-card">
@@ -4858,6 +4611,257 @@ if('serviceWorker' in navigator){
     </div>
 
     <!-- 3. Conductor Ampacity -->
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-nema')">
+        <span class="cht-icon">&#x1F50C;</span>
+        <div class="cht-hd-txt"><div class="cht-title">NEMA Plug &amp; Receptacle Configurations</div><div class="cht-sub">Common wiring device configurations &mdash; amps, volts, poles &amp; typical use</div></div>
+        <span class="cht-chev" id="cht-nema-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-nema" style="display:none;">
+
+        <div class="cht-section-lbl">Straight-Blade &mdash; Non-Locking</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:11px;">
+            <thead>
+              <tr style="background:var(--surface2);">
+                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;letter-spacing:.05em;white-space:nowrap;">Config</th>
+                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Amps</th>
+                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Volts</th>
+                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Poles/Wires</th>
+                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;">Blade Pattern</th>
+                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;">Typical Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 5-15</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">15A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">2 parallel blades + round ground</td>
+                <td style="padding:5px 8px;color:var(--sub);">Standard household outlet</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 5-20</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">T-slot neutral + parallel hot + ground</td>
+                <td style="padding:5px 8px;color:var(--sub);">Kitchen, bath, garage circuits</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 6-15</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">15A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">2 parallel blades (same size) + ground</td>
+                <td style="padding:5px 8px;color:var(--sub);">Small 240V tools, equipment</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 6-20</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">1 blade rotated 90&deg; + ground</td>
+                <td style="padding:5px 8px;color:var(--sub);">Welders, compressors, 240V tools</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 6-30</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + round ground</td>
+                <td style="padding:5px 8px;color:var(--sub);">Heavy welders, EV (some older)</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 6-50</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">50A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + U-ground</td>
+                <td style="padding:5px 8px;color:var(--sub);">EV charging (Level 2), large welders</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 10-30</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-shaped neutral <span style="color:#f0c020;font-size:9px;">NO GND</span></td>
+                <td style="padding:5px 8px;color:var(--sub);">Old dryer outlet (pre-1996)</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 10-50</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">50A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-shaped neutral <span style="color:#f0c020;font-size:9px;">NO GND</span></td>
+                <td style="padding:5px 8px;color:var(--sub);">Old range outlet (pre-1996)</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 14-20</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
+                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-neutral + ground</td>
+                <td style="padding:5px 8px;color:var(--sub);">Generator outlets, industrial equipment</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 14-30</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
+                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-neutral + ground</td>
+                <td style="padding:5px 8px;color:var(--sub);">Modern dryer outlet</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA 14-50</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">50A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
+                <td style="padding:5px 8px;color:var(--sub);">2 angled blades + L-neutral + U-ground</td>
+                <td style="padding:5px 8px;color:var(--sub);">Range outlet, EV charging (Level 2)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cht-section-lbl" style="margin-top:14px;">Twist-Lock (L-Series) &mdash; Common Field Configs</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:11px;">
+            <thead>
+              <tr style="background:var(--surface2);">
+                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;white-space:nowrap;">Config</th>
+                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Amps</th>
+                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Volts</th>
+                <th style="padding:5px 8px;text-align:center;color:var(--accent);font-size:10px;">Poles/Wires</th>
+                <th style="padding:5px 8px;text-align:left;color:var(--accent);font-size:10px;">Typical Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L5-15</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">15A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">UPS systems, A/V equipment, IT gear</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L5-20</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">Server rooms, commercial UPS</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L6-20</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">Industrial 240V equipment, generators</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L6-30</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">2P / 3W</td>
+                <td style="padding:5px 8px;color:var(--sub);">Large generators, commercial HVAC</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L14-20</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
+                <td style="padding:5px 8px;color:var(--sub);">Portable generators, transfer switches</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);background:var(--surface);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L14-30</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">125/250V</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">3P / 4W</td>
+                <td style="padding:5px 8px;color:var(--sub);">Standby generators, manual transfer switches</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L21-20</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">20A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">120/208V 3&phi;</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">4P / 5W</td>
+                <td style="padding:5px 8px;color:var(--sub);">Commercial 3-phase UPS, data centers</td>
+              </tr>
+              <tr style="background:var(--surface);">
+                <td style="padding:5px 8px;font-weight:700;color:var(--text);white-space:nowrap;">NEMA L21-30</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">30A</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">120/208V 3&phi;</td>
+                <td style="padding:5px 8px;text-align:center;color:var(--sub);">4P / 5W</td>
+                <td style="padding:5px 8px;color:var(--sub);">Large 3-phase commercial loads, generators</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cht-note" style="margin:10px 0 4px;">NEMA 10-series outlets have no separate ground &mdash; neutral and ground bonded at panel. Replaced by 14-series in 1996. Existing 10-30/10-50 installations may remain; new installs require 14-series grounded type. Twist-lock (L-series) blades rotate to lock &mdash; required where accidental disconnection is a hazard.</div>
+      </div>
+    </div>
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-gfci-dw')">
+        <span class="cht-icon">&#x26A1;</span>
+        <div class="cht-hd-txt"><div class="cht-title">GFCI &amp; AFCI — Dwelling Units</div><div class="cht-sub">§210.8(A) required locations by code year</div></div>
+        <span class="cht-chev" id="cht-gfci-dw-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-gfci-dw">
+        <div style="padding:8px 14px 4px;">
+          <div id="gfci-dw-2026-alert" class="gfci-alert" style="display:none;">
+            <div class="gfci-alert-title">&#x26A1; 2026 Code Changes</div>
+            Outdoor outlets now GFCI-required up to <strong>60A</strong> (was 50A — §210.8(F)). New appliance requirements added.
+          </div>
+          <div class="gfci-section-head">GFCI — Dwelling Unit Locations · §210.8(A)</div>
+          <table class="gfci-table">
+            <thead><tr><th>Location</th><th class="center">GFCI</th><th class="center">AFCI</th></tr></thead>
+            <tbody id="gfci-dw-tbody"></tbody>
+          </table>
+          <div class="gfci-code-note" id="gfci-dw-note"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-gfci-cm')">
+        <span class="cht-icon">&#x26A1;</span>
+        <div class="cht-hd-txt"><div class="cht-title">GFCI — Commercial &amp; Other Than Dwelling</div><div class="cht-sub">§210.8(B) required locations</div></div>
+        <span class="cht-chev" id="cht-gfci-cm-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-gfci-cm">
+        <div style="padding:8px 14px 4px;">
+          <div class="gfci-section-head">GFCI — Other Than Dwelling · §210.8(B)</div>
+          <table class="gfci-table">
+            <thead><tr><th>Location</th><th class="center">GFCI</th></tr></thead>
+            <tbody id="gfci-cm-tbody"></tbody>
+          </table>
+          <div class="gfci-code-note" id="gfci-cm-note"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-gfci-ap')">
+        <span class="cht-icon">&#x26A1;</span>
+        <div class="cht-hd-txt"><div class="cht-title">GFCI — Specific Appliances</div><div class="cht-sub">§210.8(D) appliance requirements</div></div>
+        <span class="cht-chev" id="cht-gfci-ap-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-gfci-ap">
+        <div style="padding:8px 14px 4px;">
+          <div id="gfci-ap-alert" class="gfci-alert"></div>
+          <div class="gfci-section-head">Specific Appliances — §210.8(D)</div>
+          <table class="gfci-table">
+            <thead><tr><th>Appliance</th><th class="center">GFCI Req.</th></tr></thead>
+            <tbody id="gfci-ap-tbody"></tbody>
+          </table>
+          <div class="gfci-code-note">Applies to equipment rated <strong>150V or less to ground, 60A or less</strong>, single- or 3-phase, all occupancies. §210.8(D)</div>
+        </div>
+      </div>
+    </div>
+
 
     <div class="cht-cat-hdr" id="cat-ground">Grounding & Bonding</div>
     <div class="cht-card">
@@ -5351,6 +5355,62 @@ if('serviceWorker' in navigator){
     </div>
 
 
+    <div class="cht-cat-hdr" id="cat-ref">Reference & Math</div>
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-torque')">
+        <span class="cht-icon">&#x1F527;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Torque Reference Chart</div><div class="cht-sub">Wire terminals, lug screws &amp; bolts</div></div>
+        <span class="cht-chev" id="cht-torque-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-torque">
+        <div class="cht-section-lbl">Wire / Terminal Connections</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Wire Size</th><th>Typical Torque</th><th>in&#xB7;lb Range</th><th>ft&#xB7;lb</th></tr></thead>
+            <tbody>
+              <tr><td>14 AWG</td><td>Device screws / small lugs</td><td>7 – 20 in&#xB7;lb</td><td>0.6 – 1.7</td></tr>
+              <tr><td>12 AWG</td><td>Device screws / small lugs</td><td>7 – 20 in&#xB7;lb</td><td>0.6 – 1.7</td></tr>
+              <tr><td>10 AWG</td><td>Branch circuit lugs</td><td>25 – 35 in&#xB7;lb</td><td>2.1 – 2.9</td></tr>
+              <tr><td>8 AWG</td><td>Panel / breaker lugs</td><td>35 – 45 in&#xB7;lb</td><td>2.9 – 3.8</td></tr>
+              <tr><td>6 AWG</td><td>Panel / breaker lugs</td><td>35 – 45 in&#xB7;lb</td><td>2.9 – 3.8</td></tr>
+              <tr><td>4 AWG</td><td>Breaker lugs / compression</td><td>45 – 55 in&#xB7;lb</td><td>3.8 – 4.6</td></tr>
+              <tr><td>2 AWG</td><td>Breaker lugs / compression</td><td>50 – 60 in&#xB7;lb</td><td>4.2 – 5.0</td></tr>
+              <tr><td>1 AWG</td><td>Large lugs / main breaker</td><td>100 – 125 in&#xB7;lb</td><td>8.3 – 10.4</td></tr>
+              <tr><td>1/0 AWG</td><td>Large lugs / main breaker</td><td>100 – 150 in&#xB7;lb</td><td>8.3 – 12.5</td></tr>
+              <tr><td>2/0 AWG</td><td>Main lugs / switchboard</td><td>150 – 175 in&#xB7;lb</td><td>12.5 – 14.6</td></tr>
+              <tr><td>3/0 AWG</td><td>Main lugs / switchboard</td><td>175 – 200 in&#xB7;lb</td><td>14.6 – 16.7</td></tr>
+              <tr><td>4/0 AWG</td><td>Service entrance / MDP</td><td>200 – 250 in&#xB7;lb</td><td>16.7 – 20.8</td></tr>
+              <tr><td>250 kcmil</td><td>Service entrance / MDP</td><td>250 – 300 in&#xB7;lb</td><td>20.8 – 25.0</td></tr>
+              <tr><td>350 kcmil</td><td>Service entrance / MDP</td><td>300 – 350 in&#xB7;lb</td><td>25.0 – 29.2</td></tr>
+              <tr><td>500 kcmil</td><td>Service entrance / MDP</td><td>350 – 450 in&#xB7;lb</td><td>29.2 – 37.5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cht-section-lbl" style="margin-top:6px;">Bolt / Stud Torque (Bus Bars, Lug Bolts)</div>
+        <div class="cht-scroll">
+          <table class="cht-tbl">
+            <thead><tr><th>Bolt Size</th><th>Grade 2 (in&#xB7;lb)</th><th>Grade 5 (in&#xB7;lb)</th><th>Grade 5 (ft&#xB7;lb)</th></tr></thead>
+            <tbody>
+              <tr><td>#8-32</td><td>18</td><td>20</td><td>1.7</td></tr>
+              <tr><td>#10-32</td><td>28</td><td>32</td><td>2.7</td></tr>
+              <tr><td>#10-24</td><td>30</td><td>35</td><td>2.9</td></tr>
+              <tr><td>1/4"-20</td><td>40</td><td>60</td><td>5.0</td></tr>
+              <tr><td>1/4"-28</td><td>45</td><td>70</td><td>5.8</td></tr>
+              <tr><td>5/16"-18</td><td>80</td><td>120</td><td>10.0</td></tr>
+              <tr><td>3/8"-16</td><td>140</td><td>200</td><td>16.7</td></tr>
+              <tr><td>3/8"-24</td><td>160</td><td>225</td><td>18.8</td></tr>
+              <tr><td>1/2"-13</td><td>270</td><td>400</td><td>33.3</td></tr>
+              <tr><td>1/2"-20</td><td>300</td><td>450</td><td>37.5</td></tr>
+              <tr><td>5/8"-11</td><td>540</td><td>800</td><td>66.7</td></tr>
+              <tr><td>3/4"-10</td><td>960</td><td>1400</td><td>116.7</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="cht-note">&#x26A0;&#xFE0F; Always check the device label or installation instructions — manufacturer torque specs take precedence. Most breaker lugs and connectors are stamped with the required torque value. Torquing to spec prevents loose connections, arcing, and fires.</div>
+      </div>
+    </div>
+
     <div class="cht-card">
       <div class="cht-hd" onclick="toggleCht('cht-rescircuit')">
         <span class="cht-icon">&#x1F3E0;</span>
@@ -5588,8 +5648,7 @@ if('serviceWorker' in navigator){
       </div>
     </div>
 
-    <div class="cht-cat-hdr" id="cat-ref">Reference & Math</div>
-    <div class="cht-card">
+        <div class="cht-card">
       <div class="cht-hd" onclick="toggleCht('cht-formulas')">
         <span class="cht-icon">&#x1F4D0;</span>
         <div class="cht-hd-txt"><div class="cht-title">Electrical Math Reference</div><div class="cht-sub">Ohm's Law · Power · Series / Parallel · AC · Transformers · 3-Phase</div></div>
@@ -5881,51 +5940,7 @@ if('serviceWorker' in navigator){
     <div class="code-note" id="ev-note"></div>
   </div>
 
-  <!-- ── GFCI / AFCI Lookup Tab ── -->
-  <div class="tab-panel" id="tab-gfci">
-    <div class="gfci-wrap">
-      <div class="gfci-mode-row">
-        <button class="gfci-mode-btn active" id="gfci-btn-dw" onclick="gfciMode('dwelling',this)">Dwelling</button>
-        <button class="gfci-mode-btn" id="gfci-btn-cm" onclick="gfciMode('commercial',this)">Commercial</button>
-        <button class="gfci-mode-btn" id="gfci-btn-ap" onclick="gfciMode('appliance',this)">Appliances</button>
-      </div>
 
-      <!-- DWELLING PANEL -->
-      <div id="gfci-panel-dwelling">
-        <div id="gfci-dw-2026-alert" class="gfci-alert" style="display:none;">
-          <div class="gfci-alert-title">⚡ 2026 Code Changes</div>
-          Outdoor outlets now GFCI-required up to <strong>60A</strong> (was 50A — §210.8(F)). New appliance requirements added — see <strong>Appliances tab</strong>.
-        </div>
-        <div class="gfci-section-head">GFCI — Dwelling Unit Locations · §210.8(A)</div>
-        <table class="gfci-table">
-          <thead><tr><th>Location</th><th class="center">GFCI</th><th class="center">AFCI</th></tr></thead>
-          <tbody id="gfci-dw-tbody"></tbody>
-        </table>
-        <div class="gfci-code-note" id="gfci-dw-note"></div>
-      </div>
-
-      <!-- COMMERCIAL PANEL -->
-      <div id="gfci-panel-commercial" style="display:none;">
-        <div class="gfci-section-head">GFCI — Other Than Dwelling · §210.8(B)</div>
-        <table class="gfci-table">
-          <thead><tr><th>Location</th><th class="center">GFCI</th></tr></thead>
-          <tbody id="gfci-cm-tbody"></tbody>
-        </table>
-        <div class="gfci-code-note" id="gfci-cm-note"></div>
-      </div>
-
-      <!-- APPLIANCE PANEL -->
-      <div id="gfci-panel-appliance" style="display:none;">
-        <div id="gfci-ap-alert" class="gfci-alert"></div>
-        <div class="gfci-section-head">Specific Appliances — §210.8(D)</div>
-        <table class="gfci-table">
-          <thead><tr><th>Appliance</th><th class="center">GFCI Req.</th></tr></thead>
-          <tbody id="gfci-ap-tbody"></tbody>
-        </table>
-        <div class="gfci-code-note">Applies to equipment rated <strong>150V or less to ground, 60A or less</strong>, single- or 3-phase, all occupancies. §210.8(D)</div>
-      </div>
-    </div>
-  </div>
 
   <!-- ── Dwelling Unit Service Sizing Wizard ── -->
   <div class="tab-panel" id="tab-svc">
