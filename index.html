@@ -3874,6 +3874,7 @@ if('serviceWorker' in navigator){
       <div class="field-row">
         <div class="field-label">Main Breaker</div>
         <div class="sel-wrap"><select class="fi" id="pn-main">
+          <option value="0">No Main (MLO)</option>
           <option value="60">60A</option>
           <option value="100">100A</option>
           <option value="125">125A</option>
@@ -12519,7 +12520,8 @@ function calculatePN(){
   var totalSlots=slot-1;
   var phA=phW.map(function(w){return w/lnv;});
   var maxA=Math.max.apply(null,phA.slice(0,nph));
-  var pctMain=(maxA/mainA)*100;
+  var noMain=(mainA===0||isNaN(mainA));
+  var pctMain=noMain?null:(maxA/mainA)*100;
   var imbal=null;
   if(is3){
     var avg=(phA[0]+phA[1]+phA[2])/3;
@@ -12531,8 +12533,12 @@ function calculatePN(){
   var phDetail=phA.slice(0,nph).map(function(a,i){return phNames[i]+': '+a.toFixed(1)+'A';}).join(' · ');
   var blocks=[];
   blocks.push(makeBlock('pass','Connected Load',sysLbl[sys],(totalW/1000).toFixed(2)+' kW',totalW.toLocaleString()+' W · '+phDetail));
-  var mbState=pctMain>100?'fail':pctMain>80?'neutral':'pass';
-  blocks.push(makeBlock(mbState,'Main Breaker Load',mainA+'A MAIN',pctMain.toFixed(1)+'%','Peak '+maxA.toFixed(1)+'A of '+mainA+'A · '+(pctMain>100?'OVERLOADED':pctMain>80?'HIGH':'OK')));
+  if(noMain){
+    blocks.push(makeBlock('neutral','No Main Breaker','MLO',maxA.toFixed(1)+'A peak','Sub-panel — feeder OCPD provides protection'));
+  }else{
+    var mbState=pctMain>100?'fail':pctMain>80?'neutral':'pass';
+    blocks.push(makeBlock(mbState,'Main Breaker Load',mainA+'A MAIN',pctMain.toFixed(1)+'%','Peak '+maxA.toFixed(1)+'A of '+mainA+'A · '+(pctMain>100?'OVERLOADED':pctMain>80?'HIGH':'OK')));
+  }
   if(imbal!==null){
     var imState=imbal>10?'fail':imbal>5?'neutral':'pass';
     blocks.push(makeBlock(imState,'Phase Imbalance','Code 220.61',imbal.toFixed(1)+'%',imbal>10?'Exceeds 10% — redistribute loads':imbal>5?'Moderate — consider redistributing':'Well balanced'));
@@ -12543,9 +12549,10 @@ function calculatePN(){
   if(typeof jcResultsReady==='function')jcResultsReady('pn','Panel Schedule',null,'pn-results');
   var phColors=['#111827','#dc2626','#2563eb'];
   var barHtml='<div class="pn-bar-section">';
+  var barRef=noMain?(maxA||1):mainA;
   for(var i=0;i<nph;i++){
-    var pct=Math.min((phA[i]/mainA)*100,100);
-    var isOver=phA[i]>mainA;
+    var pct=Math.min((phA[i]/barRef)*100,100);
+    var isOver=!noMain&&phA[i]>mainA;
     var isWarn=!isOver&&pct>80;
     if(isOver){
       barHtml+='<div class="pn-bar-row">'+
