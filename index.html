@@ -647,6 +647,27 @@ body.light-mode .dr-note{background:#f8fafc;border-color:#e2e8f0;}
 .bd-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
 .bd-legend-item{font-size:0.68rem;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 8px;line-height:1.4;}
 .bd-legend-item strong{color:var(--text);}
+/* ── Receptacle Spacing Tab ── */
+.rc-wrap{padding:12px 14px 24px;max-width:600px;margin:0 auto;}
+.rc-room-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.rc-room-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;text-align:center;transition:all .15s;line-height:1.3;}
+.rc-room-btn:hover{border-color:#f0c020;color:#f0c020;}
+.rc-room-btn.rc-active{background:rgba(240,192,32,.12);border-color:#f0c020;color:#f0c020;}
+.rc-walls-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.rc-wall-row{display:flex;flex-direction:column;gap:3px;}
+.rc-wall-label{font-size:0.7rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;}
+.rc-result-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.rc-result-card.rc-pass{border-left:3px solid #4ade80;}
+.rc-result-card.rc-warn{border-left:3px solid #f0c020;}
+.rc-result-card.rc-info{border-left:3px solid #60a5fa;}
+.rc-card-title{font-size:0.72rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.rc-card-body{font-size:0.85rem;color:var(--text);font-weight:600;line-height:1.5;}
+.rc-card-note{font-size:0.72rem;color:var(--muted);margin-top:4px;line-height:1.5;}
+.rc-quick-ref{margin-top:10px;}
+.rc-qr-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:6px;}
+.rc-qr-title{font-size:0.72rem;font-weight:700;color:#f0c020;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+.rc-qr-body{font-size:0.78rem;color:var(--text);line-height:1.6;}
+.rc-qr-ref{font-size:0.67rem;color:var(--muted);margin-top:3px;}
 /* ── Fraction Calculator ── */
   .fr-display { padding:8px 16px 10px; background:var(--card); }
   .fr-expr { font-family:'Roboto Mono',monospace; font-size:14px; color:var(--muted); text-align:right; min-height:18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -1546,6 +1567,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-mc" onclick="switchTab('mc',this)">Motor</button>
     <button class="tab-btn" id="tab-btn-dr" onclick="switchTab('dr',this)">Derate</button>
     <button class="tab-btn" id="tab-btn-bd" onclick="switchTab('bd',this)">Burial</button>
+    <button class="tab-btn" id="tab-btn-rc" onclick="switchTab('rc',this)">Recept</button>
     <button class="tab-btn" id="tab-btn-fr" onclick="switchTab('fr',this)">Fracs</button>
     <button class="tab-btn" id="tab-btn-dip" onclick="switchTab('dip',this)">Dip SW</button>
     <button class="tab-btn" id="tab-btn-wc" onclick="switchTab('wc',this)">Colors</button>
@@ -2646,6 +2668,82 @@ if('serviceWorker' in navigator){
       <div class="disclaimer" style="margin-top:14px;">
         <div class="disclaimer-title">Important Notice</div>
         <div class="disclaimer-text">NEC Table 300.5 (2023/2026). Local codes and AHJ requirements may be more restrictive. Depths are minimums — greater depth is always acceptable. Exception: Lesser depths permitted where protected by approved enclosures or raceway. Rocks and other hazards require additional protection per 300.5(D). Design guidance only.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       RECEPTACLE SPACING TAB (§210.52)
+  ══════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-rc">
+    <div class="rc-wrap">
+      <div class="section-label">Receptacle Spacing — §210.52</div>
+
+      <!-- Room type selector -->
+      <div class="field-label" style="margin-bottom:8px;">Room Type</div>
+      <div class="rc-room-grid">
+        <button class="rc-room-btn rc-active" id="rc-btn-living" onclick="rcSelectRoom('living',this)">Living / Family<br>Room</button>
+        <button class="rc-room-btn" id="rc-btn-bedroom" onclick="rcSelectRoom('bedroom',this)">Bedroom /<br>Sleeping Area</button>
+        <button class="rc-room-btn" id="rc-btn-kitchen" onclick="rcSelectRoom('kitchen',this)">Kitchen<br>Countertop</button>
+        <button class="rc-room-btn" id="rc-btn-hallway" onclick="rcSelectRoom('hallway',this)">Hallway</button>
+        <button class="rc-room-btn" id="rc-btn-bathroom" onclick="rcSelectRoom('bathroom',this)">Bathroom</button>
+        <button class="rc-room-btn" id="rc-btn-garage" onclick="rcSelectRoom('garage',this)">Garage</button>
+        <button class="rc-room-btn" id="rc-btn-outdoor" onclick="rcSelectRoom('outdoor',this)">Outdoor</button>
+        <button class="rc-room-btn" id="rc-btn-basement" onclick="rcSelectRoom('basement',this)">Basement /<br>Laundry</button>
+      </div>
+
+      <!-- Living / bedroom inputs -->
+      <div id="rc-inputs-walls" style="display:block;">
+        <div class="field-label" style="margin-bottom:6px;">Wall Lengths (feet) <span style="font-size:0.7rem;color:var(--muted);">— enter each continuous wall segment</span></div>
+        <div class="rc-walls-grid">
+          <div class="rc-wall-row"><div class="rc-wall-label">Wall 1</div><input class="fi" id="rc-w1" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/></div>
+          <div class="rc-wall-row"><div class="rc-wall-label">Wall 2</div><input class="fi" id="rc-w2" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/></div>
+          <div class="rc-wall-row"><div class="rc-wall-label">Wall 3</div><input class="fi" id="rc-w3" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/></div>
+          <div class="rc-wall-row"><div class="rc-wall-label">Wall 4</div><input class="fi" id="rc-w4" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/></div>
+        </div>
+        <div class="fi-sub" style="margin-top:6px;">Wall segments under 2 ft do not require a receptacle. Enter 0 or leave blank to skip.</div>
+      </div>
+
+      <!-- Kitchen inputs -->
+      <div id="rc-inputs-kitchen" style="display:none;">
+        <div class="fields">
+          <div class="field-row">
+            <div class="field-label">Linear Feet of Countertop</div>
+            <input class="fi" id="rc-ctr" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/>
+          </div>
+          <div class="field-row">
+            <div class="field-label">Island / Peninsula?</div>
+            <div class="sel-wrap"><select class="fi" id="rc-island" onchange="rcCalc()">
+              <option value="0">No island or peninsula</option>
+              <option value="1">Yes — island only</option>
+              <option value="2">Yes — peninsula only</option>
+              <option value="3">Yes — both island and peninsula</option>
+            </select></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hallway inputs -->
+      <div id="rc-inputs-hallway" style="display:none;">
+        <div class="fields">
+          <div class="field-row">
+            <div class="field-label">Hallway Length (feet)</div>
+            <input class="fi" id="rc-hall" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bathroom / garage / outdoor / basement: quick ref only -->
+      <div id="rc-inputs-static" style="display:none;"></div>
+
+      <div class="divider"></div>
+      <div class="err-msg" id="rc-err"></div>
+      <div id="rc-results"></div>
+      <div id="rc-quick-ref" class="rc-quick-ref"></div>
+
+      <div class="disclaimer">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">Receptacle spacing per NEC §210.52 (2023/2026). Requirements cover 1 &amp; 2 family dwellings and guest rooms of hotels/motels. Wall space ≥2 ft measured along the floor line requires a receptacle. Countertop sections separated by range/sink/refrigerator are measured separately. Island/peninsula receptacle requirement applies when dimension ≥24″ × 12″. Design guidance only — verify with AHJ.</div>
       </div>
     </div>
   </div>
@@ -12193,6 +12291,148 @@ function bdHighlight(){
     }
   }
 }
+
+
+// ── Receptacle Spacing (§210.52) ─────────────────────────────────────────────
+var _rcRoom = 'living';
+function rcSelectRoom(room, btn) {
+  _rcRoom = room;
+  document.querySelectorAll('.rc-room-btn').forEach(function(b){b.classList.remove('rc-active');});
+  btn.classList.add('rc-active');
+  var wallRooms = ['living','bedroom'];
+  document.getElementById('rc-inputs-walls').style.display   = wallRooms.indexOf(room)>=0 ? 'block' : 'none';
+  document.getElementById('rc-inputs-kitchen').style.display = room==='kitchen'   ? 'block' : 'none';
+  document.getElementById('rc-inputs-hallway').style.display = room==='hallway'   ? 'block' : 'none';
+  document.getElementById('rc-inputs-static').style.display  = ['bathroom','garage','outdoor','basement'].indexOf(room)>=0 ? 'block' : 'none';
+  document.getElementById('rc-err').textContent = '';
+  rcCalc();
+}
+function rcCard(type, title, body, note) {
+  return '<div class="rc-result-card rc-'+type+'"><div class="rc-card-title">'+title+'</div><div class="rc-card-body">'+body+'</div>'+(note?'<div class="rc-card-note">'+note+'</div>':'')+'</div>';
+}
+function rcQR(title, body, ref) {
+  return '<div class="rc-qr-item"><div class="rc-qr-title">'+title+'</div><div class="rc-qr-body">'+body+'</div><div class="rc-qr-ref">'+ref+'</div></div>';
+}
+function rcWallCount(ft) {
+  if(ft < 2) return 0;
+  if(ft <= 12) return 1;
+  return Math.ceil(ft / 12);
+}
+function rcCalc() {
+  var res = document.getElementById('rc-results');
+  var qr  = document.getElementById('rc-quick-ref');
+  var err = document.getElementById('rc-err');
+  err.textContent = '';
+  res.innerHTML = '';
+  qr.innerHTML  = '';
+
+  if(_rcRoom === 'living' || _rcRoom === 'bedroom') {
+    var walls = ['rc-w1','rc-w2','rc-w3','rc-w4'].map(function(id){
+      var v = parseFloat(document.getElementById(id).value);
+      return isNaN(v) ? 0 : v;
+    });
+    var hasAny = walls.some(function(w){return w>0;});
+    if(!hasAny) {
+      qr.innerHTML = rcQR('General Receptacle Rule (\u00a7210.52(A))',
+        '\u2022 No point along a wall should be more than 6 ft from a receptacle<br>\u2022 Maximum spacing between receptacles: 12 ft<br>\u2022 Any wall space 2 ft or wider requires a receptacle<br>\u2022 Doorway openings count — the 6 ft is measured from the edge of the doorway<br>\u2022 Sliding panels and fixed glass are treated as wall space',
+        '\u00a7210.52(A)');
+      return;
+    }
+    var html = '';
+    var total = 0;
+    walls.forEach(function(ft, i) {
+      if(ft <= 0) return;
+      var n = rcWallCount(ft);
+      total += n;
+      var label = 'Wall '+(i+1)+' \u2014 '+ft+' ft';
+      if(ft < 2) {
+        html += rcCard('info', label, 'No receptacle required', 'Wall space under 2 ft is exempt per \u00a7210.52(A)');
+      } else {
+        var spacing = ft <= 12 ? 'Place within 6 ft of any door/opening on this wall' : 'Space evenly \u2014 max 12 ft apart (e.g., every '+(Math.round(ft/n*10)/10)+' ft)';
+        html += rcCard('pass', label, 'Minimum '+n+' receptacle'+(n>1?'s':''), spacing);
+      }
+    });
+    res.innerHTML = html;
+    if(total > 0) {
+      qr.innerHTML = rcCard('warn','Total Minimum Count', total+' receptacle'+(total>1?'s':'')+' for these walls',
+        'Does not include GFCI requirements, arc-fault protection, or dedicated circuits. Add receptacles for furniture walls as needed.');
+    }
+    qr.innerHTML += rcQR(_rcRoom==='bedroom'?'Bedroom Rules (\u00a7210.52(A))':'Living Area Rules (\u00a7210.52(A))',
+      '\u2022 6 ft rule measured from door/opening edges<br>\u2022 All wall spaces 2 ft+ require a receptacle<br>\u2022 Floor-standing appliances (refrigerators, ranges) break the wall measurement<br>'+ (_rcRoom==='bedroom'?'\u2022 Bedroom circuits require AFCI protection (\u00a7210.12)':''),
+      '\u00a7210.52(A)'+((_rcRoom==='bedroom')?' / \u00a7210.12':''));
+
+  } else if(_rcRoom === 'kitchen') {
+    var ctr = parseFloat(document.getElementById('rc-ctr').value);
+    var island = parseInt(document.getElementById('rc-island').value);
+    var html = '';
+    if(!isNaN(ctr) && ctr > 0) {
+      // Per 210.52(C): no point along counter wall line more than 24" from an outlet
+      // Counter split by sink/range = measure each section separately
+      // Min: ceil(ctr / 2) for a single run — but 1 outlet per counter section
+      var minWall = ctr <= 4 ? 1 : Math.ceil(ctr / 2);
+      var note = ctr <= 4 ? 'One receptacle serves up to 4 ft of continuous counter' : 'Place every 2 ft along counter — no point more than 24\u2033 from an outlet';
+      html += rcCard('pass', 'Countertop Wall Receptacles \u2014 '+ctr+' ft', 'Minimum '+minWall+' receptacle'+(minWall>1?'s':''), note);
+    }
+    if(island === 1 || island === 3) {
+      html += rcCard('pass', 'Kitchen Island (\u00a7210.52(C)(2))', 'Minimum 1 receptacle required', 'Island must be \u226524\u2033 wide \u00d7 \u226512\u2033 deep to trigger this requirement. 2023+ allows above-counter or within-counter outlets.');
+    }
+    if(island === 2 || island === 3) {
+      html += rcCard('pass', 'Peninsula (\u00a7210.52(C)(3))', 'Minimum 1 receptacle required', 'Peninsula must be \u226524\u2033 wide \u00d7 \u226512\u2033 deep. Measured from the connecting edge.');
+    }
+    if(!html) {
+      html = rcCard('info', 'Enter Countertop Length', 'Enter linear feet above to calculate', '');
+    }
+    res.innerHTML = html;
+    qr.innerHTML = rcQR('Kitchen Circuit Requirements (\u00a7210.52(B))',
+      '\u2022 Minimum 2 small appliance circuits required (20A, 120V)<br>\u2022 Refrigerator may have its own dedicated 20A circuit (recommended)<br>\u2022 All countertop receptacles must be GFCI protected (\u00a7210.8(A)(6))<br>\u2022 Counter sections separated by sink, range, or refrigerator are measured independently<br>\u2022 No counter section \u22652 ft wide can go without a receptacle',
+      '\u00a7210.52(B)(1)(2)(3)');
+
+  } else if(_rcRoom === 'hallway') {
+    var hall = parseFloat(document.getElementById('rc-hall').value);
+    var html = '';
+    if(!isNaN(hall) && hall > 0) {
+      if(hall >= 10) {
+        html += rcCard('pass', 'Hallway \u2014 '+hall+' ft', '1 receptacle required', '10 ft or longer hallways require at least one receptacle outlet');
+      } else {
+        html += rcCard('info', 'Hallway \u2014 '+hall+' ft', 'No receptacle required', 'Hallways under 10 ft are exempt from the hallway receptacle requirement');
+      }
+    }
+    res.innerHTML = html;
+    qr.innerHTML = rcQR('Hallway Rule (\u00a7210.52(H))',
+      '\u2022 Hallways 10 ft or longer: at least 1 receptacle required<br>\u2022 Hallways under 10 ft: no requirement under \u00a7210.52(H)<br>\u2022 Measurement is the total length of the hallway',
+      '\u00a7210.52(H)');
+
+  } else if(_rcRoom === 'bathroom') {
+    res.innerHTML = rcCard('pass','Bathroom (\u00a7210.52(D))','Minimum 1 receptacle per basin',
+      'Located on wall or partition adjacent to the basin countertop, within 3 ft of the outside edge of each basin. Must be GFCI protected (\u00a7210.8(A)(1)). Bathroom circuits must be 20A (\u00a7210.11(C)(3)).');
+    qr.innerHTML = rcQR('Bathroom Requirements',
+      '\u2022 1 receptacle within 3 ft of each sink basin<br>\u2022 Must be GFCI protected<br>\u2022 Dedicated 20A circuit required (may serve multiple bathrooms)<br>\u2022 Receptacle must be on wall/partition adjacent to basin \u2014 not on cabinet face below counter<br>\u2022 No receptacle in face of cabinet below the basin',
+      '\u00a7210.52(D) / \u00a7210.8(A)(1) / \u00a7210.11(C)(3)');
+
+  } else if(_rcRoom === 'garage') {
+    res.innerHTML = rcCard('pass','Garage (\u00a7210.52(G))','Minimum 1 receptacle per car space',
+      'At least one accessible outlet per car space. Must be GFCI protected (\u00a7210.8(A)(2)). Does not apply to areas used for storage only.');
+    qr.innerHTML = rcQR('Garage Requirements',
+      '\u2022 1 receptacle per car space (not just per garage)<br>\u2022 Must be readily accessible<br>\u2022 GFCI protection required<br>\u2022 EV-ready circuit required in new construction in some jurisdictions<br>\u2022 2026 edition: new garages require an EV-ready 40A, 240V branch circuit (\u00a7210.17)',
+      '\u00a7210.52(G) / \u00a7210.8(A)(2) / \u00a7210.17 (2026)');
+
+  } else if(_rcRoom === 'outdoor') {
+    res.innerHTML = rcCard('pass','Outdoor (\u00a7210.52(E))','Front + back of dwelling, grade level',
+      'One accessible outlet at the front and one at the rear, at or below grade level, not more than 6.5 ft above grade. GFCI protection required (\u00a7210.8(A)(3)).');
+    qr.innerHTML = rcQR('Outdoor Requirements',
+      '\u2022 One outlet at front AND one at rear of dwelling<br>\u2022 Must be accessible from grade level (no higher than 6.5 ft)<br>\u2022 GFCI protection required<br>\u2022 Balconies, decks, or porches accessible from inside: at least 1 receptacle<br>\u2022 All outdoor receptacles must be in weatherproof enclosures',
+      '\u00a7210.52(E) / \u00a7210.8(A)(3)');
+
+  } else if(_rcRoom === 'basement') {
+    res.innerHTML = rcCard('pass','Basement (\u00a7210.52(G))','Minimum 1 receptacle per basement',
+      'Each basement requires at least one accessible outlet. Must be GFCI protected if at or below grade (\u00a7210.8(A)(5)).');
+    qr.innerHTML = rcQR('Basement & Laundry Requirements',
+      '\u2022 Basement: minimum 1 receptacle (unfinished or finished)<br>\u2022 Laundry area: at least 1 receptacle outlet for laundry appliances (\u00a7210.52(F))<br>\u2022 Laundry circuit must be a dedicated 20A circuit<br>\u2022 GFCI protection required for basement grade-level outlets<br>\u2022 Finished basements follow the general 6 ft room rule (\u00a7210.52(A))',
+      '\u00a7210.52(F)(G) / \u00a7210.8(A)(5) / \u00a7210.11(C)(2)');
+  }
+}
+// Init on load
+document.addEventListener('DOMContentLoaded', function(){ if(document.getElementById('rc-results')) rcCalc(); });
 
 // ── GFCI / AFCI Lookup ───────────────────────────────────────────────────────
 
