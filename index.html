@@ -1643,7 +1643,6 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-rc" onclick="switchTab('rc',this)">Recept</button>
     <button class="tab-btn" id="tab-btn-gs" onclick="switchTab('gs',this)">Gen Sz</button>
     <button class="tab-btn" id="tab-btn-cl" onclick="switchTab('cl',this)">Com Load</button>
-    <button class="tab-btn" id="tab-btn-wl" onclick="switchTab('wl',this)">Wet Loc</button>
     <button class="tab-btn" id="tab-btn-fr" onclick="switchTab('fr',this)">Fracs</button>
     <button class="tab-btn" id="tab-btn-dip" onclick="switchTab('dip',this)">Dip SW</button>
     <button class="tab-btn" id="tab-btn-wc" onclick="switchTab('wc',this)">Colors</button>
@@ -3186,81 +3185,6 @@ if('serviceWorker' in navigator){
   </div>
 
 
-  <!-- ══════════════════════════════════════════════
-       WET / OUTDOOR LOCATION RULES TAB
-  ══════════════════════════════════════════════ -->
-  <div class="tab-panel" id="tab-wl">
-    <div class="wl-wrap">
-      <div class="section-label">Wet &amp; Outdoor Location Rules</div>
-
-      <!-- Tab selector -->
-      <div class="wl-loc-tabs">
-        <button class="wl-loc-btn wl-active" onclick="wlShow('defs',this)">Location Types</button>
-        <button class="wl-loc-btn" onclick="wlShow('wire',this)">Wiring Methods</button>
-        <button class="wl-loc-btn" onclick="wlShow('dev',this)">Devices &amp; Boxes</button>
-        <button class="wl-loc-btn" onclick="wlShow('equip',this)">Fixtures &amp; Equip</button>
-        <button class="wl-loc-btn" onclick="wlShow('mistakes',this)">Common Mistakes</button>
-      </div>
-
-      <div class="wl-panel wl-show" id="wl-defs">
-      <div class="wl-group"><div class="wl-group-title">The Three Location Types</div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Dry Location</div><div class="wl-item-body">Indoors, protected from weather and moisture at all times. Standard indoor wiring methods apply. No special listings required.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Damp Location</div><div class="wl-item-body">Partially protected from weather — covered porches, canopies, under roof overhangs, car washes, refrigerated coolers. Equipment must be listed for <strong>damp</strong> locations minimum. Moisture can be present but the area is sheltered from direct rain.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Wet Location</div><div class="wl-item-body">Directly exposed to weather, rain, or standing water — exterior walls, rooftops, underground, in concrete, or any location subject to saturation. Equipment must be listed for <strong>wet</strong> locations. Wet-rated covers, fittings, and wiring methods required.</div></div>
-      </div>
-      <div class="wl-group"><div class="wl-group-title">How to Tell Which You Have</div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Covered Porch / Carport</div><div class="wl-item-body">Usually damp — sheltered from rain but not enclosed. Use damp-rated fixtures and in-use covers on receptacles.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Open Deck / Exterior Wall</div><div class="wl-item-body">Wet location — fully exposed. All equipment, boxes, fittings, and devices must be listed for wet locations.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Unheated Garage (attached)</div><div class="wl-item-body">Damp location minimum for most of the space. Areas near an open garage door or subject to water entry may be wet. GFCI protection required throughout.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Underground / Direct Burial</div><div class="wl-item-body">Always treated as a wet location regardless of soil conditions. Wiring methods, cables, and equipment must be rated for wet/direct-burial use.</div></div>
-      </div>
-      </div>
-      <div class="wl-panel" id="wl-wire">
-<div class="wl-scroll"><table class="wl-matrix"><thead><tr><th>Wiring Method</th><th style="text-align:center;">Dry</th><th style="text-align:center;">Damp</th><th style="text-align:center;">Wet</th><th>Notes</th></tr></thead><tbody><tr><td>RMC (Rigid Metal Conduit)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Approved for all locations including direct burial and concrete encasement</td></tr><tr><td>IMC (Intermediate Metal Conduit)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Same ratings as RMC, lighter wall — widely used outdoors</td></tr><tr><td>EMT (Electrical Metallic Tubing)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-cond-cell">*</td><td style="font-size:0.7rem;color:var(--muted);">Wet location only when listed fittings and boxes are used; not for direct burial</td></tr><tr><td>PVC Schedule 40/80</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Excellent for outdoor and underground. UV-resistant gray PVC preferred above ground</td></tr><tr><td>LFMC (Liquid-tight Flex Metal)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Used for equipment connections outdoors — A/C units, compressors. Must be listed for wet</td></tr><tr><td>LFNC (Liquid-tight Flex Nonmetallic)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-cond-cell">*</td><td style="font-size:0.7rem;color:var(--muted);">Check listing — some types rated for outdoor/wet, others for dry only</td></tr><tr><td>MC Cable</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-cond-cell">*</td><td style="font-size:0.7rem;color:var(--muted);">Standard MC is dry/damp only. MC cable listed for wet locations (jacketed) required outdoors</td></tr><tr><td>NM-B / Romex</td><td class="wl-ok-cell">✔</td><td class="wl-no-cell">−</td><td class="wl-no-cell">−</td><td style="font-size:0.7rem;color:var(--muted);">Indoor dry locations only — never outdoors, in wet areas, or exposed to moisture</td></tr><tr><td>UF-B (Underground Feeder)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Rated for direct burial, wet locations, and outdoor use. Solid gray outer jacket</td></tr><tr><td>USE / USE-2</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Underground service entrance cable — rated for direct burial and wet locations</td></tr><tr><td>SE Cable</td><td class="wl-ok-cell">✔</td><td class="wl-cond-cell">*</td><td class="wl-no-cell">−</td><td style="font-size:0.7rem;color:var(--muted);">Service entrance — damp only if listed; not for direct burial or wet locations</td></tr></tbody></table></div>
-      <div class="fi-sub" style="margin:6px 0 10px;">✔ = Permitted &nbsp; − = Not Permitted &nbsp; * = Conditional / check listing</div>
-      </div>
-      <div class="wl-panel" id="wl-dev">
-      <div class="wl-group"><div class="wl-group-title">Receptacles & Outlets</div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>In-Use / Bubble Covers Required</div><div class="wl-item-body">Any outdoor receptacle must have a cover that protects it while a cord is plugged in — not just when empty. "While-in-use" or "extra-duty" covers are the standard. Flip-lid covers alone are not sufficient for cord-connected loads.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>GFCI Protection — Always Outdoors</div><div class="wl-item-body">Every outdoor receptacle on a dwelling requires GFCI protection, regardless of amperage. The 2026 edition extends GFCI to outlets up to 60A outdoors. No exceptions for low-traffic areas.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Damp Location Covers</div><div class="wl-item-body">Receptacles in damp locations need weatherproof covers that keep water out when not in use. Vertical installation preferred — water drains away from the device.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Standard Indoor Devices Outdoors</div><div class="wl-item-body">Regular unrated outlets, switches, and covers cannot be used in wet or damp outdoor locations. Devices must be specifically listed for the location type.</div></div>
-      </div>
-      <div class="wl-group"><div class="wl-group-title">Boxes & Enclosures</div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>NEMA Ratings for Outdoor Enclosures</div><div class="wl-item-body"><strong>NEMA 3R</strong> — Rain-tight, suitable for outdoor use. Most common for panels and disconnect enclosures.<br><strong>NEMA 4</strong> — Watertight, can withstand hose-down.<br><strong>NEMA 4X</strong> — Watertight and corrosion-resistant (stainless or fiberglass). Best for coastal or chemical environments.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Conduit Fittings</div><div class="wl-item-body">All fittings used in wet locations must be listed for wet locations — this includes couplings, connectors, and straps. Standard indoor set-screw fittings are not acceptable in wet locations, even in a NEMA 3R enclosure. Use compression or rain-tight fittings.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Sealing Wet Location Boxes</div><div class="wl-item-body">Underground junction boxes must be suitable for wet locations and filled with a listed compound, or be a listed drain-type enclosure. Above-ground boxes in wet locations need gasketed covers.</div></div>
-      </div>
-      </div>
-      <div class="wl-panel" id="wl-equip">
-      <div class="wl-group"><div class="wl-group-title">Luminaires (Light Fixtures)</div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Wet-Listed vs Damp-Listed</div><div class="wl-item-body">Fixtures in wet locations must be listed and labeled <strong>"Suitable for Wet Locations."</strong> Fixtures only labeled <strong>"Suitable for Damp Locations"</strong> cannot be used where directly exposed to rain. Check the label on every fixture before installing outdoors.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Covered Porch Fixtures</div><div class="wl-item-body">A covered porch is typically damp — a damp-rated fixture is the minimum. If rain can blow in or the fixture is near an open edge, treat it as wet.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Recessed Cans</div><div class="wl-item-body">Recessed fixtures in outdoor soffits or covered porches must be rated for damp or wet locations. Standard IC-rated indoor cans cannot be used.</div></div>
-      </div>
-      <div class="wl-group"><div class="wl-group-title">HVAC & Mechanical Equipment</div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Outdoor A/C Disconnects</div><div class="wl-item-body">The disconnect for an outdoor A/C unit or heat pump must be within sight of the unit and rated for the outdoor location. NEMA 3R enclosure minimum. The branch circuit wiring to the unit uses LFMC (liquid-tight flexible conduit) for the final connection to allow vibration.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Cord-Connected Outdoor Equipment</div><div class="wl-item-body">Equipment cords used outdoors must be listed for outdoor (W-suffix) use — not standard indoor extension cords. Outdoor-rated cords resist moisture, UV, and temperature extremes.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Pools, Spas & Hot Tubs</div><div class="wl-item-body">Swimming pools, hot tubs, spas, and fountains have their own detailed requirements including bonding, clearances, and special wiring methods. See a licensed electrician and refer to Article 680 in the adopted code for your jurisdiction.</div></div>
-      </div>
-      </div>
-      <div class="wl-panel" id="wl-mistakes">
-      <div class="wl-group"><div class="wl-group-title">Common Outdoor Wiring Mistakes</div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Using NM-B (Romex) Outdoors</div><div class="wl-item-body">NM-B is rated for dry indoor locations only. Running Romex through an exterior wall to an outdoor box, or leaving it exposed on an exterior surface, is a code violation regardless of whether it is in conduit.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Standard EMT Without Wet-Rated Fittings</div><div class="wl-item-body">EMT can be used outdoors only when all fittings, boxes, and covers are rated for wet locations. Using standard set-screw connectors on outdoor EMT is one of the most common violations inspectors catch.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Indoor Panels Outdoors</div><div class="wl-item-body">A standard NEMA 1 indoor panel cannot be used outdoors. Outdoor main panels and subpanels must be NEMA 3R minimum. The interior components still need to be kept dry even in a NEMA 3R enclosure.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Flip-Lid Covers on In-Use Outlets</div><div class="wl-item-body">Single-gang flip-lid covers are only weatherproof when nothing is plugged in. The moment a cord is in use, the cover can't close and the outlet is unprotected. While-in-use (bubble) covers are required for any receptacle that may have a cord plugged in during wet conditions.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Forgetting Burial Depth</div><div class="wl-item-body">Direct-buried cable and conduit have minimum depth requirements based on wiring method and location type. See the Burial tab for a full depth reference table.</div></div>
-        <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Missing Expansion Fittings on PVC</div><div class="wl-item-body">PVC conduit expands and contracts significantly with temperature changes. Runs longer than about 30 feet outdoors need expansion fittings to prevent buckling or pulled connections.</div></div>
-      </div>
-      </div>
-
-      <div class="disclaimer">
-        <div class="disclaimer-title">Important Notice</div>
-        <div class="disclaimer-text">This reference is a general guide to outdoor and wet location wiring practices based on widely adopted electrical codes. Local amendments, jurisdiction-specific requirements, and AHJ interpretations may vary. Always verify wiring method approvals, equipment listings, and installation requirements with your local authority having jurisdiction before installation. Design guidance only.</div>
-      </div>
-    </div>
-  </div>
 
   <!-- ══════════════════════════════════════════════
        TAB 6 — FRACTION CALCULATOR
@@ -4682,6 +4606,124 @@ if('serviceWorker' in navigator){
           <div class="bd-legend-item"><strong>Under Building</strong> — Must be in raceway; 0&#34; cover required once inside</div>
         </div>
         <div style="font-size:11px;color:var(--text-dim);padding:4px 14px 8px;">Table 300.5 (2023/2026) · Minimums only — AHJ may require more · Rocks/hazards need extra protection per 300.5(D)</div>
+      </div>
+    </div>
+
+
+    <div class="cht-cat-hdr" id="cat-wetloc">Wet &amp; Outdoor Locations</div>
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-wl-defs')">
+        <span class="cht-icon">&#x1F4CD;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Location Types — Dry / Damp / Wet</div><div class="cht-sub">How to classify any installation location</div></div>
+        <span class="cht-chev" id="cht-wl-defs-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-wl-defs">
+        <div class="wl-wrap" style="padding:8px 0;">
+          <div class="wl-group"><div class="wl-group-title">The Three Location Types</div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Dry Location</div><div class="wl-item-body">Indoors, protected from weather and moisture at all times. Standard indoor wiring methods apply. No special listings required.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Damp Location</div><div class="wl-item-body">Partially protected from weather — covered porches, canopies, under roof overhangs, car washes, refrigerated coolers. Equipment must be listed for <strong>damp</strong> locations minimum. Moisture can be present but the area is sheltered from direct rain.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Wet Location</div><div class="wl-item-body">Directly exposed to weather, rain, or standing water — exterior walls, rooftops, underground, in concrete, or any location subject to saturation. Equipment must be listed for <strong>wet</strong> locations. Wet-rated covers, fittings, and wiring methods required.</div></div>
+          </div>
+          <div class="wl-group"><div class="wl-group-title">How to Tell Which You Have</div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Covered Porch / Carport</div><div class="wl-item-body">Usually damp — sheltered from rain but not enclosed. Use damp-rated fixtures and in-use covers on receptacles.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Open Deck / Exterior Wall</div><div class="wl-item-body">Wet location — fully exposed. All equipment, boxes, fittings, and devices must be listed for wet locations.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Unheated Garage (attached)</div><div class="wl-item-body">Damp location minimum for most of the space. Areas near an open garage door or subject to water entry may be wet. GFCI protection required throughout.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Underground / Direct Burial</div><div class="wl-item-body">Always treated as a wet location regardless of soil conditions. Wiring methods, cables, and equipment must be rated for wet/direct-burial use.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-wl-wire')">
+        <span class="cht-icon">&#x1F50C;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Wiring Methods by Location</div><div class="cht-sub">What's permitted — dry, damp, and wet</div></div>
+        <span class="cht-chev" id="cht-wl-wire-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-wl-wire">
+        <div class="wl-scroll">
+          <table class="wl-matrix"><thead><tr><th>Wiring Method</th><th style="text-align:center;">Dry</th><th style="text-align:center;">Damp</th><th style="text-align:center;">Wet</th><th>Notes</th></tr></thead><tbody>
+            <tr><td>RMC (Rigid Metal Conduit)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Approved for all locations including direct burial and concrete encasement</td></tr>
+            <tr><td>IMC (Intermediate Metal Conduit)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Same ratings as RMC, lighter wall — widely used outdoors</td></tr>
+            <tr><td>EMT (Electrical Metallic Tubing)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-cond-cell">*</td><td style="font-size:0.7rem;color:var(--muted);">Wet location only when listed fittings and boxes are used; not for direct burial</td></tr>
+            <tr><td>PVC Schedule 40/80</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Excellent for outdoor and underground. UV-resistant gray PVC preferred above ground</td></tr>
+            <tr><td>LFMC (Liquid-tight Flex Metal)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Used for equipment connections outdoors — A/C units, compressors. Must be listed for wet</td></tr>
+            <tr><td>LFNC (Liquid-tight Flex Nonmetallic)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-cond-cell">*</td><td style="font-size:0.7rem;color:var(--muted);">Check listing — some types rated for outdoor/wet, others for dry only</td></tr>
+            <tr><td>MC Cable</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-cond-cell">*</td><td style="font-size:0.7rem;color:var(--muted);">Standard MC is dry/damp only. MC cable listed for wet locations (jacketed) required outdoors</td></tr>
+            <tr><td>NM-B / Romex</td><td class="wl-ok-cell">✔</td><td class="wl-no-cell">−</td><td class="wl-no-cell">−</td><td style="font-size:0.7rem;color:var(--muted);">Indoor dry locations only — never outdoors, in wet areas, or exposed to moisture</td></tr>
+            <tr><td>UF-B (Underground Feeder)</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Rated for direct burial, wet locations, and outdoor use. Solid gray outer jacket</td></tr>
+            <tr><td>USE / USE-2</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td class="wl-ok-cell">✔</td><td style="font-size:0.7rem;color:var(--muted);">Underground service entrance cable — rated for direct burial and wet locations</td></tr>
+            <tr><td>SE Cable</td><td class="wl-ok-cell">✔</td><td class="wl-cond-cell">*</td><td class="wl-no-cell">−</td><td style="font-size:0.7rem;color:var(--muted);">Service entrance — damp only if listed; not for direct burial or wet locations</td></tr>
+          </tbody></table>
+        </div>
+        <div class="fi-sub" style="margin:6px 14px 10px;">✔ = Permitted &nbsp; − = Not Permitted &nbsp; * = Conditional / check listing</div>
+      </div>
+    </div>
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-wl-dev')">
+        <span class="cht-icon">&#x1F532;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Devices &amp; Boxes — Outdoor Requirements</div><div class="cht-sub">Covers, GFCI, NEMA ratings, fittings</div></div>
+        <span class="cht-chev" id="cht-wl-dev-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-wl-dev">
+        <div class="wl-wrap" style="padding:8px 0;">
+          <div class="wl-group"><div class="wl-group-title">Receptacles &amp; Outlets</div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>In-Use / Bubble Covers Required</div><div class="wl-item-body">Any outdoor receptacle must have a cover that protects it while a cord is plugged in — not just when empty. "While-in-use" or "extra-duty" covers are the standard. Flip-lid covers alone are not sufficient for cord-connected loads.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>GFCI Protection — Always Outdoors</div><div class="wl-item-body">Every outdoor receptacle on a dwelling requires GFCI protection, regardless of amperage. The 2026 edition extends GFCI to outlets up to 60A outdoors. No exceptions for low-traffic areas.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Damp Location Covers</div><div class="wl-item-body">Receptacles in damp locations need weatherproof covers that keep water out when not in use. Vertical installation preferred — water drains away from the device.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Standard Indoor Devices Outdoors</div><div class="wl-item-body">Regular unrated outlets, switches, and covers cannot be used in wet or damp outdoor locations. Devices must be specifically listed for the location type.</div></div>
+          </div>
+          <div class="wl-group"><div class="wl-group-title">Boxes &amp; Enclosures</div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>NEMA Ratings for Outdoor Enclosures</div><div class="wl-item-body"><strong>NEMA 3R</strong> — Rain-tight, suitable for outdoor use. Most common for panels and disconnect enclosures.<br><strong>NEMA 4</strong> — Watertight, can withstand hose-down.<br><strong>NEMA 4X</strong> — Watertight and corrosion-resistant (stainless or fiberglass). Best for coastal or chemical environments.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Conduit Fittings</div><div class="wl-item-body">All fittings used in wet locations must be listed for wet locations — including couplings, connectors, and straps. Standard indoor set-screw fittings are not acceptable in wet locations, even in a NEMA 3R enclosure. Use compression or rain-tight fittings.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Sealing Wet Location Boxes</div><div class="wl-item-body">Underground junction boxes must be suitable for wet locations and filled with a listed compound, or be a listed drain-type enclosure. Above-ground boxes in wet locations need gasketed covers.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-wl-equip')">
+        <span class="cht-icon">&#x1F4A1;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Fixtures &amp; Equipment — Outdoor</div><div class="cht-sub">Luminaires, HVAC disconnects, pools &amp; spas</div></div>
+        <span class="cht-chev" id="cht-wl-equip-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-wl-equip">
+        <div class="wl-wrap" style="padding:8px 0;">
+          <div class="wl-group"><div class="wl-group-title">Luminaires (Light Fixtures)</div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Wet-Listed vs Damp-Listed</div><div class="wl-item-body">Fixtures in wet locations must be listed and labeled <strong>"Suitable for Wet Locations."</strong> Fixtures only labeled <strong>"Suitable for Damp Locations"</strong> cannot be used where directly exposed to rain. Check the label on every fixture before installing outdoors.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Covered Porch Fixtures</div><div class="wl-item-body">A covered porch is typically damp — a damp-rated fixture is the minimum. If rain can blow in or the fixture is near an open edge, treat it as wet.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Recessed Cans</div><div class="wl-item-body">Recessed fixtures in outdoor soffits or covered porches must be rated for damp or wet locations. Standard IC-rated indoor cans cannot be used.</div></div>
+          </div>
+          <div class="wl-group"><div class="wl-group-title">HVAC &amp; Mechanical Equipment</div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Outdoor A/C Disconnects</div><div class="wl-item-body">The disconnect for an outdoor A/C unit or heat pump must be within sight of the unit and rated for the outdoor location. NEMA 3R enclosure minimum. The branch circuit wiring to the unit uses LFMC for the final connection to allow for vibration.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-ok"></span>Cord-Connected Outdoor Equipment</div><div class="wl-item-body">Equipment cords used outdoors must be listed for outdoor (W-suffix) use — not standard indoor extension cords. Outdoor-rated cords resist moisture, UV, and temperature extremes.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Pools, Spas &amp; Hot Tubs</div><div class="wl-item-body">Swimming pools, hot tubs, spas, and fountains have their own detailed requirements including bonding, clearances, and special wiring methods. Refer to Article 680 in the adopted code for your jurisdiction — consult a licensed electrician.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cht-card">
+      <div class="cht-hd" onclick="toggleCht('cht-wl-mistakes')">
+        <span class="cht-icon">&#x26A0;</span>
+        <div class="cht-hd-txt"><div class="cht-title">Common Outdoor Wiring Mistakes</div><div class="cht-sub">Violations inspectors catch most often</div></div>
+        <span class="cht-chev" id="cht-wl-mistakes-chev">&#x25B6;</span>
+      </div>
+      <div class="cht-body" id="cht-wl-mistakes">
+        <div class="wl-wrap" style="padding:8px 0;">
+          <div class="wl-group"><div class="wl-group-title">Common Outdoor Wiring Mistakes</div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Using NM-B (Romex) Outdoors</div><div class="wl-item-body">NM-B is rated for dry indoor locations only. Running Romex through an exterior wall to an outdoor box, or leaving it exposed on an exterior surface, is a code violation regardless of whether it is in conduit.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Standard EMT Without Wet-Rated Fittings</div><div class="wl-item-body">EMT can be used outdoors only when all fittings, boxes, and covers are rated for wet locations. Using standard set-screw connectors on outdoor EMT is one of the most common violations inspectors catch.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Indoor Panels Outdoors</div><div class="wl-item-body">A standard NEMA 1 indoor panel cannot be used outdoors. Outdoor main panels and subpanels must be NEMA 3R minimum. The interior components still need to be kept dry even in a NEMA 3R enclosure.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-no"></span>Flip-Lid Covers on In-Use Outlets</div><div class="wl-item-body">Single-gang flip-lid covers are only weatherproof when nothing is plugged in. The moment a cord is in use, the cover can't close and the outlet is unprotected. While-in-use (bubble) covers are required for any receptacle that may have a cord plugged in during wet conditions.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Forgetting Burial Depth</div><div class="wl-item-body">Direct-buried cable and conduit have minimum depth requirements based on wiring method and location type. See the Burial Depth chart under Conduit &amp; Raceways for the full reference table.</div></div>
+            <div class="wl-item"><div class="wl-item-title"><span class="wl-warn"></span>Missing Expansion Fittings on PVC</div><div class="wl-item-body">PVC conduit expands and contracts significantly with temperature changes. Runs longer than about 30 feet outdoors need expansion fittings to prevent buckling or pulled connections.</div></div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--text-dim);padding:4px 14px 8px;">General reference only — verify with local AHJ before installation.</div>
       </div>
     </div>
 
