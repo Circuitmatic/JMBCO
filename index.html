@@ -7340,7 +7340,6 @@ function buildPrintHTML(reportTitle,subtitle,bodyHTML,compact){
     '*{box-sizing:border-box;margin:0;padding:0;}'+
     'body{font-family:"Helvetica Neue",Arial,sans-serif;color:#1a1a1a;background:#fff;font-size:13px;}'+
     (compact?'body{font-size:11px;}@page{size:8.5in 10.5in;margin:0.45in 0.55in;}table{font-size:10px;}thead th{padding:5px 8px;}tbody td{padding:5px 8px;}':'')+
-+
     '.rpt-header{background:#07090f;color:#f0c020;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px;}'+
     '.rpt-brand{display:flex;align-items:center;gap:12px;}'+
     '.rpt-brand-text{display:flex;flex-direction:column;justify-content:center;}'+
@@ -12678,7 +12677,7 @@ function qzPick(choice,btn,q){
     btn.classList.add('qz-bad');
     document.querySelectorAll('.quiz-opt').forEach(function(b){if(b.textContent===q.a)b.classList.add('qz-ok');});
   }
-  document.getElementById('qz-ref').textContent=q.r||('NEC '+(_codeYear||'2026'));
+  document.getElementById('qz-ref').textContent=q.r||(_codeYear||'2026');
   document.getElementById('qz-exp').textContent=q.t;
   document.getElementById('qz-feedback').style.display='block';
   document.getElementById('qz-next').style.display='block';
@@ -12687,7 +12686,7 @@ function qzPick(choice,btn,q){
 }
 function qzHint(){
   var q=_qzSet[_qzCur];
-  document.getElementById('qz-hint-reveal').textContent='NEC » '+(q.r||('NEC '+(_codeYear||'2026')));
+  document.getElementById('qz-hint-reveal').textContent='NEC » '+(q.r||(_codeYear||'2026'));
   document.getElementById('qz-hint-reveal').style.display='block';
   document.getElementById('qz-hint-btn').style.display='none';
 }
@@ -12735,7 +12734,7 @@ function qzExportPDF(){
       '<div style="flex:1;">' +
         '<div style="font-size:15px;font-weight:800;color:'+scoreColor+';">'+passLabel+'</div>' +
         '<div style="font-size:11px;color:#6b7280;margin-top:5px;line-height:1.6;">' +
-          'NEC Code Year: <strong>'+yr+'</strong> &nbsp;&middot;&nbsp; Date: <strong>'+now+'</strong><br>' +
+          'Code Year: <strong>'+yr+'</strong> &nbsp;&middot;&nbsp; Date: <strong>'+now+'</strong><br>' +
           'Questions: <strong>'+_qzTotal+'</strong> &nbsp;&middot;&nbsp; Correct: <strong>'+_qzScore+'</strong> &nbsp;&middot;&nbsp; Incorrect: <strong>'+(_qzTotal-_qzScore)+'</strong>' +
         '</div>' +
       '</div>' +
@@ -12770,14 +12769,14 @@ function qzExportPDF(){
         '</div>' +
         // Reference + explanation
         '<div style="margin-top:5px;padding-top:5px;border-top:1px solid #e5e7eb;font-size:10px;color:#6b7280;line-height:1.5;">' +
-          '<span style="font-weight:700;color:#374151;">Ref: '+escHtml(q.r||'NEC '+yr)+'</span>' +
+          '<span style="font-weight:700;color:#374151;">Ref: '+escHtml(q.r||yr)+'</span>' +
           (q.t?'&nbsp;&mdash;&nbsp;'+escHtml(q.t):'') +
         '</div>' +
       '</div>';
   });
 
   var html=buildPrintHTML(
-    'Exam Results \u2014 NEC '+yr,
+    'Exam Results \u2014 CODE '+yr,
     pct+'% \u00b7 '+_qzScore+'/'+_qzTotal+' correct \u00b7 '+now,
     summaryHTML+qHTML,
     true  // compact flag
