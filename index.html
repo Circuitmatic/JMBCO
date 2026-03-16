@@ -688,6 +688,18 @@ body.light-mode .dr-note{background:#f8fafc;border-color:#e2e8f0;}
 .gs-size-badge{display:inline-block;background:rgba(240,192,32,.15);border:1.5px solid #f0c020;border-radius:10px;padding:8px 20px;font-size:1.3rem;font-weight:900;font-family:'Roboto Mono',monospace;color:#f0c020;margin-top:10px;}
 .gs-surge-note{font-size:0.72rem;color:var(--muted);margin-top:6px;line-height:1.6;}
 body.light-mode .gs-load-watts{background:#f8fafc;border-color:#e2e8f0;}
+/* ── Commercial Load Tab ── */
+.cl-wrap{padding:12px 14px 24px;max-width:620px;margin:0 auto;}
+.cl-section{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);margin:14px 0 6px;padding:5px 10px;background:rgba(240,192,32,.07);border-left:3px solid #f0c020;border-radius:0 6px 6px 0;}
+.cl-breakdown{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-top:10px;}
+.cl-row{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);font-size:0.82rem;}
+.cl-row:last-child{border-bottom:none;}
+.cl-row-lbl{color:var(--sub);flex:1;}
+.cl-row-val{font-family:'Roboto Mono',monospace;font-weight:700;color:var(--text);font-size:0.85rem;}
+.cl-row-val.cl-gold{color:#f0c020;}
+.cl-row.cl-total-row{background:rgba(240,192,32,.07);padding:10px 14px;}
+.cl-row.cl-total-row .cl-row-lbl{font-weight:700;color:var(--text);}
+.cl-row.cl-total-row .cl-row-val{font-size:1rem;color:#f0c020;}
 /* ── Fraction Calculator ── */
   .fr-display { padding:8px 16px 10px; background:var(--card); }
   .fr-expr { font-family:'Roboto Mono',monospace; font-size:14px; color:var(--muted); text-align:right; min-height:18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -1589,6 +1601,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-bd" onclick="switchTab('bd',this)">Burial</button>
     <button class="tab-btn" id="tab-btn-rc" onclick="switchTab('rc',this)">Recept</button>
     <button class="tab-btn" id="tab-btn-gs" onclick="switchTab('gs',this)">Gen Sz</button>
+    <button class="tab-btn" id="tab-btn-cl" onclick="switchTab('cl',this)">Com Load</button>
     <button class="tab-btn" id="tab-btn-fr" onclick="switchTab('fr',this)">Fracs</button>
     <button class="tab-btn" id="tab-btn-dip" onclick="switchTab('dip',this)">Dip SW</button>
     <button class="tab-btn" id="tab-btn-wc" onclick="switchTab('wc',this)">Colors</button>
@@ -2917,6 +2930,142 @@ if('serviceWorker' in navigator){
       <div class="disclaimer" style="margin-top:14px;">
         <div class="disclaimer-title">Important Notice</div>
         <div class="disclaimer-text">Generator sizing is an estimate only. Motor starting surge (LRA) can be 2–3× running wattage — verify with nameplate data. Do not run all loads simultaneously on an undersized generator. Transfer switches and interlock kits must be installed by a licensed electrician per §702 (Optional Standby Systems). Portable generators must never be operated indoors or near openings. Design guidance only.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       COMMERCIAL LOAD CALCULATION TAB (Art. 220)
+  ══════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-cl">
+    <div class="cl-wrap">
+      <div class="section-label">Commercial Load Calc — Art. 220</div>
+
+      <!-- Building / Lighting -->
+      <div class="cl-section">1 — General Lighting (Table 220.42)</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Building / Occupancy Type</div>
+          <div class="sel-wrap"><select class="fi" id="cl-occ" onchange="clLiveUpdate()">
+            <option value="3.5">Office Building</option>
+            <option value="3.5">Bank</option>
+            <option value="3.0">Barber Shop / Beauty Parlor</option>
+            <option value="3.0">School</option>
+            <option value="3.0">Store / Retail</option>
+            <option value="2.0">Restaurant</option>
+            <option value="2.0">Hospital</option>
+            <option value="2.0">Hotel / Motel (no cooking by guests)</option>
+            <option value="2.0">Industrial / Commercial Loft</option>
+            <option value="2.0">Club</option>
+            <option value="2.0">Court Room</option>
+            <option value="1.5">Lodge Room</option>
+            <option value="1.0">Assembly Hall / Auditorium</option>
+            <option value="1.0">Church</option>
+            <option value="0.5">Garage (commercial)</option>
+            <option value="0.25">Warehouse (storage)</option>
+            <option value="2.0">All Others</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Floor Area (sq ft)</div>
+          <input class="fi" id="cl-sqft" type="number" min="0" placeholder="sq ft" oninput="clLiveUpdate()"/>
+        </div>
+      </div>
+
+      <!-- Receptacles -->
+      <div class="cl-section">2 — Receptacle Loads (§220.44)</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Number of General-Use Receptacles</div>
+          <input class="fi" id="cl-rec" type="number" min="0" placeholder="count (180 VA each)" oninput="clLiveUpdate()"/>
+        </div>
+      </div>
+
+      <!-- Show window / track -->
+      <div class="cl-section">3 — Show Window & Track Lighting (§220.43)</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Show Window Linear Feet</div>
+          <input class="fi" id="cl-sw" type="number" min="0" placeholder="ft (200 VA/ft)" oninput="clLiveUpdate()"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Track Lighting (linear feet)</div>
+          <input class="fi" id="cl-track" type="number" min="0" placeholder="ft (150 VA per 2 ft)" oninput="clLiveUpdate()"/>
+        </div>
+      </div>
+
+      <!-- Kitchen equipment -->
+      <div class="cl-section">4 — Commercial Kitchen Equipment (§220.56)</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Number of Kitchen Equipment Pieces</div>
+          <input class="fi" id="cl-kit-count" type="number" min="0" placeholder="count" oninput="clLiveUpdate()"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Total Kitchen Equipment Load (W)</div>
+          <input class="fi" id="cl-kit-w" type="number" min="0" placeholder="watts" oninput="clLiveUpdate()"/>
+        </div>
+      </div>
+
+      <!-- Motors / HVAC -->
+      <div class="cl-section">5 — Motor & HVAC Loads (§220.50)</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Largest Single Motor (W / VA)</div>
+          <input class="fi" id="cl-mot-lg" type="number" min="0" placeholder="W — sized at 125% per §430" oninput="clLiveUpdate()"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">All Other Motor Loads (W / VA)</div>
+          <input class="fi" id="cl-mot-oth" type="number" min="0" placeholder="W — remaining motors at 100%" oninput="clLiveUpdate()"/>
+        </div>
+      </div>
+
+      <!-- Other / Fixed -->
+      <div class="cl-section">6 — Other Fixed & Special Loads</div>
+      <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Heating Load (W)</div>
+          <input class="fi" id="cl-heat" type="number" min="0" placeholder="W" oninput="clLiveUpdate()"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">A/C Load (W)</div>
+          <input class="fi" id="cl-ac" type="number" min="0" placeholder="W (noncoincident with heat)" oninput="clLiveUpdate()"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Other Fixed Loads (W)</div>
+          <input class="fi" id="cl-other" type="number" min="0" placeholder="W" oninput="clLiveUpdate()"/>
+        </div>
+        <div class="field-row">
+          <div class="field-label">System Voltage</div>
+          <div class="sel-wrap"><select class="fi" id="cl-volts" onchange="clLiveUpdate()">
+            <option value="120">120V (1φ)</option>
+            <option value="208" selected>208V (3φ)</option>
+            <option value="240">240V (1φ)</option>
+            <option value="277">277V (1φ)</option>
+            <option value="480">480V (3φ)</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Phase</div>
+          <div class="sel-wrap"><select class="fi" id="cl-phase" onchange="clLiveUpdate()">
+            <option value="1">Single-Phase</option>
+            <option value="3" selected>Three-Phase</option>
+          </select></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="err-msg" id="cl-err"></div>
+      <div class="btn-row">
+        <button class="btn btn-calc" onclick="calculateCL()">Calculate</button>
+        <button class="btn btn-reset" onclick="resetCL()">Reset</button>
+      </div>
+      <div class="section-label" id="cl-results-label" style="display:none;">Results</div>
+      <div id="cl-breakdown" style="display:none;" class="cl-breakdown"></div>
+      <div class="results" id="cl-results"></div>
+      <div class="disclaimer" style="margin-top:14px;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">Feeder/service load calculation per Art. 220 (2023/2026). General lighting per Table 220.42. Receptacle demand per §220.44 (first 10 kVA @ 100%, remainder @ 50%). Kitchen demand per Table 220.56. Largest motor at 125% per §430. Heating/A/C noncoincident per §220.60 (use largest). Neutral load, voltage drop, and harmonic loads not included. Verify all demand factors and special loads with AHJ. Design guidance only.</div>
       </div>
     </div>
   </div>
@@ -12654,6 +12803,113 @@ function gsReset(){
     chk.checked=defaultChecked.indexOf(chk.id)>=0;
   });
   gsCalc();
+}
+
+
+// ── Commercial Load Calculation (Art. 220) ────────────────────────────────────
+var _CL_KIT_DEMAND=[1.0,1.0,0.9,0.8,0.7,0.65];
+function clKitDemand(n){ return n<=0?0:_CL_KIT_DEMAND[Math.min(n,6)-1]; }
+function clRow(lbl,val,sub,gold){
+  return '<div class="cl-row'+(gold?' cl-total-row':'')+'">'+
+    '<span class="cl-row-lbl">'+lbl+(sub?' <span style="font-size:0.7rem;color:var(--muted);">'+sub+'</span>':'')+'</span>'+
+    '<span class="cl-row-val'+(gold?' cl-gold':'')+'">'+val+'</span></div>';
+}
+function clFmt(va){ return (va/1000).toFixed(2)+' kVA'; }
+function clLiveUpdate(){ /* live update on input change */ }
+function calculateCL(){
+  var errEl=document.getElementById('cl-err');
+  errEl.textContent='';
+
+  var vaPerSqft=parseFloat(document.getElementById('cl-occ').value)||0;
+  var sqft=parseFloat(document.getElementById('cl-sqft').value)||0;
+  var recCount=parseFloat(document.getElementById('cl-rec').value)||0;
+  var swFt=parseFloat(document.getElementById('cl-sw').value)||0;
+  var trackFt=parseFloat(document.getElementById('cl-track').value)||0;
+  var kitCount=parseInt(document.getElementById('cl-kit-count').value)||0;
+  var kitW=parseFloat(document.getElementById('cl-kit-w').value)||0;
+  var motLg=parseFloat(document.getElementById('cl-mot-lg').value)||0;
+  var motOth=parseFloat(document.getElementById('cl-mot-oth').value)||0;
+  var heatW=parseFloat(document.getElementById('cl-heat').value)||0;
+  var acW=parseFloat(document.getElementById('cl-ac').value)||0;
+  var otherW=parseFloat(document.getElementById('cl-other').value)||0;
+  var volts=parseFloat(document.getElementById('cl-volts').value)||208;
+  var phase=parseInt(document.getElementById('cl-phase').value)||3;
+
+  var hasAny=(sqft+recCount+swFt+trackFt+kitW+motLg+motOth+heatW+acW+otherW)>0;
+  if(!hasAny){errEl.textContent='Enter at least one load to calculate.';return;}
+
+  // 1. General lighting
+  var lightingVA = sqft * vaPerSqft;
+
+  // 2. Receptacle demand (§220.44): 180VA each, first 10kVA@100%, rest@50%
+  var recVA = recCount * 180;
+  var recDemand = recVA <= 10000 ? recVA : 10000 + (recVA - 10000) * 0.5;
+
+  // 3. Show window + track
+  var swVA = swFt * 200;
+  var trackVA = trackFt * 75; // 150VA per 2ft = 75VA/ft
+
+  // 4. Kitchen demand
+  var kitDemand = kitW * clKitDemand(kitCount);
+
+  // 5. Motors: largest @ 125%, others @ 100%
+  var motorVA = motLg * 1.25 + motOth;
+
+  // 6. Noncoincident (§220.60): use larger of heat or A/C
+  var hvacVA = Math.max(heatW, acW);
+
+  // 7. Other
+  var totalVA = lightingVA + recDemand + swVA + trackVA + kitDemand + motorVA + hvacVA + otherW;
+
+  // Minimum ampacity
+  var sqrtPhase = phase===3 ? Math.sqrt(3) : 1;
+  var amps = totalVA / (volts * sqrtPhase);
+  var ampsAt125 = amps * 1.25; // continuous load 125% sizing
+
+  // Build breakdown rows
+  var rows = '';
+  if(sqft>0) rows += clRow('General Lighting',clFmt(lightingVA), sqft.toLocaleString()+' sq ft × '+vaPerSqft+' VA/sq ft');
+  if(recCount>0) rows += clRow('Receptacles (demand)',clFmt(recDemand), recCount+' × 180 VA = '+clFmt(recVA)+' → demand');
+  if(swFt>0) rows += clRow('Show Window',clFmt(swVA), swFt+' ft × 200 VA/ft');
+  if(trackFt>0) rows += clRow('Track Lighting',clFmt(trackVA), trackFt+' ft × 75 VA/ft');
+  if(kitW>0) rows += clRow('Kitchen Equipment (demand)',clFmt(kitDemand), kitCount+' pieces → '+(clKitDemand(kitCount)*100)+'% of '+clFmt(kitW));
+  if(motLg>0) rows += clRow('Largest Motor (125%)',clFmt(motLg*1.25), motLg.toLocaleString()+' W × 125%');
+  if(motOth>0) rows += clRow('Other Motors',clFmt(motOth), 'at 100%');
+  if(hvacVA>0) rows += clRow('HVAC — Noncoincident',clFmt(hvacVA), (heatW>acW?'Heating governs':'A/C governs')+' (§220.60)');
+  if(otherW>0) rows += clRow('Other Fixed Loads',clFmt(otherW),'');
+  rows += clRow('Total Calculated Load',clFmt(totalVA),'',true);
+
+  document.getElementById('cl-breakdown').innerHTML = rows;
+  document.getElementById('cl-breakdown').style.display = 'block';
+  document.getElementById('cl-results-label').style.display = 'block';
+
+  // Result blocks
+  var phLbl = phase===3 ? '3φ' : '1φ';
+  var blocks = [];
+  blocks.push(makeBlock('pass','Total Demand Load',phLbl+' · '+volts+'V',clFmt(totalVA),
+    totalVA.toLocaleString()+' VA total calculated load'));
+  var ampState = amps>400?'fail':amps>200?'neutral':'pass';
+  blocks.push(makeBlock(ampState,'Minimum Feeder Ampacity','§215.2(A)',amps.toFixed(1)+'A',
+    clFmt(totalVA)+' ÷ ('+(phase===3?'√3 × ':'')+volts+'V) = '+amps.toFixed(1)+'A · Size next standard OCPD'));
+  if(ampsAt125>amps){
+    blocks.push(makeBlock('neutral','If Continuous Load (125%)','§215.3',ampsAt125.toFixed(1)+'A',
+      amps.toFixed(1)+'A × 125% = '+ampsAt125.toFixed(1)+'A · Use if load runs 3+ hours'));
+  }
+  document.getElementById('cl-results').innerHTML = blocks.join('');
+  if(typeof jcResultsReady==='function') jcResultsReady('cl','Commercial Load Calc',null,'cl-results');
+}
+function resetCL(){
+  ['cl-sqft','cl-rec','cl-sw','cl-track','cl-kit-count','cl-kit-w',
+   'cl-mot-lg','cl-mot-oth','cl-heat','cl-ac','cl-other'].forEach(function(id){
+    document.getElementById(id).value='';
+  });
+  document.getElementById('cl-occ').selectedIndex=0;
+  document.getElementById('cl-volts').value='208';
+  document.getElementById('cl-phase').value='3';
+  document.getElementById('cl-err').textContent='';
+  document.getElementById('cl-results').innerHTML='';
+  document.getElementById('cl-breakdown').style.display='none';
+  document.getElementById('cl-results-label').style.display='none';
 }
 
 // ── GFCI / AFCI Lookup ───────────────────────────────────────────────────────
