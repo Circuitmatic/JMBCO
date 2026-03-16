@@ -3929,7 +3929,7 @@ if('serviceWorker' in navigator){
     </div>
     <div class="btn-row">
       <button class="btn btn-calc" id="pn-calc-btn" onclick="calculatePN()">Calculate</button>
-      <button class="btn btn-calc" id="pn-export-btn" onclick="pnExportPrint()" style="display:none;background:#1d6b3e;">Export Schedule</button>
+      <button class="btn btn-calc" id="pn-export-btn" onclick="pnCheckBlanksAndExport()" style="display:none;background:#1d6b3e;">Export Schedule</button>
     </div>
     <div style="padding:2px 14px 10px;">
       <button class="btn btn-reset" style="width:100%;font-size:11px;" onclick="resetPN()">Clear All</button>
@@ -12543,7 +12543,7 @@ function clrPN(){
 }
 function showPNErr(m){clrPN();var e=document.getElementById('pn-err');e.innerHTML=m;e.className='err-msg show';}
 function calculatePN(){
-  if(document.getElementById('pn-mode').value==='print'){pnExportPrint();return;}
+  if(document.getElementById('pn-mode').value==='print'){pnCheckBlanksAndExport();return;}
   if(document.activeElement)document.activeElement.blur();
   clrPN();
   var sys=document.getElementById('pn-system').value;
@@ -12674,6 +12674,56 @@ function onPnModeChange(){
     resDiv.innerHTML='';
     if(phSec)phSec.innerHTML='';
   }
+}
+function pnCheckBlanksAndExport(){
+  var blanks=0;
+  document.querySelectorAll('.pn-card').forEach(function(card){
+    var id=card.id.replace('pn-card-','');
+    var inp=document.getElementById('pn-desc-'+id);
+    if(inp&&!inp.value.trim())blanks++;
+  });
+  if(!blanks){pnExportPrint();return;}
+  pnShowBlankPrompt(blanks);
+}
+function pnShowBlankPrompt(count){
+  var ov=document.getElementById('pn-blank-overlay');
+  if(!ov){
+    ov=document.createElement('div');
+    ov.id='pn-blank-overlay';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:950;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+    ov.innerHTML='<div style="background:var(--card,#1e2a3a);border-radius:14px;padding:22px;width:100%;max-width:320px;font-family:Inter,sans-serif;">'
+      +'<div style="font-size:15px;font-weight:700;color:var(--text,#f1f5f9);margin-bottom:4px;" id="pn-blank-title"></div>'
+      +'<div style="font-size:12px;color:var(--sub,#94a3b8);margin-bottom:18px;">Choose how to label blank circuits before exporting:</div>'
+      +'<button onclick="pnFillBlanks('Spare')" style="display:block;width:100%;margin-bottom:10px;padding:12px 14px;background:#f0c020;color:#1a1200;border:none;border-radius:10px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;text-align:left;">'
+        +'<div>Fill with SPARE</div>'
+        +'<div style="font-size:10px;font-weight:500;opacity:0.7;margin-top:2px;">Breaker installed, circuit not yet used</div>'
+      +'</button>'
+      +'<button onclick="pnFillBlanks('Space')" style="display:block;width:100%;margin-bottom:10px;padding:12px 14px;background:var(--surface,#263040);color:var(--text,#f1f5f9);border:1.5px solid var(--border,#334);border-radius:10px;font-size:13px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer;text-align:left;">'
+        +'<div>Fill with SPACE</div>'
+        +'<div style="font-size:10px;font-weight:500;opacity:0.7;margin-top:2px;">No breaker installed — exposed bus</div>'
+      +'</button>'
+      +'<button onclick="pnHideBlankPrompt()" style="display:block;width:100%;padding:11px 14px;background:none;color:var(--sub,#94a3b8);border:1.5px solid var(--border,#334);border-radius:10px;font-size:13px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;">'
+        +'Cancel — I'll fill them in'
+      +'</button>'
+    +'</div>';
+    document.body.appendChild(ov);
+  }
+  document.getElementById('pn-blank-title').textContent=count+' circuit'+(count!==1?'s':'')+' with no description';
+  ov.style.display='flex';
+}
+function pnFillBlanks(label){
+  document.querySelectorAll('.pn-card').forEach(function(card){
+    var id=card.id.replace('pn-card-','');
+    var inp=document.getElementById('pn-desc-'+id);
+    if(inp&&!inp.value.trim())inp.value=label;
+  });
+  pnRefreshBadges();
+  pnHideBlankPrompt();
+  pnExportPrint();
+}
+function pnHideBlankPrompt(){
+  var ov=document.getElementById('pn-blank-overlay');
+  if(ov)ov.style.display='none';
 }
 function pnExportPrint(){
   var cards=document.querySelectorAll('.pn-card');
