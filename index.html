@@ -3881,6 +3881,10 @@ if('serviceWorker' in navigator){
         <input class="fi" id="pn-name" type="text" placeholder="e.g. Main, MDP, LP-1"/>
       </div>
       <div class="field-row">
+        <div class="field-label">Location</div>
+        <input class="fi" id="pn-location" type="text" placeholder="e.g. 1st Floor Elec. Room"/>
+      </div>
+      <div class="field-row">
         <div class="field-label">System</div>
         <div class="sel-wrap"><select class="fi" id="pn-system" onchange="onPnSystemChange()">
           <option value="120_240_1">120/240V · 1Ø · 3W</option>
@@ -12501,25 +12505,27 @@ function pnRefreshBadges(){
   var sys=document.getElementById('pn-system').value;
   var nph=pnNumPh(sys),slot=1,blk={};
   function nxt(s){while(blk[s])s++;return s;}
+  function nxtOdd(s){if(s%2===0)s++;while(blk[s])s+=2;return s;}
   document.querySelectorAll('.pn-card').forEach(function(card){
     var id=card.id.replace('pn-card-','');
     var poles=parseInt(document.getElementById('pn-poles-'+id).value)||1;
-    slot=nxt(slot);
-    var ph=pnPhLabel(slot-1,sys);
-    var phDisplay=ph,cktLabel;
+    var ph,phDisplay,cktLabel;
     if(poles===1){
-      cktLabel=String(slot);
-      slot++;
+      slot=nxt(slot);
+      ph=pnPhLabel(slot-1,sys);phDisplay=ph;
+      cktLabel=String(slot);slot++;
     }else if(poles===2){
+      slot=nxtOdd(slot);
+      ph=pnPhLabel(slot-1,sys);
       cktLabel=slot+'-'+(slot+1);
       phDisplay=ph+'-'+pnPhLabel(slot,sys);
-      blk[slot]=blk[slot+1]=true;
-      slot+=2;
+      blk[slot]=blk[slot+1]=true;slot+=2;
     }else{
+      slot=nxtOdd(slot);
+      ph=pnPhLabel(slot-1,sys);
       cktLabel=slot+','+(slot+2)+','+(slot+4);
-      if(pnIs3Ph(sys))phDisplay='A-B-C';
-      blk[slot]=blk[slot+2]=blk[slot+4]=true;
-      slot++;
+      phDisplay=pnIs3Ph(sys)?'A-B-C':ph;
+      blk[slot]=blk[slot+2]=blk[slot+4]=true;slot++;
     }
     var ne=document.getElementById('pn-cnum-'+id);
     var be=document.getElementById('pn-cph-'+id);
@@ -12547,11 +12553,12 @@ function calculatePN(){
   if(!cards.length){showPNErr('Add at least one circuit.');return;}
   var phW=[0,0,0],totalW=0,slot=1,spares=0,blk={};
   function nxtS(s){while(blk[s])s++;return s;}
+  function nxtOddS(s){if(s%2===0)s++;while(blk[s])s+=2;return s;}
   cards.forEach(function(card){
     var id=card.id.replace('pn-card-','');
     var poles=parseInt(document.getElementById('pn-poles-'+id).value)||1;
     var w=parseFloat(document.getElementById('pn-load-'+id).value)||0;
-    slot=nxtS(slot);
+    if(poles===1)slot=nxtS(slot);else slot=nxtOddS(slot);
     if(!w){
       if(poles===1){slot++;}
       else if(poles===2){blk[slot]=blk[slot+1]=true;slot+=2;}
@@ -12673,76 +12680,92 @@ function pnExportPrint(){
   if(!cards.length){return;}
   var circuits=[],slot=1,blkE={};
   function nxtE(s){while(blkE[s])s++;return s;}
+  function nxtOddE(s){if(s%2===0)s++;while(blkE[s])s+=2;return s;}
   cards.forEach(function(card){
     var id=card.id.replace('pn-card-','');
     var poles=parseInt(document.getElementById('pn-poles-'+id).value)||1;
     var bkr=document.getElementById('pn-bkr-'+id).value;
     var desc=document.getElementById('pn-desc-'+id).value||'';
-    slot=nxtE(slot);
-    var cktLabel;
-    if(poles===1){cktLabel=String(slot);slot++;}
-    else if(poles===2){cktLabel=slot+'-'+(slot+1);blkE[slot]=blkE[slot+1]=true;slot+=2;}
-    else{cktLabel=slot+','+(slot+2)+','+(slot+4);blkE[slot]=blkE[slot+2]=blkE[slot+4]=true;slot++;}
-    circuits.push({cktLabel:cktLabel,poles:poles,bkr:bkr,desc:desc});
+    var ss;
+    if(poles===1){ss=nxtE(slot);slot=ss+1;}
+    else if(poles===2){ss=nxtOddE(slot);blkE[ss]=blkE[ss+1]=true;slot=ss+2;}
+    else{ss=nxtOddE(slot);blkE[ss]=blkE[ss+2]=blkE[ss+4]=true;slot=ss+1;}
+    var cktLabel=poles===2?(ss+'-'+(ss+1)):poles===3?(ss+','+(ss+2)+','+(ss+4)):String(ss);
+    circuits.push({cktLabel:cktLabel,poles:poles,bkr:bkr,desc:desc,ss:ss});
   });
+  var slotMap={};circuits.forEach(function(c){slotMap[c.ss]=c;});
+  var maxSlot=0;circuits.forEach(function(c){var e=c.poles===3?(c.ss+4):c.poles===2?(c.ss+1):c.ss;if(e>maxSlot)maxSlot=e;});
+  var maxRow=Math.ceil(maxSlot/2)||1;
   var sections=parseInt(document.getElementById('pn-sections').value)||1;
-  var perSection=Math.ceil(circuits.length/sections);
+  var perSecRows=Math.ceil(maxRow/sections);
   var pname=document.getElementById('pn-name').value||'Panel';
+  var loc=document.getElementById('pn-location').value||'';
   var sys=document.getElementById('pn-system').value;
   var mainVal=document.getElementById('pn-main').value;
   var mainLbl=mainVal==='0'?'MLO (No Main)':mainVal+'A Main';
+  var dateStr=new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
   var sysLbl={'120_240_1':'120/240V 1\u00D83W','120_208_3':'120/208V 3\u00D84W','277_480_3':'277/480V 3\u00D84W','240_3_3':'240V 3\u00D83W \u0394'}[sys]||sys;
   var css='body{font-family:Arial,sans-serif;margin:0;padding:0;background:#fff;color:#000;font-size:11px;}'
     +'.ps-page{page-break-after:always;padding:16px;max-width:760px;margin:0 auto;box-sizing:border-box;}'
     +'.ps-page:last-child{page-break-after:auto;}'
     +'.ps-hdr{border:2px solid #000;padding:7px 11px;margin-bottom:7px;}'
     +'.ps-title{font-size:13px;font-weight:bold;letter-spacing:1.5px;margin-bottom:4px;}'
-    +'.ps-meta{font-size:10px;display:flex;gap:20px;flex-wrap:wrap;}'
+    +'.ps-meta{font-size:10px;display:flex;gap:16px;flex-wrap:wrap;}'
     +'.ps-meta b{font-weight:bold;}'
-    +'.ps-line{border-top:1px solid #555;display:inline-block;min-width:110px;margin-left:3px;vertical-align:bottom;}'
-    +'table{width:100%;border-collapse:collapse;}'
-    +'th,td{border:1px solid #000;padding:3px 5px;}'
+    +'table{width:100%;border-collapse:collapse;table-layout:fixed;}'
+    +'th,td{border:1px solid #000;padding:3px 5px;overflow:hidden;vertical-align:middle;}'
     +'th{background:#d0d0d0;font-weight:bold;text-align:center;font-size:10px;letter-spacing:.5px;text-transform:uppercase;}'
-    +'.tc{text-align:center;font-weight:bold;width:54px;white-space:nowrap;}'
-    +'.ta{text-align:center;width:34px;}'
+    +'.tc{text-align:center;font-weight:bold;width:52px;white-space:nowrap;}'
+    +'.ta{text-align:center;width:32px;}'
     +'.td{}'
     +'.tdr{text-align:right;}'
-    +'.sp td{background:#e8e8e8;font-style:italic;}'
-    +'tr:nth-child(even) td{background:#f7f7f7;}'
-    +'.sp td{background:#e0e0e0 !important;}'
+    +'tr:nth-child(even) td:not([rowspan]){background:#f7f7f7;}'
     +'@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}}';
+  // Build one section's tbody using slotMap + rowspan for 3P
+  function buildTbody(rowStart,rowEnd){
+    var covLeft={},tb='';
+    for(var row=rowStart;row<=rowEnd;row++){
+      var ls=row*2-1,rs=row*2;
+      var lc=slotMap[ls],rc=slotMap[rs];
+      tb+='<tr>';
+      if(!covLeft[row]){
+        if(lc&&lc.poles===3){
+          var rspan=Math.min(3,rowEnd-row+1);
+          if(rspan===3){covLeft[row+1]=covLeft[row+2]=true;}
+          var ra=rspan>1?' rowspan="'+rspan+'"':'';
+          tb+='<td class="tc"'+ra+'>'+escHtml(lc.cktLabel)+'</td>'
+            +'<td class="td"'+ra+'>'+escHtml(lc.desc||'\u2014')+'</td>'
+            +'<td class="ta"'+ra+'>'+escHtml(lc.bkr)+'A</td>';
+        }else if(lc&&lc.poles===2){
+          tb+='<td class="tc">'+escHtml(lc.cktLabel)+'</td>'
+            +'<td class="td" colspan="3" style="font-style:italic;text-align:center;">'+escHtml(lc.desc||'\u2014')+'</td>'
+            +'<td class="ta">'+escHtml(lc.bkr)+'A</td>'
+            +'<td class="tc"></td></tr>';
+          continue;
+        }else if(lc){
+          tb+='<td class="tc">'+escHtml(lc.cktLabel)+'</td>'
+            +'<td class="td">'+escHtml(lc.desc||'\u2014')+'</td>'
+            +'<td class="ta">'+escHtml(lc.bkr)+'A</td>';
+        }else{
+          tb+='<td class="tc"></td><td class="td"></td><td class="ta"></td>';
+        }
+      }
+      if(rc){
+        tb+='<td class="ta">'+escHtml(rc.bkr)+'A</td>'
+          +'<td class="td tdr">'+escHtml(rc.desc||'\u2014')+'</td>'
+          +'<td class="tc">'+escHtml(rc.cktLabel)+'</td>';
+      }else{
+        tb+='<td class="ta"></td><td class="td"></td><td class="tc"></td>';
+      }
+      tb+='</tr>';
+    }
+    return tb;
+  }
   var pages='';
   for(var s=0;s<sections;s++){
-    var sc=circuits.slice(s*perSection,Math.min((s+1)*perSection,circuits.length));
-    if(!sc.length)continue;
-    var tbody='';
-    var i=0;
-    while(i<sc.length){
-      var c=sc[i];
-      if(c.poles>1){
-        tbody+='<tr class="sp"><td class="tc">'+escHtml(c.cktLabel)+'</td>'
-          +'<td class="td" colspan="3">'+escHtml(c.desc||'\u2014')+'</td>'
-          +'<td class="ta">'+escHtml(c.bkr)+'A</td>'
-          +'<td class="tc"></td></tr>';
-        i++;
-      }else{
-        var c2=(i+1<sc.length&&sc[i+1].poles===1)?sc[i+1]:null;
-        tbody+='<tr>';
-        tbody+='<td class="tc">'+escHtml(c.cktLabel)+'</td>';
-        tbody+='<td class="td">'+escHtml(c.desc||'\u2014')+'</td>';
-        tbody+='<td class="ta">'+escHtml(c.bkr)+'A</td>';
-        if(c2){
-          tbody+='<td class="ta">'+escHtml(c2.bkr)+'A</td>';
-          tbody+='<td class="td tdr">'+escHtml(c2.desc||'\u2014')+'</td>';
-          tbody+='<td class="tc">'+escHtml(c2.cktLabel)+'</td>';
-          i+=2;
-        }else{
-          tbody+='<td class="ta"></td><td class="td"></td><td class="tc"></td>';
-          i++;
-        }
-        tbody+='</tr>';
-      }
-    }
+    var rowStart=s*perSecRows+1,rowEnd=Math.min((s+1)*perSecRows,maxRow);
+    if(rowStart>maxRow)continue;
+    var slotRange=(rowStart*2-1)+'\u2013'+(rowEnd*2);
     pages+='<div class="ps-page">'
       +'<div class="ps-hdr">'
         +'<div class="ps-title">PANEL SCHEDULE</div>'
@@ -12750,70 +12773,45 @@ function pnExportPrint(){
           +'<span><b>Panel:</b> '+escHtml(pname)+'</span>'
           +'<span><b>System:</b> '+sysLbl+'</span>'
           +'<span><b>Main:</b> '+mainLbl+'</span>'
-          +(sections>1?'<span><b>Section:</b> '+(s+1)+' / '+sections+'</span>':'')
-          +'<span><b>Date:</b> <span class="ps-line"></span></span>'
-          +'<span><b>Location:</b> <span class="ps-line" style="min-width:160px;"></span></span>'
+          +(loc?'<span><b>Location:</b> '+escHtml(loc)+'</span>':'')
+          +(sections>1?'<span><b>Section:</b> '+(s+1)+' / '+sections+' (Ckts '+slotRange+')</span>':'')
+          +'<span><b>Date:</b> '+escHtml(dateStr)+'</span>'
         +'</div>'
       +'</div>'
       +'<table>'
         +'<thead><tr>'
-          +'<th class="tc">CKT #</th>'
+          +'<th class="tc" style="width:52px;">CKT #</th>'
           +'<th class="td">DESCRIPTION</th>'
-          +'<th class="ta">A</th>'
-          +'<th class="ta">A</th>'
+          +'<th class="ta" style="width:32px;">A</th>'
+          +'<th class="ta" style="width:32px;">A</th>'
           +'<th class="td">DESCRIPTION</th>'
-          +'<th class="tc">CKT #</th>'
+          +'<th class="tc" style="width:52px;">CKT #</th>'
         +'</tr></thead>'
-        +'<tbody>'+tbody+'</tbody>'
+        +'<tbody>'+buildTbody(rowStart,rowEnd)+'</tbody>'
       +'</table>'
     +'</div>';
   }
   var win=window.open('','_blank','width=840,height=700');
   if(!win){alert('Allow pop-ups to export the panel schedule.');return;}
   win.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Panel Schedule \u2014 '+escHtml(pname)+'</title><style>'+css+'</style></head><body>'+pages+'</body></html>');
-  win.document.close();
-  win.focus();
+  win.document.close();win.focus();
   setTimeout(function(){win.print();},400);
-  // Build in-app preview for Notes save
-  var prevRows='';
-  var pi=0;
-  while(pi<circuits.length){
-    var pc=circuits[pi];
-    var bStyle='border:1px solid var(--border);padding:2px 5px;font-size:10px;';
-    if(pc.poles>1){
-      prevRows+='<tr><td style="'+bStyle+'text-align:center;font-weight:700;">'+escHtml(pc.cktLabel)+'</td>'
-        +'<td colspan="3" style="'+bStyle+'font-style:italic;">'+escHtml(pc.desc||'\u2014')+'</td>'
-        +'<td style="'+bStyle+'text-align:center;">'+escHtml(pc.bkr)+'A</td>'
-        +'<td style="'+bStyle+'"></td></tr>';
-      pi++;
-    }else{
-      var pc2=(pi+1<circuits.length&&circuits[pi+1].poles===1)?circuits[pi+1]:null;
-      prevRows+='<tr><td style="'+bStyle+'text-align:center;font-weight:700;">'+escHtml(pc.cktLabel)+'</td>'
-        +'<td style="'+bStyle+'">'+escHtml(pc.desc||'\u2014')+'</td>'
-        +'<td style="'+bStyle+'text-align:center;">'+escHtml(pc.bkr)+'A</td>';
-      if(pc2){
-        prevRows+='<td style="'+bStyle+'text-align:center;">'+escHtml(pc2.bkr)+'A</td>'
-          +'<td style="'+bStyle+'text-align:right;">'+escHtml(pc2.desc||'\u2014')+'</td>'
-          +'<td style="'+bStyle+'text-align:center;font-weight:700;">'+escHtml(pc2.cktLabel)+'</td></tr>';
-        pi+=2;
-      }else{
-        prevRows+='<td style="'+bStyle+'"></td><td style="'+bStyle+'"></td><td style="'+bStyle+'"></td></tr>';
-        pi++;
-      }
-    }
-  }
-  var thStyle='border:1px solid var(--border);padding:2px 5px;background:var(--surface2,#2a2a2a);font-size:9px;text-transform:uppercase;letter-spacing:.4px;text-align:center;';
-  var prevHtml='<div style="font-size:10px;color:var(--muted);margin-bottom:6px;">'+escHtml(pname)+' \u00B7 '+sysLbl+' \u00B7 '+mainLbl+'</div>'
-    +'<div style="overflow-x:auto;">'
-    +'<table style="width:100%;border-collapse:collapse;">'
+  // In-app notes preview — reuse buildTbody with inline styles
+  var thS='border:1px solid var(--border);padding:2px 4px;background:var(--surface2,#2a2a2a);font-size:9px;text-transform:uppercase;text-align:center;';
+  var tdC='border:1px solid var(--border);padding:2px 4px;font-size:10px;vertical-align:middle;';
+  var prevTb=buildTbody(1,maxRow)
+    .replace(/class="tc"([^>]*>)/g,'style="'+tdC+'text-align:center;font-weight:700;"$1')
+    .replace(/class="td tdr"([^>]*>)/g,'style="'+tdC+'text-align:right;"$1')
+    .replace(/class="td"([^>]*>)/g,'style="'+tdC+'"$1')
+    .replace(/class="ta"([^>]*>)/g,'style="'+tdC+'text-align:center;"$1')
+    .replace(/class="[^"]*"/g,'');
+  var prevHtml='<div style="font-size:10px;color:var(--muted);margin-bottom:6px;">'+escHtml(pname)+' \u00B7 '+sysLbl+' \u00B7 '+mainLbl+(loc?' \u00B7 '+escHtml(loc):'')+'</div>'
+    +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;table-layout:fixed;">'
     +'<thead><tr>'
-    +'<th style="'+thStyle+'width:50px;">CKT #</th>'
-    +'<th style="'+thStyle+'">DESCRIPTION</th>'
-    +'<th style="'+thStyle+'width:32px;">A</th>'
-    +'<th style="'+thStyle+'width:32px;">A</th>'
-    +'<th style="'+thStyle+'">DESCRIPTION</th>'
-    +'<th style="'+thStyle+'width:50px;">CKT #</th>'
-    +'</tr></thead><tbody>'+prevRows+'</tbody></table></div>';
+    +'<th style="'+thS+'width:52px;">CKT #</th><th style="'+thS+'">DESCRIPTION</th>'
+    +'<th style="'+thS+'width:32px;">A</th><th style="'+thS+'width:32px;">A</th>'
+    +'<th style="'+thS+'">DESCRIPTION</th><th style="'+thS+'width:52px;">CKT #</th>'
+    +'</tr></thead><tbody>'+prevTb+'</tbody></table></div>';
   var rl=document.getElementById('pn-results-label');
   var rd=document.getElementById('pn-results');
   rl.textContent='Panel Schedule';rl.style.display='block';
@@ -12822,6 +12820,7 @@ function pnExportPrint(){
 }
 function resetPN(){
   document.getElementById('pn-name').value='';
+  document.getElementById('pn-location').value='';
   document.getElementById('pn-mode').value='load';
   document.getElementById('pn-sections-row').style.display='none';
   document.getElementById('pn-calc-btn').style.display='';
