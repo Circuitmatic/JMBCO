@@ -1661,6 +1661,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-pn" onclick="switchTab('pn',this)">Panel Sched</button>
     <button class="tab-btn" id="tab-btn-feeder" onclick="switchTab('feeder',this)">Feeder</button>
     <button class="tab-btn" id="tab-btn-pv" onclick="switchTab('pv',this)">Solar/PV</button>
+    <button class="tab-btn" id="tab-btn-af" onclick="switchTab('af',this)">Arc Flash</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -6645,6 +6646,261 @@ if('serviceWorker' in navigator){
   </div>
 
 
+  <!-- ── ARC FLASH / PPE QUICK-REF TAB ── -->
+  <div class="tab-panel" id="tab-af">
+    <div style="background:#1a0000;border:1px solid #8b0000;border-radius:8px;padding:10px 14px;margin:10px 14px 6px;font-size:12px;color:#ff6b6b;">
+      <b>&#9888; Arc flash is a life-safety hazard.</b> This tab is a quick reference only. NFPA 70E requires a site-specific arc flash hazard analysis (IEEE 1584) before energized electrical work. Always follow your employer&#39;s Electrical Safety Program and NFPA 70E — this app does not replace an engineering study.
+    </div>
+
+    <!-- Sub-tab buttons -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px 6px;">
+      <button class="btn btn-reset" id="af-btn-cat" onclick="afShow('af-cat',this)" style="font-size:11px;padding:4px 10px;border-color:var(--gold);color:var(--gold);">PPE Categories</button>
+      <button class="btn btn-reset" id="af-btn-equip" onclick="afShow('af-equip',this)" style="font-size:11px;padding:4px 10px;">Equipment Lookup</button>
+      <button class="btn btn-reset" id="af-btn-ppe" onclick="afShow('af-ppe',this)" style="font-size:11px;padding:4px 10px;">Required PPE</button>
+      <button class="btn btn-reset" id="af-btn-rules" onclick="afShow('af-rules',this)" style="font-size:11px;padding:4px 10px;">Key Rules</button>
+    </div>
+
+    <!-- PPE CATEGORIES PANEL -->
+    <div class="af-panel" id="af-cat">
+      <div class="section-label">PPE Categories — NFPA 70E Table 130.5(G)</div>
+      <div style="padding:0 14px 10px;font-size:12px;color:var(--sub);">The PPE category method is a simplified alternative to a full arc flash study. It applies only when equipment conditions match Table 130.5(C) parameters exactly.</div>
+      <div style="padding:0 14px 10px;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <thead><tr style="border-bottom:1px solid var(--gold);">
+            <th style="padding:6px 8px;text-align:left;">Category</th>
+            <th style="padding:6px 8px;text-align:center;">Min Arc Rating</th>
+            <th style="padding:6px 8px;text-align:left;">Typical Task Examples</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:6px 8px;"><span style="background:#1a3a1a;color:#4caf50;border-radius:4px;padding:2px 7px;font-weight:700;">Cat 1</span></td>
+              <td style="padding:6px 8px;text-align:center;">4 cal/cm²</td>
+              <td style="padding:6px 8px;color:var(--sub);">Reading meters on 240V panels, voltage testing ≤240V</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:6px 8px;"><span style="background:#1a2f3a;color:#4fc3f7;border-radius:4px;padding:2px 7px;font-weight:700;">Cat 2</span></td>
+              <td style="padding:6px 8px;text-align:center;">8 cal/cm²</td>
+              <td style="padding:6px 8px;color:var(--sub);">Work on 480V panels/MCCs, resetting tripped CB</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:6px 8px;"><span style="background:#2a2000;color:#f5a623;border-radius:4px;padding:2px 7px;font-weight:700;">Cat 3</span></td>
+              <td style="padding:6px 8px;text-align:center;">25 cal/cm²</td>
+              <td style="padding:6px 8px;color:var(--sub);">600V switchgear, racking draw-out breakers</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;"><span style="background:#2a0000;color:#ff6b6b;border-radius:4px;padding:2px 7px;font-weight:700;">Cat 4</span></td>
+              <td style="padding:6px 8px;text-align:center;">40 cal/cm²</td>
+              <td style="padding:6px 8px;color:var(--sub);">Medium-voltage work, open-air bus, high-fault equipment</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="padding:0 14px 8px;font-size:11px;color:var(--text-dim);">&#9432; Incident energy above 40 cal/cm² — engineering study required; PPE category method does not apply.</div>
+    </div>
+
+    <!-- EQUIPMENT LOOKUP PANEL -->
+    <div class="af-panel" id="af-equip" style="display:none;">
+      <div class="section-label">Equipment Lookup — NFPA 70E Table 130.5(C)</div>
+      <div style="padding:0 14px 6px;font-size:12px;color:var(--sub);">Parameters listed are the maximum allowable conditions for the PPE category to apply. If actual conditions exceed any parameter, a full arc flash study is required.</div>
+      <div style="padding:0 14px 10px;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:12px;">
+          <thead><tr style="border-bottom:1px solid var(--gold);">
+            <th style="padding:5px 8px;text-align:left;">Equipment Type</th>
+            <th style="padding:5px 8px;text-align:center;">Max Fault</th>
+            <th style="padding:5px 8px;text-align:center;">Max Clear</th>
+            <th style="padding:5px 8px;text-align:center;">Cat</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);"><td colspan="4" style="padding:5px 8px;font-size:11px;font-weight:600;color:var(--gold);">Panelboards &amp; Distribution Equipment</td></tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">Panelboard / other equip ≤240V</td>
+              <td style="padding:5px 8px;text-align:center;">25 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.03 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#1a3a1a;color:#4caf50;border-radius:4px;padding:1px 6px;font-weight:700;">1</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">Panelboard / other equip &gt;240V–600V</td>
+              <td style="padding:5px 8px;text-align:center;">25 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.03 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#1a2f3a;color:#4fc3f7;border-radius:4px;padding:1px 6px;font-weight:700;">2</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);"><td colspan="4" style="padding:5px 8px;font-size:11px;font-weight:600;color:var(--gold);">Motor Control Centers (600V class)</td></tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">MCC — current-limiting fuses ≤600V, ≤100A</td>
+              <td style="padding:5px 8px;text-align:center;">42 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.03 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#1a3a1a;color:#4caf50;border-radius:4px;padding:1px 6px;font-weight:700;">1</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">MCC — current-limiting fuses ≤600V, &gt;100A</td>
+              <td style="padding:5px 8px;text-align:center;">42 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.03 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#1a2f3a;color:#4fc3f7;border-radius:4px;padding:1px 6px;font-weight:700;">2</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">MCC — MCCB or non-CL fuses, bus ≤42 kA</td>
+              <td style="padding:5px 8px;text-align:center;">42 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.03 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#2a2000;color:#f5a623;border-radius:4px;padding:1px 6px;font-weight:700;">3</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">MCC — MCCB or non-CL fuses, bus &gt;42 kA</td>
+              <td style="padding:5px 8px;text-align:center;">85 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.03 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#2a0000;color:#ff6b6b;border-radius:4px;padding:1px 6px;font-weight:700;">4</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);"><td colspan="4" style="padding:5px 8px;font-size:11px;font-weight:600;color:var(--gold);">Low-Voltage Switchgear (600V class)</td></tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">LV switchgear — CL fuses, bus closed/door closed</td>
+              <td style="padding:5px 8px;text-align:center;">85 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.03 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#1a2f3a;color:#4fc3f7;border-radius:4px;padding:1px 6px;font-weight:700;">2</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">LV switchgear — non-CL CBs, bus closed/door closed</td>
+              <td style="padding:5px 8px;text-align:center;">85 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.03 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#2a0000;color:#ff6b6b;border-radius:4px;padding:1px 6px;font-weight:700;">4</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);"><td colspan="4" style="padding:5px 8px;font-size:11px;font-weight:600;color:var(--gold);">Medium-Voltage Switchgear (1 kV–38 kV)</td></tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">Metal-clad switchgear — door closed, CB racked in</td>
+              <td style="padding:5px 8px;text-align:center;">45 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.04 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#1a2f3a;color:#4fc3f7;border-radius:4px;padding:1px 6px;font-weight:700;">2</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">Metal-clad switchgear — door open or CB racking</td>
+              <td style="padding:5px 8px;text-align:center;">45 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.04 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#2a0000;color:#ff6b6b;border-radius:4px;padding:1px 6px;font-weight:700;">4</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);">
+              <td style="padding:5px 8px;">Metal-enclosed interrupter switchgear, fused</td>
+              <td style="padding:5px 8px;text-align:center;">40 kA</td>
+              <td style="padding:5px 8px;text-align:center;">0.04 s</td>
+              <td style="padding:5px 8px;text-align:center;"><span style="background:#2a2000;color:#f5a623;border-radius:4px;padding:1px 6px;font-weight:700;">3</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REQUIRED PPE PANEL -->
+    <div class="af-panel" id="af-ppe" style="display:none;">
+      <div class="section-label">Required PPE by Category — NFPA 70E Table 130.5(G)</div>
+      <div style="padding:0 14px 10px;">
+
+        <div style="background:var(--card-bg,#1e1e1e);border-left:3px solid #4caf50;border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+          <div style="font-weight:700;color:#4caf50;margin-bottom:6px;">Category 1 — 4 cal/cm² minimum arc rating</div>
+          <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--sub);line-height:1.8;">
+            <li>Arc-rated long-sleeve shirt &amp; pants (or arc flash coverall)</li>
+            <li>Arc-rated face shield (min 4 cal/cm²) OR arc flash hood</li>
+            <li>Hard hat (non-conductive)</li>
+            <li>Hearing protection (insert type)</li>
+            <li>Heavy-duty leather gloves</li>
+            <li>Leather work boots</li>
+            <li>Safety glasses (under face shield)</li>
+          </ul>
+        </div>
+
+        <div style="background:var(--card-bg,#1e1e1e);border-left:3px solid #4fc3f7;border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+          <div style="font-weight:700;color:#4fc3f7;margin-bottom:6px;">Category 2 — 8 cal/cm² minimum arc rating</div>
+          <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--sub);line-height:1.8;">
+            <li>Arc-rated long-sleeve shirt &amp; pants (or arc flash coverall) — 8 cal/cm²</li>
+            <li>Arc flash hood OR arc-rated balaclava + face shield</li>
+            <li>Hard hat (non-conductive)</li>
+            <li>Hearing protection (insert type)</li>
+            <li>Heavy-duty leather gloves</li>
+            <li>Leather work boots</li>
+            <li>Safety glasses (under face shield/hood)</li>
+          </ul>
+        </div>
+
+        <div style="background:var(--card-bg,#1e1e1e);border-left:3px solid #f5a623;border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+          <div style="font-weight:700;color:#f5a623;margin-bottom:6px;">Category 3 — 25 cal/cm² minimum arc rating</div>
+          <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--sub);line-height:1.8;">
+            <li>Arc flash suit (jacket + pants or coverall) — 25 cal/cm²</li>
+            <li>Arc flash suit hood — 25 cal/cm²</li>
+            <li>Hard hat (under hood)</li>
+            <li>Hearing protection (insert type)</li>
+            <li>Arc-rated gloves (leather or rubber insulating + leather protectors)</li>
+            <li>Leather work boots</li>
+            <li>Safety glasses (under hood)</li>
+          </ul>
+        </div>
+
+        <div style="background:var(--card-bg,#1e1e1e);border-left:3px solid #ff6b6b;border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+          <div style="font-weight:700;color:#ff6b6b;margin-bottom:6px;">Category 4 — 40 cal/cm² minimum arc rating</div>
+          <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--sub);line-height:1.8;">
+            <li>Arc flash suit (jacket + pants or coverall) — 40 cal/cm²</li>
+            <li>Arc flash suit hood — 40 cal/cm²</li>
+            <li>Hard hat (under hood)</li>
+            <li>Hearing protection (insert type)</li>
+            <li>Arc-rated gloves (rubber insulating + leather protectors)</li>
+            <li>Leather work boots</li>
+            <li>Safety glasses (under hood)</li>
+          </ul>
+        </div>
+
+        <div style="font-size:11px;color:var(--text-dim);">&#9432; Rubber insulating gloves with leather protectors provide both shock and arc protection. Arc-rated gloves alone do not provide shock protection — verify voltage class for the task.</div>
+      </div>
+    </div>
+
+    <!-- KEY RULES PANEL -->
+    <div class="af-panel" id="af-rules" style="display:none;">
+      <div class="section-label">Key Rules &amp; Notes</div>
+      <div style="padding:0 14px 10px;">
+
+        <div style="background:var(--card-bg,#1e1e1e);border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+          <div style="font-weight:700;color:var(--gold);margin-bottom:6px;">When Energized Work Is Permitted</div>
+          <div style="font-size:12px;color:var(--sub);line-height:1.7;">Energized electrical work is only permitted when de-energizing creates a greater hazard, or is infeasible due to equipment design or operational limitations. A written energized work permit is required — NFPA 70E §130.2(B).</div>
+        </div>
+
+        <div style="background:var(--card-bg,#1e1e1e);border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+          <div style="font-weight:700;color:var(--gold);margin-bottom:6px;">PPE Category Method Limitations</div>
+          <ul style="margin:0;padding-left:16px;font-size:12px;color:var(--sub);line-height:1.8;">
+            <li>Only applies when equipment and conditions exactly match Table 130.5(C)</li>
+            <li>Does not apply to DC systems (separate DC table in NFPA 70E)</li>
+            <li>Does not apply if fault current or clearing time exceeds table limits</li>
+            <li>Full IEEE 1584 engineering study overrides PPE category method</li>
+          </ul>
+        </div>
+
+        <div style="background:var(--card-bg,#1e1e1e);border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+          <div style="font-weight:700;color:var(--gold);margin-bottom:6px;">Arc Flash Boundary</div>
+          <div style="font-size:12px;color:var(--sub);line-height:1.7;">The arc flash boundary is where incident energy equals 1.2 cal/cm² (onset of second-degree burn). Anyone inside this boundary must wear appropriate PPE. The boundary must be established by a hazard analysis or PPE category method before work begins.</div>
+        </div>
+
+        <div style="background:var(--card-bg,#1e1e1e);border-radius:6px;padding:10px 12px;margin-bottom:10px;">
+          <div style="font-weight:700;color:var(--gold);margin-bottom:6px;">Shock Protection Boundaries</div>
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;font-size:12px;margin-top:6px;">
+              <thead><tr style="border-bottom:1px solid var(--border);color:var(--sub);">
+                <th style="padding:4px 8px;text-align:left;">Voltage</th>
+                <th style="padding:4px 8px;text-align:right;">Limited (Unqualified)</th>
+                <th style="padding:4px 8px;text-align:right;">Restricted (Qualified)</th>
+              </tr></thead>
+              <tbody>
+                <tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 8px;">50V–300V</td><td style="padding:4px 8px;text-align:right;">3.5 ft (42")</td><td style="padding:4px 8px;text-align:right;">Avoid contact</td></tr>
+                <tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 8px;">301V–750V</td><td style="padding:4px 8px;text-align:right;">3.5 ft (42")</td><td style="padding:4px 8px;text-align:right;">1 ft (12")</td></tr>
+                <tr style="border-bottom:1px solid var(--border);"><td style="padding:4px 8px;">751V–15kV</td><td style="padding:4px 8px;text-align:right;">10 ft (120")</td><td style="padding:4px 8px;text-align:right;">2 ft 2" (26")</td></tr>
+                <tr><td style="padding:4px 8px;">15.1kV–36kV</td><td style="padding:4px 8px;text-align:right;">13 ft (156")</td><td style="padding:4px 8px;text-align:right;">2 ft 9" (33")</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+      <div class="disclaimer" style="display:block;margin:0 14px 10px;">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">This reference is based on NFPA 70E-2021. Standards are updated on a regular cycle — always verify against the current edition adopted in your jurisdiction. Arc flash PPE categories are not a substitute for a site-specific arc flash hazard analysis per IEEE 1584. Incident energy levels vary widely based on available fault current, upstream protection, and working distance. This app does not provide arc flash engineering analysis — consult a licensed electrical engineer for arc flash studies. Reference only.</div>
+      </div>
+    </div>
+
+  </div>
+
+
   <!-- ── FEEDER SIZING TAB ── -->
   <div class="tab-panel" id="tab-feeder">
     <div class="section-label">Feeder &amp; Branch Circuit Sizing</div>
@@ -9992,6 +10248,17 @@ function crpRender(){
     +'<span><b>Total bends:</b> '+totalBends+'°</span>'
     +'<span><b>Sections:</b> '+sections.length+'</span>'
     +'</div></div>';
+}
+
+
+// ── Arc Flash Tab ─────────────────────────────────────────────────────────────
+function afShow(id, btn){
+  document.querySelectorAll('.af-panel').forEach(function(el){el.style.display='none';});
+  document.querySelectorAll('#tab-af .btn').forEach(function(b){
+    b.style.borderColor=''; b.style.color='';
+  });
+  document.getElementById(id).style.display='block';
+  if(btn){btn.style.borderColor='var(--gold)';btn.style.color='var(--gold)';}
 }
 
 // ── Conduit Mode Switch ───────────────────────────────────────────────────────
