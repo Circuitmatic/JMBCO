@@ -700,6 +700,24 @@ body.light-mode .gs-load-watts{background:#f8fafc;border-color:#e2e8f0;}
 .cl-row.cl-total-row{background:rgba(240,192,32,.07);padding:10px 14px;}
 .cl-row.cl-total-row .cl-row-lbl{font-weight:700;color:var(--text);}
 .cl-row.cl-total-row .cl-row-val{font-size:1rem;color:#f0c020;}
+/* ── Residential Circuit Reference Tab ── */
+.rr-wrap{padding:12px 14px 24px;max-width:620px;margin:0 auto;}
+.rr-group{margin-bottom:16px;}
+.rr-group-title{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text);padding:5px 10px;background:rgba(240,192,32,.07);border-left:3px solid #f0c020;border-radius:0 6px 6px 0;margin-bottom:6px;}
+.rr-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:11px 14px;margin-bottom:6px;display:flex;gap:12px;align-items:flex-start;}
+.rr-badge{flex-shrink:0;background:rgba(240,192,32,.12);border:1px solid rgba(240,192,32,.35);border-radius:8px;padding:5px 10px;text-align:center;min-width:62px;}
+.rr-badge-amp{font-size:1rem;font-weight:900;font-family:'Roboto Mono',monospace;color:#f0c020;line-height:1.1;}
+.rr-badge-volt{font-size:0.65rem;font-weight:700;color:var(--muted);line-height:1.2;}
+.rr-info{flex:1;min-width:0;}
+.rr-title{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.rr-desc{font-size:0.75rem;color:var(--sub);line-height:1.5;}
+.rr-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;}
+.rr-tag{font-size:0.62rem;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.3px;}
+.rr-tag.req{background:rgba(74,222,128,.12);color:#4ade80;border:1px solid rgba(74,222,128,.3);}
+.rr-tag.rec{background:rgba(96,165,250,.12);color:#60a5fa;border:1px solid rgba(96,165,250,.3);}
+.rr-tag.new{background:rgba(240,192,32,.12);color:#f0c020;border:1px solid rgba(240,192,32,.3);}
+.rr-tag.gfci{background:rgba(251,146,60,.12);color:#fb923c;border:1px solid rgba(251,146,60,.3);}
+.rr-tag.afci{background:rgba(167,139,250,.12);color:#a78bfa;border:1px solid rgba(167,139,250,.3);}
 /* ── Fraction Calculator ── */
   .fr-display { padding:8px 16px 10px; background:var(--card); }
   .fr-expr { font-family:'Roboto Mono',monospace; font-size:14px; color:var(--muted); text-align:right; min-height:18px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -1602,6 +1620,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-rc" onclick="switchTab('rc',this)">Recept</button>
     <button class="tab-btn" id="tab-btn-gs" onclick="switchTab('gs',this)">Gen Sz</button>
     <button class="tab-btn" id="tab-btn-cl" onclick="switchTab('cl',this)">Com Load</button>
+    <button class="tab-btn" id="tab-btn-rr" onclick="switchTab('rr',this)">Res Ref</button>
     <button class="tab-btn" id="tab-btn-fr" onclick="switchTab('fr',this)">Fracs</button>
     <button class="tab-btn" id="tab-btn-dip" onclick="switchTab('dip',this)">Dip SW</button>
     <button class="tab-btn" id="tab-btn-wc" onclick="switchTab('wc',this)">Colors</button>
@@ -3066,6 +3085,241 @@ if('serviceWorker' in navigator){
       <div class="disclaimer" style="margin-top:14px;">
         <div class="disclaimer-title">Important Notice</div>
         <div class="disclaimer-text">Feeder/service load calculation per Art. 220 (2023/2026). General lighting per Table 220.42. Receptacle demand per §220.44 (first 10 kVA @ 100%, remainder @ 50%). Kitchen demand per Table 220.56. Largest motor at 125% per §430. Heating/A/C noncoincident per §220.60 (use largest). Neutral load, voltage drop, and harmonic loads not included. Verify all demand factors and special loads with AHJ. Design guidance only.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       RESIDENTIAL CIRCUIT REFERENCE TAB
+  ══════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab-rr">
+    <div class="rr-wrap">
+      <div class="section-label">Residential Circuit Reference</div>
+      <div class="fi-sub" style="margin-bottom:12px;">Quick-reference guide for common residential circuits, sizing, and requirements.</div>
+      <div class="rr-tags" style="margin-bottom:14px;gap:6px;display:flex;flex-wrap:wrap;">
+        <span class="rr-tag req">Required by code</span>
+        <span class="rr-tag rec">Recommended practice</span>
+        <span class="rr-tag gfci">GFCI needed</span>
+        <span class="rr-tag afci">AFCI needed</span>
+        <span class="rr-tag new">2026 change</span>
+      </div>
+      <div class="rr-group">
+        <div class="rr-group-title">General Wiring</div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">15A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">General Lighting & Outlets</div>
+            <div class="rr-desc">Standard bedroom, living room, dining room, and hallway circuits. Breaker at 15A, 14 AWG copper. No single outlet should be the only thing on a dedicated circuit unless specified.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required</span><span class="rr-tag afci">AFCI — Bedrooms</span><span class="rr-tag afci">AFCI — Living Areas (2023+)</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">General Purpose — Heavy Use Areas</div>
+            <div class="rr-desc">20A circuits used where heavier loads are expected — home offices, workshops, garages. 12 AWG copper minimum. Provides more headroom than 15A for tools and equipment.</div>
+            <div class="rr-tags"><span class="rr-tag rec">Recommended</span><span class="rr-tag afci">AFCI if bedroom/living</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="rr-group">
+        <div class="rr-group-title">Kitchen</div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Small Appliance Branch Circuits (SABC)</div>
+            <div class="rr-desc">Minimum two 20A circuits required just for countertop receptacles in the kitchen, pantry, breakfast area, and dining room. Toasters, coffee makers, microwaves — all go here. No lighting or other loads allowed on these circuits.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required — Min. 2</span><span class="rr-tag gfci">GFCI Required</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Refrigerator</div>
+            <div class="rr-desc">Dedicated 20A circuit for the refrigerator. Keeps it from sharing with countertop loads. Industry standard — protects the fridge from tripped breakers and keeps food safe.</div>
+            <div class="rr-tags"><span class="rr-tag rec">Recommended Dedicated</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Dishwasher</div>
+            <div class="rr-desc">Dedicated 20A circuit for the dishwasher. Hardwired or cord-and-plug. Should not share with other loads. GFCI required in most cases.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required Dedicated</span><span class="rr-tag gfci">GFCI</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Garbage Disposal</div>
+            <div class="rr-desc">Dedicated or shared 20A circuit for the disposal. Some installs share with dishwasher on a split duplex — check local AHJ requirements.</div>
+            <div class="rr-tags"><span class="rr-tag rec">Typically Dedicated</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">50A</div><div class="rr-badge-volt">240V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Electric Range / Oven</div>
+            <div class="rr-desc">50A, 240V dedicated circuit. 6 AWG copper minimum. NEMA 14-50 receptacle or hardwired. If cooktop and oven are separate units, each may need its own circuit — check nameplate.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required Dedicated</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Microwave (Over-Range)</div>
+            <div class="rr-desc">Dedicated 20A circuit for built-in or over-range microwave. Most over-range units draw 1,200–1,800W and should not share a circuit.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required Dedicated</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="rr-group">
+        <div class="rr-group-title">Laundry & Utility</div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Laundry Receptacle</div>
+            <div class="rr-desc">At least one 20A dedicated receptacle for laundry appliances. Required within the laundry area — no other loads allowed on this circuit.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required Dedicated</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">30A</div><div class="rr-badge-volt">240V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Electric Dryer</div>
+            <div class="rr-desc">30A, 240V dedicated circuit. 10 AWG copper minimum. NEMA 14-30 receptacle (current standard — 4-wire). Old 3-wire NEMA 10-30 may remain in existing installs but cannot be used in new work.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required Dedicated</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Freezer / Secondary Refrigerator</div>
+            <div class="rr-desc">Dedicated 20A circuit for any freezer or extra fridge in garage, basement, or utility area. Keeps food safe if another circuit trips. GFCI required in garages.</div>
+            <div class="rr-tags"><span class="rr-tag rec">Recommended Dedicated</span><span class="rr-tag gfci">GFCI in Garage</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="rr-group">
+        <div class="rr-group-title">Bathrooms</div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Bathroom Receptacle Circuit</div>
+            <div class="rr-desc">Minimum one 20A circuit serving bathroom receptacle outlets. One circuit can serve multiple bathrooms. Cannot serve any loads outside bathrooms. GFCI protection required on all bathroom outlets.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required</span><span class="rr-tag gfci">GFCI Required</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Bathroom Exhaust Fan / Lighting</div>
+            <div class="rr-desc">Exhaust fans and lighting are typically wired off the general lighting circuit or a dedicated bathroom circuit. Not required to be dedicated, but common in larger builds.</div>
+            <div class="rr-tags"><span class="rr-tag rec">Common Practice</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="rr-group">
+        <div class="rr-group-title">HVAC & Mechanical</div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">VariesA</div><div class="rr-badge-volt">240V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Central A/C Condenser</div>
+            <div class="rr-desc">Dedicated 240V circuit sized to nameplate — typically 30–60A. Disconnect required within sight of the unit. Breaker sized per nameplate max fuse/breaker rating, not just the FLA.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required Dedicated</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">VariesA</div><div class="rr-badge-volt">120/240V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Air Handler / Furnace</div>
+            <div class="rr-desc">Air handler typically 120V, 15–20A. Electric furnace or heat strips run 240V and may need 30–60A+ depending on kW rating. Always check nameplate.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required Dedicated</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Thermostat / Control Wiring</div>
+            <div class="rr-desc">Low-voltage thermostat wiring (18–24V) is powered from the furnace or air handler control board — not a separate breaker. Class 2 wiring rules apply.</div>
+            <div class="rr-tags"><span class="rr-tag rec">Class 2 Wiring</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="rr-group">
+        <div class="rr-group-title">Garage & Outdoor</div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Garage General Outlets</div>
+            <div class="rr-desc">At least one 20A circuit for the garage. GFCI protection required on all garage outlets. Separate from exterior outlets. EV-ready circuit increasingly required for new builds.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required</span><span class="rr-tag gfci">GFCI Required</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">40A</div><div class="rr-badge-volt">240V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">EV Charging Circuit</div>
+            <div class="rr-desc">40A, 240V dedicated circuit for Level 2 EV charging. 8 AWG copper minimum. NEMA 14-50 or hardwired EVSE. Required for new one- and two-family dwellings under 2026 code.</div>
+            <div class="rr-tags"><span class="rr-tag req">Required — New Builds 2026</span><span class="rr-tag new">2026</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Outdoor Receptacles</div>
+            <div class="rr-desc">GFCI-protected receptacles at front and rear of dwelling, accessible from grade. Weatherproof covers required. Typically fed from the garage circuit or a dedicated outdoor circuit.</div>
+            <div class="rr-tags"><span class="rr-tag req">Front + Rear Required</span><span class="rr-tag gfci">GFCI Required</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Garage Door Opener</div>
+            <div class="rr-desc">Usually fed from the garage general circuit. No dedicated circuit required, but a dedicated 20A circuit is clean practice and leaves room for future EV outlet.</div>
+            <div class="rr-tags"><span class="rr-tag rec">Typically Shared</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="rr-group">
+        <div class="rr-group-title">Special & Safety</div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Smoke / CO Detector Circuit</div>
+            <div class="rr-desc">Hardwired detectors are typically on a dedicated 15–20A circuit or tapped from a nearby lighting circuit. Interconnection is required — all detectors sound together when one triggers.</div>
+            <div class="rr-tags"><span class="rr-tag req">Hardwired + Interconnected</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Sump Pump</div>
+            <div class="rr-desc">Dedicated 20A circuit for the sump pump. Should be on a circuit that stays live during a storm — not shared with anything that could be switched off. GFCI not required on dedicated sump pump circuits.</div>
+            <div class="rr-tags"><span class="rr-tag rec">Dedicated Recommended</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">20A</div><div class="rr-badge-volt">120V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Home Office / Workbench</div>
+            <div class="rr-desc">20A circuits are strongly recommended for home offices, workshops, and hobby areas. Multiple circuits prevent tripping when running tools, monitors, and chargers simultaneously.</div>
+            <div class="rr-tags"><span class="rr-tag rec">Recommended</span></div>
+          </div>
+        </div>
+        <div class="rr-card">
+          <div class="rr-badge"><div class="rr-badge-amp">VariesA</div><div class="rr-badge-volt">120/240V</div></div>
+          <div class="rr-info">
+            <div class="rr-title">Whole-House Generator Transfer Switch</div>
+            <div class="rr-desc">Interlock kit or transfer switch required to safely connect a generator. Must prevent backfeed to the utility line. Sizing depends on which circuits are backed up.</div>
+            <div class="rr-tags"><span class="rr-tag req">Transfer Switch Required</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <div class="disclaimer-title">Important Notice</div>
+        <div class="disclaimer-text">This reference is a general guide based on common residential wiring practices and widely adopted code requirements. Local jurisdictions may have additional or different requirements. Always verify circuit requirements with your local AHJ before installation. Wire sizing, breaker ratings, and protection requirements must be confirmed against the actual equipment nameplate and applicable adopted code edition. Design guidance only.</div>
       </div>
     </div>
   </div>
