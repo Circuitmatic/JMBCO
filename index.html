@@ -260,11 +260,11 @@ body.light-mode .svc-method-btn.active,body.light-mode .svc-method-btn:hover{bor
 .svc-ib:hover{color:#f0c020;}
 .svc-info-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;}
 .svc-info-overlay.open{display:flex;align-items:center;justify-content:center;}
-.svc-info-modal{background:var(--card,#1e2a3a);border-radius:14px;padding:22px;width:calc(100% - 40px);max-width:340px;box-shadow:0 8px 40px rgba(0,0,0,0.35);}
-.svc-info-modal-title{font-size:14px;font-weight:700;font-family:'Inter',sans-serif;color:var(--text,#f1f5f9);margin-bottom:10px;}
-.svc-info-modal-body{font-size:13px;font-family:'Inter',sans-serif;color:var(--text,#f1f5f9);line-height:1.6;opacity:0.85;}
-.svc-info-modal-ref{font-size:11px;font-family:'Roboto Mono',monospace;color:#f0c020;margin-top:10px;opacity:0.8;}
-.svc-info-close{width:100%;margin-top:14px;background:#f0c020;color:#1a1200;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;}
+.svc-info-modal{background:var(--card,#1e2a3a);border-radius:14px;padding:22px;width:calc(100% - 40px);max-width:340px;box-shadow:0 8px 40px rgba(0,0,0,0.35);max-height:calc(100vh - 80px);display:flex;flex-direction:column;overflow:hidden;}
+.svc-info-modal-title{font-size:14px;font-weight:700;font-family:'Inter',sans-serif;color:var(--text,#f1f5f9);margin-bottom:10px;flex-shrink:0;}
+.svc-info-modal-body{font-size:13px;font-family:'Inter',sans-serif;color:var(--text,#f1f5f9);line-height:1.6;opacity:0.85;overflow-y:auto;flex:1;}
+.svc-info-modal-ref{font-size:11px;font-family:'Roboto Mono',monospace;color:#f0c020;margin-top:10px;opacity:0.8;flex-shrink:0;}
+.svc-info-close{width:100%;margin-top:14px;background:#f0c020;color:#1a1200;border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;flex-shrink:0;}
 body.light-mode .svc-info-modal{background:#fff;}
 body.light-mode .svc-info-modal-title{color:#111827;}
 body.light-mode .svc-info-modal-body{color:#374151;}
