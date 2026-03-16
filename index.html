@@ -7416,9 +7416,7 @@ function buildPrintHTML(reportTitle,subtitle,bodyHTML,compact){
                '<div style="font-size:9px;color:#9ca3af;letter-spacing:.5px;font-weight:500;margin-top:2px;">Electricians Toolkit</div>';
   }
 
-  // ── Right: report title + date (no project info here — moved to body) ──
-  var hdRight='<div style="font-size:11px;font-weight:700;color:#e2e8f0;text-align:right;line-height:1.5;white-space:nowrap;">'+reportTitle+'</div>'+
-              '<div style="font-size:10px;color:#9ca3af;text-align:right;margin-top:2px;">'+now+'</div>';
+  var hdRight='';
 
   // ── Project info band (in body, above data — only when from a project) ──
   var projBand='';
