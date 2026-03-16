@@ -1660,6 +1660,7 @@ if('serviceWorker' in navigator){
     <button class="tab-btn" id="tab-btn-xfmr" onclick="switchTab('xfmr',this)">Transformer</button>
     <button class="tab-btn" id="tab-btn-pn" onclick="switchTab('pn',this)">Panel Sched</button>
     <button class="tab-btn" id="tab-btn-feeder" onclick="switchTab('feeder',this)">Feeder</button>
+    <button class="tab-btn" id="tab-btn-pv" onclick="switchTab('pv',this)">Solar/PV</button>
   </div>
   <div class="tab-scroll-track"><div class="tab-scroll-thumb" id="tab-scroll-thumb"></div></div>
 
@@ -6484,6 +6485,98 @@ if('serviceWorker' in navigator){
     </div>
   </div>
 
+  <!-- ── SOLAR / PV CONDUCTOR SIZING TAB ── -->
+  <div class="tab-panel" id="tab-pv">
+    <div class="section-label">Module Data</div>
+    <div class="fields">
+      <div class="field-row">
+        <div class="field-label">Module Isc (A)</div>
+        <input type="number" class="fi" id="pv-isc" min="0.1" max="50" step="0.01" value="10.5" placeholder="e.g. 10.5">
+      </div>
+      <div class="field-row">
+        <div class="field-label">Module Voc (V)</div>
+        <input type="number" class="fi" id="pv-voc" min="1" max="100" step="0.1" value="40.5" placeholder="e.g. 40.5">
+      </div>
+      <div class="field-row">
+        <div class="field-label">Modules / String</div>
+        <input type="number" class="fi" id="pv-mps" min="1" max="50" step="1" value="10" placeholder="e.g. 10">
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-label">Array Configuration</div>
+    <div class="fields">
+      <div class="field-row">
+        <div class="field-label">Strings in Parallel</div>
+        <input type="number" class="fi" id="pv-strings" min="1" max="100" step="1" value="2" placeholder="e.g. 2">
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-label">Installation Conditions</div>
+    <div class="fields">
+      <div class="field-row">
+        <div class="field-label">Ambient Temp (°C)</div>
+        <div class="sel-wrap"><select class="fi" id="pv-amb">
+          <option value="25">25°C (77°F) — mild</option>
+          <option value="30" selected>30°C (86°F) — standard</option>
+          <option value="35">35°C (95°F) — warm</option>
+          <option value="40">40°C (104°F) — hot climate</option>
+          <option value="45">45°C (113°F) — desert</option>
+        </select></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Roof Mount Adder</div>
+        <div class="sel-wrap"><select class="fi" id="pv-roof">
+          <option value="0">Not roof-mounted / &gt;12" clearance (+0°C)</option>
+          <option value="9">3½"–12" above roof (+9°C)</option>
+          <option value="22" selected>½"–3½" above roof (+22°C)</option>
+          <option value="33">≤½" above roof (+33°C)</option>
+        </select></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Conductors in Conduit</div>
+        <div class="sel-wrap"><select class="fi" id="pv-bundle">
+          <option value="1">1–3 (no derating)</option>
+          <option value="4" selected>4–6 (80%)</option>
+          <option value="7">7–9 (70%)</option>
+          <option value="10">10–20 (50%)</option>
+          <option value="21">21–30 (45%)</option>
+          <option value="31">31–40 (40%)</option>
+          <option value="41">41+ (35%)</option>
+        </select></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section-label">Inverter AC Output</div>
+    <div class="fields">
+      <div class="field-row">
+        <div class="field-label">Inverter Output (A)</div>
+        <input type="number" class="fi" id="pv-inv-a" min="0" max="1000" step="0.1" value="32" placeholder="e.g. 32">
+      </div>
+      <div class="field-row">
+        <div class="field-label">AC Output Voltage</div>
+        <div class="sel-wrap"><select class="fi" id="pv-inv-v">
+          <option value="120">120V</option>
+          <option value="240" selected>240V split-phase</option>
+          <option value="208">208V 3-phase</option>
+          <option value="480">480V 3-phase</option>
+        </select></div>
+      </div>
+    </div>
+    <div class="err-msg" id="pv-err"></div>
+    <div class="btn-row">
+      <button class="btn btn-calc" onclick="calculatePV()">Calculate</button>
+      <button class="btn btn-reset" onclick="resetPV()">Reset</button>
+    </div>
+    <div class="section-label" id="pv-results-label" style="display:none;">Results</div>
+    <div class="results" id="pv-results"></div>
+    <div class="disclaimer" id="pv-disclaimer" style="display:none;">
+      <div class="disclaimer-title">Important Notice</div>
+      <div class="disclaimer-text">PV conductor sizing per §690.8. Design current = Isc × 1.25 × 1.25. Conductor ampacity from §310.16 (90°C column, USE-2/PV Wire). Temperature correction per Table 310.15(B)(2)(a). Roof mount adder per §310.15(B)(3)(c). Bundling derating per §310.15(C)(1). OCPD sized to next standard rating at or above design current per §690.9. Verify module series fuse rating on nameplate — OCPD must not exceed that value. System voltage calculation is nominal Voc × modules; cold-temperature Voc correction (§690.7) required for actual max system voltage — verify with temperature-adjusted string sizing tool. Design guidance only — have all PV systems designed and installed by a licensed solar contractor and inspected by AHJ.</div>
+    </div>
+    <div class="code-note" id="pv-note"></div>
+  </div>
+
+
   <!-- ── FEEDER SIZING TAB ── -->
   <div class="tab-panel" id="tab-feeder">
     <div class="section-label">Feeder &amp; Branch Circuit Sizing</div>
@@ -7259,6 +7352,7 @@ function setCodeYear(year){
   if(document.getElementById('xf-ocpd-results-label')&&document.getElementById('xf-ocpd-results-label').style.display!=='none')calculateXfmrOCPD();
   if(document.getElementById('xf-sds-results-label')&&document.getElementById('xf-sds-results-label').style.display!=='none')calculateXfmrSDS();
   if(document.getElementById('fd-results-label')&&document.getElementById('fd-results-label').style.display!=='none')calculateFeeder();
+  if(document.getElementById('pv-results-label')&&document.getElementById('pv-results-label').style.display!=='none')calculatePV();
   // Update quiz title immediately regardless of which tab is active
   var qzTitleEl=document.getElementById('qz-title');
   if(qzTitleEl) qzTitleEl.textContent='⚡ CODE '+year+' — EXAM PREP';
@@ -9855,6 +9949,148 @@ function calculateCFD(){
 
 // seed data fill row on load
 (function(){cfdAddRow();})();
+
+// ── Solar / PV Conductor Sizing §690.8 ───────────────────────────────────────
+// §310.16 Cu: [size, 90°C ampacity]
+var _PV_WIRE=[
+  {sz:'14 AWG',  a75:20,  a90:25},
+  {sz:'12 AWG',  a75:25,  a90:30},
+  {sz:'10 AWG',  a75:35,  a90:40},
+  {sz:'8 AWG',   a75:50,  a90:55},
+  {sz:'6 AWG',   a75:65,  a90:75},
+  {sz:'4 AWG',   a75:85,  a90:95},
+  {sz:'3 AWG',   a75:100, a90:110},
+  {sz:'2 AWG',   a75:115, a90:130},
+  {sz:'1 AWG',   a75:130, a90:145},
+  {sz:'1/0 AWG', a75:150, a90:170},
+  {sz:'2/0 AWG', a75:175, a90:195},
+  {sz:'3/0 AWG', a75:200, a90:225},
+  {sz:'4/0 AWG', a75:230, a90:260},
+  {sz:'250 kcmil',a75:255,a90:290},
+  {sz:'300 kcmil',a75:285,a90:320},
+  {sz:'350 kcmil',a75:310,a90:350},
+  {sz:'400 kcmil',a75:335,a90:380},
+  {sz:'500 kcmil',a75:380,a90:430}
+];
+var _PV_OCPD=[15,20,25,30,35,40,45,50,60,70,80,90,100,110,125,150,175,200,225,250,300,350,400,450,500,600];
+
+function pvTempDerate(ambC, roofAdd){
+  var t=ambC+roofAdd;
+  if(t<=30) return 1.00;
+  if(t<=35) return 0.96;
+  if(t<=40) return 0.91;
+  if(t<=45) return 0.87;
+  if(t<=50) return 0.82;
+  if(t<=55) return 0.76;
+  if(t<=60) return 0.71;
+  if(t<=70) return 0.58;
+  if(t<=80) return 0.41;
+  return 0.00;
+}
+function pvBundleDerate(n){
+  if(n<=3)  return 1.00;
+  if(n<=6)  return 0.80;
+  if(n<=9)  return 0.70;
+  if(n<=20) return 0.50;
+  if(n<=30) return 0.45;
+  if(n<=40) return 0.40;
+  return 0.35;
+}
+function pvNextOCPD(i){
+  for(var k=0;k<_PV_OCPD.length;k++) if(_PV_OCPD[k]>=i) return _PV_OCPD[k];
+  return Math.ceil(i);
+}
+function pvFindWire(designI, tF, bF){
+  for(var i=0;i<_PV_WIRE.length;i++){
+    var derated=_PV_WIRE[i].a90*tF*bF;
+    if(derated>=designI) return {sz:_PV_WIRE[i].sz, a90:_PV_WIRE[i].a90, a75:_PV_WIRE[i].a75, derated:derated};
+  }
+  return null;
+}
+function pvBlock(title, wire, designI, ocpd, note){
+  var ocpdStr=ocpd?('<br><span style="font-size:11px;color:var(--sub);">OCPD: '+ocpd+'A</span>'):'';
+  var noteStr=note?('<div style="font-size:11px;color:var(--text-dim);padding:2px 0;">'+note+'</div>'):'';
+  return '<div class="result-block"><div class="rb-label">'+title+'</div>'
+    +'<div class="rb-val">'+(wire?wire.sz:'—')+'</div>'
+    +'<div class="rb-sub">Design: '+designI.toFixed(2)+'A'+(wire?' · Derated: '+wire.derated.toFixed(1)+'A':' · <span style="color:var(--danger);">No standard wire fits — upsize conduit/reduce strings</span>')+ocpdStr+'</div>'
+    +noteStr+'</div>';
+}
+
+function calculatePV(){
+  var err=document.getElementById('pv-err');
+  err.textContent='';
+  var isc=parseFloat(document.getElementById('pv-isc').value);
+  var voc=parseFloat(document.getElementById('pv-voc').value);
+  var mps=parseInt(document.getElementById('pv-mps').value);
+  var strings=parseInt(document.getElementById('pv-strings').value);
+  var amb=parseInt(document.getElementById('pv-amb').value);
+  var roof=parseInt(document.getElementById('pv-roof').value);
+  var bundleN=parseInt(document.getElementById('pv-bundle').value);
+  var invA=parseFloat(document.getElementById('pv-inv-a').value);
+  var invV=document.getElementById('pv-inv-v').value;
+
+  if(!isc||!voc||!mps||!strings||!invA){err.textContent='Fill in all fields.';return;}
+
+  var tF=pvTempDerate(amb,roof);
+  var bF=pvBundleDerate(bundleN);
+  var effectiveTemp=amb+roof;
+
+  if(tF===0){err.textContent='Combined temperature ('+effectiveTemp+'°C) exceeds 90°C conductor rating. Relocate conduit or increase clearance.';return;}
+
+  // Source circuit (one string)
+  var srcDesign=isc*1.25*1.25;
+  var srcWire=pvFindWire(srcDesign,tF,bF);
+  var srcOCPD=pvNextOCPD(srcDesign);
+
+  // Output circuit (all strings combined at combiner)
+  var outDesign=isc*strings*1.25*1.25;
+  var outWire=pvFindWire(outDesign,tF,bF);
+  var outOCPD=pvNextOCPD(outDesign);
+
+  // Inverter AC output circuit (continuous load → ×1.25)
+  var acDesign=invA*1.25;
+  var acWire=pvFindWire(acDesign,tF,bF);
+  var acOCPD=pvNextOCPD(acDesign);
+
+  // System voltage (nominal)
+  var sysV=(voc*mps).toFixed(0);
+
+  var rl=document.getElementById('pv-results-label');
+  rl.style.display='block';
+  var rd=document.getElementById('pv-results');
+
+  rd.innerHTML=''
+    +'<div style="font-size:12px;color:var(--sub);padding:6px 0 10px;">Conditions: '+effectiveTemp+'°C effective · Temp derating: '+(tF*100).toFixed(0)+'% · Bundle derating: '+(bF*100).toFixed(0)+'% · Combined: '+(tF*bF*100).toFixed(0)+'%</div>'
+    +makeBlock('','System Voltage (nominal)','',sysV+' V DC','Voc '+voc+'V × '+mps+' modules/string — apply §690.7 cold-temp correction for max')
+    +'<div style="font-size:12px;font-weight:600;color:var(--gold);padding:8px 0 4px;border-top:1px solid var(--border);margin-top:6px;">DC Source Circuit (per string)</div>'
+    +pvBlock('Min Wire Size (USE-2/PV Wire)',srcWire,srcDesign,srcOCPD,'Isc '+isc+'A × 1.25 × 1.25 = '+srcDesign.toFixed(2)+'A · Check module series fuse rating on nameplate')
+    +'<div style="font-size:12px;font-weight:600;color:var(--gold);padding:8px 0 4px;border-top:1px solid var(--border);margin-top:6px;">DC Output Circuit ('+strings+' strings combined)</div>'
+    +pvBlock('Min Wire Size (USE-2/PV Wire)',outWire,outDesign,strings>1?outOCPD:null,strings===1?'Single string — source and output circuits are the same':'Isc '+isc+'A × '+strings+' strings × 1.25 × 1.25 = '+outDesign.toFixed(2)+'A')
+    +'<div style="font-size:12px;font-weight:600;color:var(--gold);padding:8px 0 4px;border-top:1px solid var(--border);margin-top:6px;">AC Inverter Output Circuit</div>'
+    +pvBlock('Min Wire Size (THWN-2)',acWire,acDesign,acOCPD,'Inverter rated output '+invA+'A × 1.25 (continuous) = '+acDesign.toFixed(2)+'A · '+invV+'V AC');
+
+  document.getElementById('pv-disclaimer').style.display='block';
+  document.getElementById('pv-note').innerHTML='<div style="font-size:11px;color:var(--text-dim);padding:6px 14px 0;">§690.8 design current · §310.16 ampacity · Table 310.15(B)(2)(a) temp factors · §310.15(B)(3)(c) roof adder · §310.15(C)(1) bundling</div>';
+  jcResultsReady('pv','Solar/PV Conductor Sizing',null,'pv-results');
+}
+
+function resetPV(){
+  document.getElementById('pv-isc').value='10.5';
+  document.getElementById('pv-voc').value='40.5';
+  document.getElementById('pv-mps').value='10';
+  document.getElementById('pv-strings').value='2';
+  document.getElementById('pv-amb').value='30';
+  document.getElementById('pv-roof').value='22';
+  document.getElementById('pv-bundle').value='4';
+  document.getElementById('pv-inv-a').value='32';
+  document.getElementById('pv-inv-v').value='240';
+  document.getElementById('pv-results').innerHTML='';
+  document.getElementById('pv-results-label').style.display='none';
+  document.getElementById('pv-disclaimer').style.display='none';
+  document.getElementById('pv-note').innerHTML='';
+  document.getElementById('pv-err').textContent='';
+}
+
 
 // ── Conduit Bend ──────────────────────────────────────────────────────────────
 // Take-up (deduct) by conduit size — how much to subtract from stub height to get your mark
