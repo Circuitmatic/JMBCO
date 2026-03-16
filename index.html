@@ -162,7 +162,7 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #ffffff; border-ra
 .quiz-stat-row{display:flex;gap:8px;width:100%;max-width:600px;margin-bottom:10px;}
 .quiz-stat{flex:1;background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:8px 10px;text-align:center;}
 .quiz-stat-lbl{font-size:0.65rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;}
-.quiz-stat-val{font-size:0.9rem;font-weight:700;color:#f0c020;margin-top:2px;font-family:'Roboto Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.quiz-stat-val{font-size:0.9rem;font-weight:700;color:#111827;margin-top:2px;font-family:'Roboto Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .quiz-stat-val.sm{font-size:0.65rem;}
 .quiz-card{width:100%;max-width:600px;background:#111827;border:1px solid #1e293b;border-radius:14px;padding:18px;}
 .quiz-q-text{font-size:0.97rem;font-weight:600;color:#f1f5f9;margin-bottom:16px;line-height:1.55;}
@@ -171,16 +171,16 @@ body.light-mode .tab-btn.active { color: #1a1200; background: #ffffff; border-ra
 .quiz-opt:hover:not(:disabled){border-color:#f0c020;background:#1e2530;transform:translateY(-1px);}
 .quiz-opt.qz-ok{border-color:#22c55e!important;background:rgba(34,197,94,0.13)!important;color:#4ade80!important;}
 .quiz-opt.qz-bad{border-color:#ef4444!important;background:rgba(239,68,68,0.13)!important;color:#f87171!important;}
-.quiz-feedback{margin-top:14px;padding:12px 14px;border-radius:9px;background:#0a1120;border-left:3px solid #f0c020;display:none;}
+.quiz-feedback{margin-top:14px;padding:12px 14px;border-radius:9px;background:#f1f5f9;border-left:3px solid #f0c020;display:none;}
 .quiz-ref{display:inline-block;background:#f0c020;color:#1a1200;padding:2px 7px;border-radius:4px;font-weight:900;font-size:0.68rem;margin-bottom:7px;font-family:'Roboto Mono',monospace;}
-.quiz-exp{font-size:0.84rem;color:#cbd5e1;line-height:1.45;}
+.quiz-exp{font-size:0.84rem;color:#374151;line-height:1.45;}
 .quiz-next-btn{margin-top:14px;width:100%;padding:14px;background:#f0c020;color:#1a1200;border:none;border-radius:9px;font-weight:900;font-family:'Roboto Mono',monospace;cursor:pointer;display:none;text-transform:uppercase;letter-spacing:1px;font-size:0.82rem;}
 .quiz-next-btn:hover{background:#ffe066;}
 .quiz-score-screen{display:none;text-align:center;padding:16px 0;}
 .quiz-end-title{font-family:'Orbitron',monospace;font-size:1.3rem;font-weight:900;color:#f0c020;letter-spacing:3px;text-transform:uppercase;text-shadow:0 0 16px rgba(240,192,32,0.4);margin-bottom:14px;}
-.quiz-score-sublbl{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:2px;}
-.quiz-score-num{font-size:3.2rem;font-family:'Roboto Mono',monospace;color:#f0c020;margin:4px 0 6px;text-shadow:0 0 20px rgba(240,192,32,0.35);}
-.quiz-score-label{font-size:0.85rem;color:#94a3b8;margin-bottom:10px;}
+.quiz-score-sublbl{font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#374151;margin-bottom:2px;}
+.quiz-score-num{font-size:3.2rem;font-family:'Roboto Mono',monospace;color:#111827;margin:4px 0 6px;}
+.quiz-score-label{font-size:0.85rem;color:#374151;margin-bottom:10px;}
 .quiz-score-msg{margin-bottom:16px;font-size:0.88rem;line-height:1.5;}
 .quiz-score-pass{color:#4ade80;}
 .quiz-score-fail{color:#f87171;}
@@ -199,7 +199,7 @@ body.light-mode .quiz-opt:hover:not(:disabled){background:#f1f5f9;border-color:#
 body.light-mode .quiz-feedback{background:#f8fafc;border-color:#e2e8f0;}
 body.light-mode .quiz-exp{color:#374151;}
 body.light-mode .quiz-prog-wrap{background:#e2e8f0;}
-body.light-mode .quiz-stat-val{color:#c9a010;}
+body.light-mode .quiz-stat-val{color:#111827;}
 body.light-mode .quiz-q-text{color:#111827;}
 body.light-mode .calc-home-lbl { color: #c9a010; }
 body.light-mode .menu-btn { color: #c9a010; }
@@ -12746,11 +12746,10 @@ function qzExportPDF(){
   _qzLog.forEach(function(entry,i){
     var q=entry.q;
     var ok=entry.correct;
-    var rowBg=ok?'#f0fdf4':'#fef2f2';
     var markColor=ok?'#15803d':'#dc2626';
     var mark=ok?'\u2713':'\u2717';
     qHTML+=
-      '<div style="background:'+rowBg+';border:1px solid '+(ok?'#bbf7d0':'#fecaca')+';border-radius:8px;padding:10px 14px;margin-bottom:7px;page-break-inside:avoid;">' +
+      '<div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:10px 14px;margin-bottom:7px;page-break-inside:avoid;">' +
         // Header row: number + category + mark
         '<div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px;">' +
           '<div style="display:flex;align-items:baseline;gap:8px;">' +
@@ -12770,7 +12769,7 @@ function qzExportPDF(){
           ) +
         '</div>' +
         // Reference + explanation
-        '<div style="margin-top:5px;padding-top:5px;border-top:1px solid '+(ok?'#bbf7d0':'#fecaca')+';font-size:10px;color:#6b7280;line-height:1.5;">' +
+        '<div style="margin-top:5px;padding-top:5px;border-top:1px solid #e5e7eb'+'';font-size:10px;color:#6b7280;line-height:1.5;">' +
           '<span style="font-weight:700;color:#374151;">Ref: '+escHtml(q.r||'NEC '+yr)+'</span>' +
           (q.t?'&nbsp;&mdash;&nbsp;'+escHtml(q.t):'') +
         '</div>' +
