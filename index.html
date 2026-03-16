@@ -12633,10 +12633,15 @@ function calculatePN(){
 function pnSetCount(){
   var n=parseInt(document.getElementById('pn-count').value);
   if(!n||n<1||n>84){return;}
-  document.getElementById('pn-circuits').innerHTML='';
-  pnRowCount=0;
-  clrPN();
-  for(var i=0;i<n;i++)pnAddCircuit();
+  var cards=Array.from(document.querySelectorAll('.pn-card'));
+  var cur=cards.length;
+  if(n===cur)return;
+  if(n>cur){
+    for(var i=0;i<n-cur;i++)pnAddCircuit();
+  }else{
+    cards.slice(n).forEach(function(c){c.parentNode.removeChild(c);});
+    pnRefreshBadges();clrPN();
+  }
 }
 function onPnModeChange(){
   var mode=document.getElementById('pn-mode').value;
