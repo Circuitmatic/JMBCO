@@ -12469,6 +12469,8 @@ function pnRefreshBadges(){
   var nph=pnNumPh(sys),slot=1,blk={};
   function nxt(s){while(blk[s])s++;return s;}
   function nxtOdd(s){if(s%2===0)s++;while(blk[s])s+=2;return s;}
+  function nxtEven(s){if(s%2!==0)s++;while(blk[s])s+=2;return s;}
+  function nxtSide(s){return s%2===0?nxtEven(s):nxtOdd(s);}
   document.querySelectorAll('.pn-card').forEach(function(card){
     var id=card.id.replace('pn-card-','');
     var poles=parseInt(document.getElementById('pn-poles-'+id).value)||1;
@@ -12478,13 +12480,13 @@ function pnRefreshBadges(){
       ph=pnPhLabel(slot-1,sys);phDisplay=ph;
       cktLabel=String(slot);slot++;
     }else if(poles===2){
-      slot=nxtOdd(slot);
+      slot=nxtSide(slot);
       ph=pnPhLabel(slot-1,sys);
-      cktLabel=slot+'-'+(slot+1);
-      phDisplay=ph+'-'+pnPhLabel(slot,sys);
-      blk[slot]=blk[slot+1]=true;slot+=2;
+      cktLabel=slot+'-'+(slot+2);
+      phDisplay=ph+'-'+pnPhLabel(slot+1,sys);
+      blk[slot]=blk[slot+2]=true;slot=slot+1;
     }else{
-      slot=nxtOdd(slot);
+      slot=nxtSide(slot);
       ph=pnPhLabel(slot-1,sys);
       cktLabel=slot+','+(slot+2)+','+(slot+4);
       phDisplay=pnIs3Ph(sys)?'A-B-C':ph;
@@ -12742,6 +12744,7 @@ function pnExportPrint(){
   function buildTbody(rowStart,rowEnd){
     var covLeft={},covRight={},tb='';
     for(var row=rowStart;row<=rowEnd;row++){
+      if(covLeft[row]&&covRight[row]){tb+='<tr style="display:none"></tr>';continue;}
       var ls=row*2-1,rs=row*2;
       var lc=slotMap[ls],rc=slotMap[rs];
       tb+='<tr>';
@@ -12753,16 +12756,16 @@ function pnExportPrint(){
           var ra=rspan>1?' rowspan="'+rspan+'"':'';
           tb+='<td class="tc"'+ra+'>'+escHtml(lc.cktLabel)+'</td>'
             +'<td class="td"'+ra+'>'+escHtml(lc.desc||'—')+'</td>'
-            +'<td class="ta"'+ra+'>'+escHtml(lc.bkr)+'A</td>';
+            +'<td class="ta"'+ra+'>'+lc.poles+'P–'+escHtml(lc.bkr)+'A</td>';
         }else if(lc&&lc.poles===2){
           covLeft[row+1]=true;
           tb+='<td class="tc" rowspan="2">'+escHtml(lc.cktLabel)+'</td>'
             +'<td class="td" rowspan="2">'+escHtml(lc.desc||'—')+'</td>'
-            +'<td class="ta" rowspan="2">'+escHtml(lc.bkr)+'A</td>';
+            +'<td class="ta" rowspan="2">'+lc.poles+'P–'+escHtml(lc.bkr)+'A</td>';
         }else if(lc){
           tb+='<td class="tc">'+escHtml(lc.cktLabel)+'</td>'
             +'<td class="td">'+escHtml(lc.desc||'—')+'</td>'
-            +'<td class="ta">'+escHtml(lc.bkr)+'A</td>';
+            +'<td class="ta">'+lc.poles+'P–'+escHtml(lc.bkr)+'A</td>';
         }else{
           tb+='<td class="tc"></td><td class="td"></td><td class="ta"></td>';
         }
@@ -12773,16 +12776,16 @@ function pnExportPrint(){
           if(rspanR>=2)covRight[row+1]=true;
           if(rspanR===3)covRight[row+2]=true;
           var raR=rspanR>1?' rowspan="'+rspanR+'"':'';
-          tb+='<td class="ta"'+raR+'>'+escHtml(rc.bkr)+'A</td>'
+          tb+='<td class="ta"'+raR+'>'+rc.poles+'P–'+escHtml(rc.bkr)+'A</td>'
             +'<td class="td tdr"'+raR+'>'+escHtml(rc.desc||'—')+'</td>'
             +'<td class="tc"'+raR+'>'+escHtml(rc.cktLabel)+'</td>';
         }else if(rc&&rc.poles===2){
           covRight[row+1]=true;
-          tb+='<td class="ta" rowspan="2">'+escHtml(rc.bkr)+'A</td>'
+          tb+='<td class="ta" rowspan="2">'+rc.poles+'P–'+escHtml(rc.bkr)+'A</td>'
             +'<td class="td tdr" rowspan="2">'+escHtml(rc.desc||'—')+'</td>'
             +'<td class="tc" rowspan="2">'+escHtml(rc.cktLabel)+'</td>';
         }else if(rc){
-          tb+='<td class="ta">'+escHtml(rc.bkr)+'A</td>'
+          tb+='<td class="ta">'+rc.poles+'P–'+escHtml(rc.bkr)+'A</td>'
             +'<td class="td tdr">'+escHtml(rc.desc||'—')+'</td>'
             +'<td class="tc">'+escHtml(rc.cktLabel)+'</td>';
         }else{
@@ -12814,8 +12817,8 @@ function pnExportPrint(){
         +'<thead><tr>'
           +'<th class="tc" style="width:52px;">CKT #</th>'
           +'<th class="td">DESCRIPTION</th>'
-          +'<th class="ta" style="width:32px;">A</th>'
-          +'<th class="ta" style="width:32px;">A</th>'
+          +'<th class="ta" style="width:56px;font-size:9px;">A</th>'
+          +'<th class="ta" style="width:56px;font-size:9px;">A</th>'
           +'<th class="td">DESCRIPTION</th>'
           +'<th class="tc" style="width:52px;">CKT #</th>'
         +'</tr></thead>'
