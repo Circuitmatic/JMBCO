@@ -400,7 +400,7 @@ body.light-mode .svc-info-modal-body{color:#374151;}
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #f0c020;
-    padding: 12px 20px 6px;
+    padding: 8px 20px 4px;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -414,7 +414,7 @@ body.light-mode .svc-info-modal-body{color:#374151;}
   }
 
   /* ── Fields ── */
-  .fields { padding: 0 20px 4px; display: flex; flex-direction: column; gap: 6px; }
+  .fields { padding: 0 20px 2px; display: flex; flex-direction: column; gap: 4px; }
   .field-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .field-row.hidden { display: none; }
   .field-label {
@@ -651,12 +651,12 @@ body.light-mode .dr-note{background:#f8fafc;border-color:#e2e8f0;}
 /* ── Receptacle Spacing Tab ── */
 .rc-wrap{padding:12px 14px 24px;max-width:600px;margin:0 auto;}
 .rc-room-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
-.rc-room-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;text-align:center;transition:all .15s;line-height:1.3;}
+.rc-room-btn{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 8px;font-size:0.78rem;font-weight:700;color:var(--text);cursor:pointer;text-align:center;transition:all .15s;line-height:1.3;min-height:52px;display:flex;align-items:center;justify-content:center;}
 .rc-room-btn:hover{border-color:#f0c020;color:#f0c020;}
 .rc-room-btn.rc-active{background:rgba(240,192,32,.12);border-color:#f0c020;color:#f0c020;}
-.rc-walls-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.rc-wall-row{display:flex;flex-direction:column;gap:3px;}
-.rc-wall-label{font-size:0.7rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;}
+.rc-walls-grid{display:flex;flex-direction:column;gap:6px;}
+.rc-wall-row{display:flex;align-items:center;gap:8px;}
+.rc-wall-label{font-size:0.7rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;min-width:44px;flex-shrink:0;}
 .rc-result-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
 .rc-result-card.rc-pass{border-left:3px solid #4ade80;}
 .rc-result-card.rc-warn{border-left:3px solid #f0c020;}
@@ -684,9 +684,9 @@ body.light-mode .dr-note{background:#f8fafc;border-color:#e2e8f0;}
 .gs-total-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);}
 .gs-total-row:last-child{border-bottom:none;padding-top:10px;margin-top:4px;}
 .gs-total-lbl{font-size:0.8rem;color:var(--sub);}
-.gs-total-val{font-size:0.9rem;font-weight:900;font-family:'Roboto Mono',monospace;color:var(--text);}
+.gs-total-val{font-size:0.9rem;font-weight:600;font-family:'Inter',sans-serif;color:var(--text);}
 .gs-total-val.gs-gold{color:#f0c020;}
-.gs-size-badge{display:inline-block;background:rgba(240,192,32,.15);border:1.5px solid #f0c020;border-radius:10px;padding:8px 20px;font-size:1.3rem;font-weight:900;font-family:'Roboto Mono',monospace;color:#f0c020;margin-top:10px;}
+.gs-size-badge{display:inline-block;background:rgba(240,192,32,.15);border:1.5px solid #f0c020;border-radius:10px;padding:8px 20px;font-size:1.3rem;font-weight:700;font-family:'Inter',sans-serif;color:#f0c020;margin-top:10px;}
 .gs-surge-note{font-size:0.72rem;color:var(--muted);margin-top:6px;line-height:1.6;}
 body.light-mode .gs-load-watts{background:#f8fafc;border-color:#e2e8f0;}
 /* ── Commercial Load Tab ── */
@@ -2406,9 +2406,16 @@ if('serviceWorker' in navigator){
     </div>
 
     <!-- ── RUN PLANNER MODE ── -->
+    <!-- ── RUN PLANNER MODE ── -->
     <div id="cf-run-section" style="display:none;">
-      <div class="section-label">Conduit</div>
+
+      <!-- ── Header: Run Info + Conduit collapsed into one block ── -->
+      <div class="section-label">Run Setup</div>
       <div class="fields">
+        <div class="field-row">
+          <div class="field-label">Run Name / ID</div>
+          <input class="fi" id="crp-name" type="text" placeholder="e.g. Panel A → MCC-1">
+        </div>
         <div class="field-row">
           <div class="field-label">Conduit Type</div>
           <div class="sel-wrap"><select class="fi" id="crp-type">
@@ -2420,8 +2427,40 @@ if('serviceWorker' in navigator){
           </select></div>
         </div>
         <div class="field-row">
-          <div class="field-label">Trade Size</div>
-          <div class="sel-wrap"><select class="fi" id="crp-size">
+          <div class="field-label">Install Condition</div>
+          <div class="sel-wrap"><select class="fi" id="crp-install">
+            <option value="exposed">Exposed</option>
+            <option value="concealed">Concealed</option>
+            <option value="rooftop">Rooftop</option>
+            <option value="underground">Underground Transition</option>
+          </select></div>
+        </div>
+        <div class="field-row">
+          <div class="field-label">Mounting Surface</div>
+          <div class="sel-wrap"><select class="fi" id="crp-mount">
+            <option value="wall">Wall</option>
+            <option value="ceiling">Ceiling</option>
+            <option value="strut">Strut / Unistrut</option>
+            <option value="trapeze">Trapeze</option>
+          </select></div>
+        </div>
+      </div>
+
+      <!-- ── Segment Adder ── -->
+      <div class="section-label">Add Segment</div>
+      <div style="padding:0 14px 4px;">
+
+        <!-- Action tabs -->
+        <div style="display:flex;gap:6px;margin-bottom:10px;">
+          <button id="crp-tab-straight" class="btn btn-reset" style="flex:1;font-size:11px;font-weight:700;background:var(--gold);color:#000;border-color:var(--gold);" onclick="crpSetTab('straight')">Straight</button>
+          <button id="crp-tab-bend" class="btn btn-reset" style="flex:1;font-size:11px;" onclick="crpSetTab('bend')">Bend</button>
+          <button id="crp-tab-pull" class="btn btn-reset" style="flex:1;font-size:11px;" onclick="crpSetTab('pull')">Pull Point</button>
+        </div>
+
+        <!-- Shared: trade size (applies to next segment added) -->
+        <div style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">
+          <div style="font-size:11px;color:var(--sub);white-space:nowrap;">Size</div>
+          <div class="sel-wrap" style="flex:1;"><select class="fi" id="crp-size" style="font-size:12px;">
             <option value="0.5">½"</option>
             <option value="0.75">¾"</option>
             <option value="1" selected>1"</option>
@@ -2432,49 +2471,73 @@ if('serviceWorker' in navigator){
             <option value="3">3"</option>
             <option value="4">4"</option>
           </select></div>
+          <div style="font-size:10px;color:var(--muted);flex:2;line-height:1.3;">Changes per segment — mix sizes in one run</div>
         </div>
+
+        <!-- Straight panel -->
+        <div id="crp-panel-straight">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+            <div style="font-size:11px;color:var(--sub);white-space:nowrap;">Length (ft)</div>
+            <input type="number" class="fi" id="crp-ft" min="0.5" max="9999" step="0.5" value="10" style="flex:1;font-size:13px;">
+          </div>
+          <button class="btn btn-reset" style="width:100%;font-size:12px;font-weight:600;" onclick="crpAddStraight()">+ Add Straight</button>
+        </div>
+
+        <!-- Bend panel -->
+        <div id="crp-panel-bend" style="display:none;">
+          <div style="display:flex;gap:8px;margin-bottom:8px;">
+            <div style="flex:1;">
+              <div style="font-size:11px;color:var(--sub);margin-bottom:4px;">Angle</div>
+              <div class="sel-wrap"><select class="fi" id="crp-deg">
+                <option value="22.5">22.5°</option>
+                <option value="30">30°</option>
+                <option value="45">45°</option>
+                <option value="60">60°</option>
+                <option value="90" selected>90°</option>
+              </select></div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:11px;color:var(--sub);margin-bottom:4px;">Type</div>
+              <div class="sel-wrap"><select class="fi" id="crp-bend-mode" onchange="crpRender()">
+                <option value="field" selected>Field</option>
+                <option value="factory">Factory</option>
+              </select></div>
+            </div>
+          </div>
+          <button class="btn btn-reset" style="width:100%;font-size:12px;font-weight:600;" onclick="crpAddBend()">+ Add Bend</button>
+        </div>
+
+        <!-- Pull Point panel -->
+        <div id="crp-panel-pull" style="display:none;">
+          <div style="display:flex;gap:8px;margin-bottom:8px;">
+            <div style="flex:1;">
+              <div style="font-size:11px;color:var(--sub);margin-bottom:4px;">Pull Type</div>
+              <div class="sel-wrap"><select class="fi" id="crp-pb-type">
+                <option value="straight">Straight</option>
+                <option value="angle">Angle</option>
+                <option value="u">U-Pull</option>
+              </select></div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:11px;color:var(--sub);margin-bottom:4px;">Largest pipe (in)</div>
+              <input type="number" class="fi" id="crp-pb-largest" min="0.5" max="6" step="0.25" placeholder="auto">
+            </div>
+          </div>
+          <button class="btn btn-reset" style="width:100%;font-size:12px;font-weight:600;border-color:var(--gold);color:#fff;background:var(--gold);" onclick="crpAddPullPoint()">&#8627; Mark Pull Point</button>
+        </div>
+
       </div>
-        <div class="section-label">Add Segments</div>
-      <div class="fields">
-        <div class="field-row">
-          <div class="field-label">Straight (ft)</div>
-          <input type="number" class="fi" id="crp-ft" min="0.5" max="9999" step="0.5" value="10" placeholder="ft">
-        </div>
-        <div style="padding:0 14px 8px;">
-          <button class="btn btn-reset" style="width:100%;font-size:11px;" onclick="crpAddStraight()">+ Add Straight Run</button>
-        </div>
-        <div class="field-row" style="margin-top:6px;">
-          <div class="field-label">Bend Type <button class="svc-ib" onclick="svcInfo('crp_bend_type')">ⓘ</button></div>
-          <div class="sel-wrap"><select class="fi" id="crp-bend-mode" onchange="crpRender()">
-            <option value="field" selected>Field Bends</option>
-            <option value="factory">Pre-Made Elbows (Factory)</option>
-          </select></div>
-        </div>
-        <div class="field-row">
-          <div class="field-label">Angle</div>
-          <div class="sel-wrap"><select class="fi" id="crp-deg">
-            <option value="22.5">22.5°</option>
-            <option value="30">30°</option>
-            <option value="45">45°</option>
-            <option value="60">60°</option>
-            <option value="90" selected>90°</option>
-          </select></div>
-        </div>
-        <div style="padding:0 14px 8px;">
-          <button class="btn btn-reset" style="width:100%;font-size:11px;" onclick="crpAddBend()">+ Add Bend</button>
-        </div>
-        <div style="padding:0 14px 8px;">
-          <button class="btn btn-reset" style="width:100%;font-size:11px;border-color:var(--gold);color:var(--gold);" onclick="crpAddPullPoint()">&#8627; Mark Pull Point <button class="svc-ib" onclick="event.stopPropagation();svcInfo('crp_pull_box')" style="color:var(--sub);">ⓘ</button></button>
-        </div>
-      </div>
-        <div class="section-label">Run</div>
+
+      <!-- ── Run List ── -->
+      <div class="section-label">Run</div>
       <div id="crp-list" style="padding:0 14px;min-height:40px;font-size:13px;"></div>
       <div id="crp-summary" style="padding:8px 14px 4px;"></div>
       <div style="padding:4px 14px 10px;">
         <button class="btn btn-reset" style="font-size:11px;" onclick="crpClear()">Clear All</button>
       </div>
-      <div class="code-note" id="crp-note" style="font-size:11px;color:var(--text-dim);padding:4px 14px 8px;">Max 360° of bends between pull points — §358.26 (EMT), §344.26 (RMC), §352.26 (PVC). Mark a pull point to reset the counter for each section.</div>
+      <div class="code-note" id="crp-note" style="font-size:11px;color:var(--text-dim);padding:4px 14px 8px;">Max 360° of bends between pull points — §358.26 (EMT), §344.26 (RMC), §352.26 (PVC).</div>
     </div>
+
 
 
   </div>
@@ -2843,13 +2906,14 @@ if('serviceWorker' in navigator){
       <!-- Living / bedroom inputs -->
       <div id="rc-inputs-walls" style="display:block;">
         <div class="field-label" style="margin-bottom:6px;">Wall Lengths (feet) <span style="font-size:0.7rem;color:var(--muted);">— enter each continuous wall segment</span></div>
-        <div class="rc-walls-grid">
-          <div class="rc-wall-row"><div class="rc-wall-label">Wall 1</div><input class="fi" id="rc-w1" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/></div>
-          <div class="rc-wall-row"><div class="rc-wall-label">Wall 2</div><input class="fi" id="rc-w2" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/></div>
-          <div class="rc-wall-row"><div class="rc-wall-label">Wall 3</div><input class="fi" id="rc-w3" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/></div>
-          <div class="rc-wall-row"><div class="rc-wall-label">Wall 4</div><input class="fi" id="rc-w4" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/></div>
+        <div id="rc-walls-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;">
+          <div class="rc-wall-row" id="rc-wall-row-1"><div class="rc-wall-label">Wall 1</div><input class="fi rc-wall-input" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/></div>
         </div>
-        <div class="fi-sub" style="margin-top:6px;">Wall segments under 2 ft do not require a receptacle. Enter 0 or leave blank to skip.</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px;">
+          <button class="btn btn-reset" style="font-size:11px;padding:4px 12px;" onclick="rcAddWall()">+ Add Wall</button>
+          <button class="btn btn-reset" style="font-size:11px;padding:4px 12px;" id="rc-remove-wall-btn" onclick="rcRemoveWall()" style="display:none;">− Remove Last</button>
+        </div>
+        <div class="fi-sub">Wall segments under 2 ft do not require a receptacle.</div>
       </div>
 
       <!-- Kitchen inputs -->
@@ -3457,7 +3521,7 @@ if('serviceWorker' in navigator){
           <span class="stg-action-icon">&#x2709;&#xFE0F;</span>
           <div class="stg-row-info">
             <div class="stg-row-title">Contact &amp; Support</div>
-            <div class="stg-row-sub">support@circuitmatic.app</div>
+            <div class="stg-row-sub"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="42313732322d303602212b3021372b362f23362b216c233232">[email&#160;protected]</a></div>
           </div>
           <span class="stg-action-arrow">&#8250;</span>
         </div>
@@ -7204,7 +7268,7 @@ if('serviceWorker' in navigator){
   </div>
 </div><!-- calc-wrap -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── Electrical Code 2026 Ch.9 Table 8 & 9 — Voltage Drop Data ────────────────────────────
 var COND_TBL={copper:{'18':{r75:7.77,xl_nonmetal:0.058,xl_steel:0.073,dc:7.77},'16':{r75:4.89,xl_nonmetal:0.058,xl_steel:0.073,dc:4.89},'14':{r75:3.10,xl_nonmetal:0.058,xl_steel:0.073,dc:3.07},'12':{r75:2.00,xl_nonmetal:0.054,xl_steel:0.068,dc:1.93},'10':{r75:1.20,xl_nonmetal:0.050,xl_steel:0.063,dc:1.21},'8':{r75:0.780,xl_nonmetal:0.052,xl_steel:0.065,dc:0.778},'6':{r75:0.490,xl_nonmetal:0.051,xl_steel:0.064,dc:0.491},'4':{r75:0.310,xl_nonmetal:0.048,xl_steel:0.060,dc:0.308},'3':{r75:0.250,xl_nonmetal:0.047,xl_steel:0.059,dc:0.245},'2':{r75:0.190,xl_nonmetal:0.045,xl_steel:0.057,dc:0.194},'1':{r75:0.150,xl_nonmetal:0.046,xl_steel:0.057,dc:0.154},'1/0':{r75:0.120,xl_nonmetal:0.044,xl_steel:0.055,dc:0.122},'2/0':{r75:0.100,xl_nonmetal:0.043,xl_steel:0.054,dc:0.0967},'3/0':{r75:0.077,xl_nonmetal:0.042,xl_steel:0.052,dc:0.0766},'4/0':{r75:0.062,xl_nonmetal:0.041,xl_steel:0.051,dc:0.0608},'250':{r75:0.052,xl_nonmetal:0.041,xl_steel:0.052,dc:0.0515},'300':{r75:0.044,xl_nonmetal:0.041,xl_steel:0.051,dc:0.0429},'350':{r75:0.038,xl_nonmetal:0.040,xl_steel:0.050,dc:0.0367},'400':{r75:0.033,xl_nonmetal:0.040,xl_steel:0.049,dc:0.0321},'500':{r75:0.027,xl_nonmetal:0.039,xl_steel:0.048,dc:0.0258},'600':{r75:0.023,xl_nonmetal:0.039,xl_steel:0.048,dc:0.0214},'700':{r75:0.021,xl_nonmetal:0.038,xl_steel:0.048,dc:0.0184},'750':{r75:0.019,xl_nonmetal:0.038,xl_steel:0.048,dc:0.0171},'800':{r75:0.018,xl_nonmetal:0.038,xl_steel:0.047,dc:0.0161},'900':{r75:0.017,xl_nonmetal:0.037,xl_steel:0.047,dc:0.0143},'1000':{r75:0.015,xl_nonmetal:0.037,xl_steel:0.046,dc:0.0129}},aluminum:{'12':{r75:3.20,xl_nonmetal:0.054,xl_steel:0.068,dc:3.18},'10':{r75:2.00,xl_nonmetal:0.050,xl_steel:0.063,dc:2.00},'8':{r75:1.30,xl_nonmetal:0.052,xl_steel:0.065,dc:1.26},'6':{r75:0.810,xl_nonmetal:0.051,xl_steel:0.064,dc:0.808},'4':{r75:0.510,xl_nonmetal:0.048,xl_steel:0.060,dc:0.508},'3':{r75:0.400,xl_nonmetal:0.047,xl_steel:0.059,dc:0.403},'2':{r75:0.320,xl_nonmetal:0.045,xl_steel:0.057,dc:0.319},'1':{r75:0.250,xl_nonmetal:0.046,xl_steel:0.057,dc:0.253},'1/0':{r75:0.200,xl_nonmetal:0.044,xl_steel:0.055,dc:0.201},'2/0':{r75:0.160,xl_nonmetal:0.043,xl_steel:0.054,dc:0.159},'3/0':{r75:0.130,xl_nonmetal:0.042,xl_steel:0.052,dc:0.126},'4/0':{r75:0.105,xl_nonmetal:0.041,xl_steel:0.051,dc:0.100},'250':{r75:0.085,xl_nonmetal:0.041,xl_steel:0.052,dc:0.0847},'300':{r75:0.071,xl_nonmetal:0.041,xl_steel:0.051,dc:0.0707},'350':{r75:0.061,xl_nonmetal:0.040,xl_steel:0.050,dc:0.0605},'400':{r75:0.054,xl_nonmetal:0.040,xl_steel:0.049,dc:0.0529},'500':{r75:0.043,xl_nonmetal:0.039,xl_steel:0.048,dc:0.0424},'600':{r75:0.036,xl_nonmetal:0.039,xl_steel:0.048,dc:0.0353},'700':{r75:0.033,xl_nonmetal:0.038,xl_steel:0.048,dc:0.0303},'750':{r75:0.029,xl_nonmetal:0.038,xl_steel:0.048,dc:0.0282},'800':{r75:0.027,xl_nonmetal:0.038,xl_steel:0.047,dc:0.0265},'900':{r75:0.025,xl_nonmetal:0.037,xl_steel:0.047,dc:0.0235},'1000':{r75:0.023,xl_nonmetal:0.037,xl_steel:0.046,dc:0.0212}}};
 
@@ -10361,23 +10425,67 @@ function resetCF(){
 
 
 // ── Conduit Run Planner ───────────────────────────────────────────────────────
-var _crp_segs = [];  // {type:'straight'|'bend'|'pull', value, label}
+var _crp_segs = [];
+
+function crpSetTab(tab){
+  var tabs=['straight','bend','pull'];
+  tabs.forEach(function(t){
+    var btn=document.getElementById('crp-tab-'+t);
+    var panel=document.getElementById('crp-panel-'+t);
+    if(btn&&panel){
+      if(t===tab){
+        btn.style.background='var(--gold)';btn.style.color='#000';btn.style.borderColor='var(--gold)';
+        panel.style.display='';
+      } else {
+        btn.style.background='';btn.style.color='';btn.style.borderColor='';
+        panel.style.display='none';
+      }
+    }
+  });
+}
+
+function crpGetSize(){
+  return parseFloat(document.getElementById('crp-size').value)||1;
+}
+
+function crpSizeLabel(sz){
+  var map={'0.5':'½"','0.75':'¾"','1':'1"','1.25':'1¼"','1.5':'1½"','2':'2"','2.5':'2½"','3':'3"','4':'4"'};
+  return map[String(sz)]||(sz+'"');
+}
 
 function crpAddStraight(){
   var ft=parseFloat(document.getElementById('crp-ft').value);
   if(!ft||ft<=0) return;
-  _crp_segs.push({type:'straight', value:ft, label:ft+' ft straight'});
+  var sz=crpGetSize();
+  _crp_segs.push({type:'straight', value:ft, size:sz, label:ft+' ft — '+crpSizeLabel(sz)});
   crpRender();
 }
+
 function crpAddBend(){
   var deg=parseFloat(document.getElementById('crp-deg').value);
   var mode=(document.getElementById('crp-bend-mode')||{value:'field'}).value;
-  var label=mode==='factory'?(deg+'° factory elbow'):(deg+'° field bend');
-  _crp_segs.push({type:'bend', value:deg, label:label, mode:mode});
+  var sz=crpGetSize();
+  var label=(mode==='factory'?(deg+'° factory elbow'):(deg+'° field bend'))+' — '+crpSizeLabel(sz);
+  _crp_segs.push({type:'bend', value:deg, size:sz, label:label, mode:mode});
   crpRender();
 }
+
 function crpAddPullPoint(){
-  _crp_segs.push({type:'pull', value:0, label:'Pull Point'});
+  var pbType=(document.getElementById('crp-pb-type')||{value:'straight'}).value;
+  var tradeSize=parseFloat(document.getElementById('crp-size').value);
+  var largestEl=document.getElementById('crp-pb-largest');
+  var largest=largestEl&&largestEl.value?parseFloat(largestEl.value):tradeSize;
+  // §314.28 pull box sizing
+  var minSize;
+  if(pbType==='straight'){
+    minSize=8*largest;
+  } else {
+    // angle/U-pull: 6× largest + trade size (simplified — single conduit entry assumed for others)
+    minSize=6*largest+tradeSize;
+  }
+  var typeLabel=pbType==='straight'?'Straight Pull':pbType==='angle'?'Angle Pull':'U-Pull';
+  var label='Pull Point ('+typeLabel+' — min '+minSize.toFixed(2)+'" box, §314.28)';
+  _crp_segs.push({type:'pull', value:0, label:label, pbType:pbType, pbSize:minSize, largest:largest});
   crpRender();
 }
 function crpRemove(i){
@@ -10387,6 +10495,11 @@ function crpRemove(i){
 function crpExport(){
   var condType=document.getElementById('crp-type').value;
   var tradeSize=document.getElementById('crp-size').value;
+  var runName=(document.getElementById('crp-name')||{value:''}).value||'';
+  var installCond=(document.getElementById('crp-install')||{value:''}).value||'';
+  var mountSurf=(document.getElementById('crp-mount')||{value:''}).value||'';
+  var installLabels={exposed:'Exposed',concealed:'Concealed',rooftop:'Rooftop',underground:'Underground Transition'};
+  var mountLabels={wall:'Wall',ceiling:'Ceiling',strut:'Strut / Unistrut',trapeze:'Trapeze'};
   var bmEl=document.getElementById('crp-bend-mode');
   var bendMode=bmEl?bmEl.value:'field';
   var totalFt=0,bendsByDeg={},pullCount=0;
@@ -10402,33 +10515,57 @@ function crpExport(){
   });
   sections.push(cur);
   var totalSticks=0,totalCouplings=0;
-  sections.forEach(function(sec){if(sec.ft>0){var st=Math.ceil(sec.ft/10);totalSticks+=st;totalCouplings+=Math.max(0,st-1);}});
+  var expSticksRows='';
+  var ftBySize={};
+  _crp_segs.forEach(function(s){if(s.type==='straight'){var sz=s.size||parseFloat(tradeSize);ftBySize[sz]=(ftBySize[sz]||0)+s.value;}});
+  Object.keys(ftBySize).sort(function(a,b){return parseFloat(a)-parseFloat(b);}).forEach(function(sz){
+    var ft=ftBySize[sz];var st=Math.ceil(ft/10);var cp=Math.max(0,st-1);
+    totalSticks+=st;totalCouplings+=cp;
+    expSticksRows+='<tr><td>'+condType+' '+crpSizeLabel(parseFloat(sz))+' Conduit (10 ft sticks)</td><td style="text-align:right;" class="tot">'+st+' stk</td></tr>'
+      +'<tr><td>Couplings '+crpSizeLabel(parseFloat(sz))+'</td><td style="text-align:right;" class="tot">'+cp+' ea</td></tr>';
+  });
   var totalConnectors=2+(pullCount*2);
-  var ts=parseFloat(tradeSize);
+  var ts=_crp_segs.reduce(function(mx,s){return s.size&&s.size>mx?s.size:mx;},parseFloat(tradeSize)||1);
   var suppInterval=condType==='ENT'?3:(condType==='PVC'?(ts<=1?3:ts<=2?5:6):10);
-  var suppCount=Math.max(2,Math.ceil(totalFt/suppInterval)+1+(pullCount*2));
+  var suppFirstOffset=3;
+  var spanFt=Math.max(0,totalFt-(suppFirstOffset*2)-(pullCount*suppFirstOffset*2));
+  var suppCount=Math.max(2,2+(pullCount*2)+(spanFt>0?Math.ceil(spanFt/suppInterval):0));
   var bendKeys=Object.keys(bendsByDeg).map(Number).sort(function(a,b){return a-b;});
   var bendRows=bendMode==='factory'
-    ?bendKeys.map(function(d){return '<tr><td>'+condType+' '+tradeSize+'" '+d+'° Factory Elbow</td><td style="text-align:right;">'+bendsByDeg[d]+' ea</td></tr>';}).join('')
-    :(bendKeys.length?'<tr><td>Field Bends ('+bendKeys.map(function(d){return bendsByDeg[d]+'×'+d+'°';}).join(', ')+')</td><td style="text-align:right;">on-site</td></tr>':'');
-  var css='body{font-family:Arial,sans-serif;font-size:13px;margin:28px 24px;}h1{font-size:17px;margin:0 0 2px;}h2{font-size:12px;color:#555;margin:0 0 18px;font-weight:400;}table{width:100%;border-collapse:collapse;margin-bottom:14px;}td,th{padding:7px 8px;border-bottom:1px solid #e0e0e0;}th{text-align:left;font-weight:700;font-size:11px;text-transform:uppercase;color:#888;border-bottom:2px solid #bbb;}.tot{font-weight:700;}.note{font-size:11px;color:#666;margin-top:10px;line-height:1.6;}.bar{background:#f9f9f9;border-bottom:1px solid #ddd;padding:10px 16px;display:flex;gap:10px;position:sticky;top:0;z-index:9;margin:-28px -24px 24px;}@media print{.bar{display:none!important;}}';
+    ?bendKeys.map(function(d){return '<tr><td>'+condType+' '+tradeSize+'" '+d+'\u00b0 Factory Elbow</td><td style="text-align:right;">'+bendsByDeg[d]+' ea</td></tr>';}).join('')
+    :(bendKeys.length?'<tr><td>Field Bends ('+bendKeys.map(function(d){return bendsByDeg[d]+'\u00d7'+d+'\u00b0';}).join(', ')+')</td><td style="text-align:right;">on-site</td></tr>':'');
+  var pbExportRows=_crp_segs.filter(function(s){return s.type==='pull'&&s.pbSize;}).map(function(s,pi){
+    var ptLabel=s.pbType==='straight'?'Straight':s.pbType==='angle'?'Angle':'U-Pull';
+    return '<tr><td>Pull Box '+(pi+1)+' ('+ptLabel+' \u2014 min '+s.pbSize.toFixed(2)+'" side, \u00a7314.28)</td><td style="text-align:right;" class="tot">1 ea</td></tr>';
+  }).join('');
+  var secTableRows=sections.filter(function(sc,idx){return sc.ft>0||sc.bends>0;}).map(function(sc,idx){
+    var ok=sc.bends<=360?'\u2713':'\u2717 OVER LIMIT';
+    var color=sc.bends>360?'color:#c00':'';
+    return '<tr><td>Section '+(idx+1)+'</td><td style="text-align:right;">'+sc.ft.toFixed(1)+' ft</td><td style="text-align:right;">'+sc.bends+'\u00b0</td><td style="text-align:center;'+color+'">'+ok+'</td></tr>';
+  }).join('');
+  var metaLine=[runName,installCond?installLabels[installCond]:'',mountSurf?mountLabels[mountSurf]:''].filter(Boolean).join(' \u00b7 ');
+  var css='body{font-family:Arial,sans-serif;font-size:13px;margin:28px 24px;}h1{font-size:17px;margin:0 0 2px;}h2{font-size:12px;color:#555;margin:0 0 14px;font-weight:400;}h3{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin:18px 0 6px;border-top:1px solid #e0e0e0;padding-top:10px;}table{width:100%;border-collapse:collapse;margin-bottom:10px;}td,th{padding:6px 8px;border-bottom:1px solid #e0e0e0;}th{text-align:left;font-weight:700;font-size:11px;text-transform:uppercase;color:#888;border-bottom:2px solid #bbb;}.tot{font-weight:700;}.note{font-size:11px;color:#666;margin-top:10px;line-height:1.6;}.bar{background:#f9f9f9;border-bottom:1px solid #ddd;padding:10px 16px;display:flex;gap:10px;position:sticky;top:0;z-index:9;margin:-28px -24px 24px;}@media print{.bar{display:none!important;}}';
   var html='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Conduit Takeoff</title><style>'+css+'</style></head><body>'
     +'<div class="bar"><button onclick="window.print()" style="background:#f0c020;color:#000;border:none;border-radius:5px;padding:7px 16px;font-weight:700;cursor:pointer;">Print / Save PDF</button>'
-    +'<button onclick="window.close()" style="background:#f4f4f5;border:1px solid #ccc;border-radius:5px;padding:7px 14px;cursor:pointer;">← Close</button></div>'
-    +'<h1>Conduit Run — Material Takeoff</h1>'
-    +'<h2>'+condType+' '+tradeSize+'" · '+totalFt.toFixed(1)+' ft total · '+(bendMode==='factory'?'Pre-Made Elbows':'Field Bends')+'</h2>'
+    +'<button onclick="window.close()" style="background:#f4f4f5;border:1px solid #ccc;border-radius:5px;padding:7px 14px;cursor:pointer;">\u2190 Close</button></div>'
+    +'<h1>Conduit Run \u2014 Material Takeoff</h1>'
+    +'<h2>'+(metaLine||condType+' '+tradeSize+'" \u00b7 '+totalFt.toFixed(1)+' ft total \u00b7 '+(bendMode==='factory'?'Pre-Made Elbows':'Field Bends'))+'</h2>'
+    +(sections.filter(function(sc){return sc.ft>0||sc.bends>0;}).length>1
+      ?'<h3>Section Compliance</h3>'
+       +'<table><thead><tr><th>Section</th><th style="text-align:right;">Straight</th><th style="text-align:right;">Bends</th><th style="text-align:center;">\u00a7358.26/344.26/352.26</th></tr></thead><tbody>'+secTableRows+'</tbody></table>':'')
+    +'<h3>Material Takeoff</h3>'
     +'<table><thead><tr><th>Item</th><th style="text-align:right;">Qty</th></tr></thead><tbody>'
-    +'<tr><td>'+condType+' '+tradeSize+'" Conduit (10 ft sticks)</td><td style="text-align:right;" class="tot">'+totalSticks+' stk</td></tr>'
+    +expSticksRows
     +bendRows
-    +'<tr><td>Couplings (stick-to-stick joints)</td><td style="text-align:right;" class="tot">'+totalCouplings+' ea</td></tr>'
     +'<tr><td>Connectors (terminal &amp; pull-box entries)</td><td style="text-align:right;" class="tot">'+totalConnectors+' ea</td></tr>'
-    +'<tr><td>Straps / Supports (max '+suppInterval+' ft spacing)</td><td style="text-align:right;" class="tot">'+suppCount+' ea</td></tr>'
-    +(pullCount?'<tr><td>Pull / Junction Boxes</td><td style="text-align:right;" class="tot">'+pullCount+' ea</td></tr>':'')
+    +'<tr><td>Straps / Supports (within 3 ft of boxes, then every '+suppInterval+' ft)</td><td style="text-align:right;" class="tot">'+suppCount+' ea</td></tr>'
+    +pbExportRows
+    +(!pbExportRows&&pullCount?'<tr><td>Pull / Junction Boxes</td><td style="text-align:right;" class="tot">'+pullCount+' ea</td></tr>':'')
     +'</tbody></table>'
-    +'<div class="note">Add 5–10% conduit for field waste. '
+    +'<div class="note">Add 5\u201310% conduit for field waste. '
     +(bendMode==='factory'?'Verify factory elbow dimensions with manufacturer before ordering. ':'')
-    +'Straps also required within 3 ft of every box, fitting, and termination. '
-    +'Conductors 4 AWG and larger require pull boxes sized per §314.28.</div>'
+    +'Straps also required within 3 ft of every box, fitting, and termination. '
+    +'Conductors 4 AWG and larger require pull boxes sized per \u00a7314.28.</div>'
     +'</body></html>';
   var blob=new Blob([html],{type:'text/html'});
   var url=URL.createObjectURL(blob);
@@ -10445,7 +10582,8 @@ function crpRender(){
   var list=document.getElementById('crp-list');
   var sumEl=document.getElementById('crp-summary');
   var condType=document.getElementById('crp-type').value;
-  var tradeSize=parseFloat(document.getElementById('crp-size').value);
+  // tradeSize for support interval = largest size used in run, fallback to crp-size
+  var tradeSize=_crp_segs.reduce(function(mx,s){return s.size&&s.size>mx?s.size:mx;},parseFloat(document.getElementById('crp-size').value)||1);
   var bmEl=document.getElementById('crp-bend-mode');
   var bendMode=bmEl?bmEl.value:'field';
   if(!_crp_segs.length){
@@ -10459,19 +10597,25 @@ function crpRender(){
     else{if(s.type==='bend')cur.bends+=s.value;if(s.type==='straight')cur.ft+=s.value;cur.segs.push(i);}
   }
   sections.push(cur);
-  var runBends=0,rows='';
+  var runBends=0,sectionIdx=0,rows='';
   for(var i=0;i<_crp_segs.length;i++){
     var s=_crp_segs[i];
     if(s.type==='pull'){
-      runBends=0;
+      var secBends=sections[sectionIdx]?sections[sectionIdx].bends:0;
+      var secOver=secBends>360;var secNear=secBends>=270&&secBends<=360;
+      var secColor=secOver?'#dc2626':secNear?'#f5a623':'#16a34a';
+      var secBadge=' <span style="font-size:10px;color:'+secColor+';">[Sec '+(sectionIdx+1)+': '+secBends+'°'+(secOver?' ✗ OVER':secNear?' ⚠':' ✓')+']</span>';
+      var pbInfo=s.pbSize?' <span style="font-size:10px;color:var(--gold);">min '+s.pbSize.toFixed(2)+'" box (§314.28)</span>':'';
+      sectionIdx++;runBends=0;
       rows+='<div style="display:flex;align-items:center;padding:5px 0;border-top:1px dashed var(--gold);border-bottom:1px dashed var(--gold);margin:4px 0;">'
-        +'<span style="color:var(--gold);font-size:11px;flex:1;">&#8627; PULL POINT — bend counter reset</span>'
+        +'<span style="color:var(--gold);font-size:11px;flex:1;">&#8627; PULL POINT'+secBadge+(s.pbSize?'<br><span style="font-size:10px;color:var(--sub);">'+s.label.replace('Pull Point (','(')+pbInfo+'</span>':'')+'</span>'
+        +'<button class="btn btn-reset" style="padding:1px 6px;font-size:10px;" onclick="crpRemove('+i+')">&#x2715;</button></div>';
         +'<button class="btn btn-reset" style="padding:1px 6px;font-size:10px;" onclick="crpRemove('+i+')">&#x2715;</button></div>';
     }else{
       if(s.type==='bend')runBends+=s.value;
       var icon=s.type==='bend'?'&#x21AA;':'&#x2192;';
       var bColor=s.type==='bend'?(runBends>360?'#dc2626':runBends>=270?'#f5a623':'var(--sub)'):'var(--sub)';
-      var badge=s.type==='bend'?(' <span style="color:'+bColor+';font-size:10px;">['+runBends+'° total]</span>'):'  ';
+      var badge=s.type==='bend'?(' <span style="color:'+bColor+';font-size:10px;">['+runBends+'° in section]</span>'):'';
       rows+='<div style="display:flex;align-items:center;padding:3px 0;border-bottom:1px solid var(--border);">'
         +'<span style="font-size:15px;margin-right:8px;color:var(--sub);">'+icon+'</span>'
         +'<span style="flex:1;font-size:13px;color:var(--text);">'+s.label+badge+'</span>'
@@ -10491,30 +10635,69 @@ function crpRender(){
   var statusMsg=overLimit?'✗ Over 360° in one section — pull point required ('+limitRef+')'
     :nearLimit?'⚠ Approaching 360° — consider a pull point'
     :'✓ All sections within 360° limit ('+limitRef+')';
-  var suppInterval,suppRef;
-  if(condType==='EMT'){suppInterval=10;suppRef='§358.30';}
-  else if(condType==='RMC'){suppInterval=10;suppRef='§344.30';}
-  else if(condType==='IMC'){suppInterval=10;suppRef='§342.30';}
-  else if(condType==='ENT'){suppInterval=3;suppRef='§362.30';}
-  else{suppInterval=tradeSize<=1?3:tradeSize<=2?5:6;suppRef='§352.30';}
-  var suppCount=Math.max(2,Math.ceil(totalFt/suppInterval)+1+(pullCount*2));
+  var suppInterval,suppRef,suppFirstOffset;
+  if(condType==='EMT'){suppInterval=10;suppRef='§358.30';suppFirstOffset=3;}
+  else if(condType==='RMC'){suppInterval=10;suppRef='§344.30';suppFirstOffset=3;}
+  else if(condType==='IMC'){suppInterval=10;suppRef='§342.30';suppFirstOffset=3;}
+  else if(condType==='ENT'){suppInterval=3;suppRef='§362.30';suppFirstOffset=3;}
+  else{suppInterval=tradeSize<=1?3:tradeSize<=2?5:6;suppRef='§352.30';suppFirstOffset=3;}
+  // Support placement: within 3ft of each box/termination end, then every suppInterval ft
+  // Each run end = 2 supports (start + end within 3ft). Each pull point = 2 more.
+  // Span supports = ceil((totalFt - 6) / suppInterval) for the middle stretch, minimum 0
+  var spanFt=Math.max(0,totalFt-(suppFirstOffset*2)-(pullCount*suppFirstOffset*2));
+  var spanSupports=spanFt>0?Math.ceil(spanFt/suppInterval):0;
+  var suppCount=2+(pullCount*2)+spanSupports;
+  suppCount=Math.max(suppCount,2);
+  // Per-size conduit totals
+  var ftBySize={};
+  _crp_segs.forEach(function(s){if(s.type==='straight'){var sz=s.size||tradeSize;ftBySize[sz]=(ftBySize[sz]||0)+s.value;}});
   var totalSticks=0,totalCouplings=0;
-  sections.forEach(function(sec){if(sec.ft>0){var st=Math.ceil(sec.ft/10);totalSticks+=st;totalCouplings+=Math.max(0,st-1);}});
+  var sticksRows='';
+  Object.keys(ftBySize).sort(function(a,b){return parseFloat(a)-parseFloat(b);}).forEach(function(sz){
+    var ft=ftBySize[sz];var st=Math.ceil(ft/10);var cp=Math.max(0,st-1);
+    totalSticks+=st;totalCouplings+=cp;
+    sticksRows+='<tr><td style="padding:3px 0;color:var(--text);">'+condType+' '+crpSizeLabel(parseFloat(sz))+' Conduit <span style="font-size:10px;color:var(--sub);">(10 ft sticks)</span></td>'
+      +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">'+st+' stk</td></tr>'
+      +'<tr><td style="padding:3px 0;color:var(--text);">Couplings '+crpSizeLabel(parseFloat(sz))+' <span style="font-size:10px;color:var(--sub);">stick-to-stick</span></td>'
+      +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">'+cp+' ea</td></tr>';
+  });
   var totalConnectors=2+(pullCount*2);
   var bendKeys=Object.keys(bendsByDeg).map(Number).sort(function(a,b){return a-b;});
   var bendSummary=bendKeys.map(function(d){return bendsByDeg[d]+'×'+d+'°';}).join(', ');
   var secRows=sections.filter(function(sc){return sc.segs.length;}).map(function(sc,idx2){
     var c2=sc.bends>360?'#dc2626':sc.bends>=270?'#f5a623':'var(--text)';
+    var compIcon=sc.bends>360?'<span style="color:#dc2626;">✗</span>':sc.bends>=270?'<span style="color:#f5a623;">⚠</span>':'<span style="color:#16a34a;">✓</span>';
     return '<tr><td style="padding:2px 4px;color:var(--text);">Sec '+(idx2+1)+'</td>'
       +'<td style="padding:2px 4px;text-align:right;color:var(--text);">'+sc.ft.toFixed(1)+' ft</td>'
-      +'<td style="padding:2px 4px;text-align:right;color:'+c2+';">'+sc.bends+'°</td></tr>';
+      +'<td style="padding:2px 4px;text-align:right;color:'+c2+';">'+sc.bends+'°</td>'
+      +'<td style="padding:2px 4px;text-align:center;">'+compIcon+'</td></tr>';
   }).join('');
-  var elbowRows=bendMode==='factory'?bendKeys.map(function(d){
-    return '<tr><td style="padding:3px 0;color:var(--text);">'+condType+' '+tradeSize+'" '+d+'° Elbow</td>'
-      +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">'+bendsByDeg[d]+' ea</td></tr>';
-  }).join(''):'';
+  var elbowRows='';
+  if(bendMode==='factory'){
+    var elbowByDegSize={};
+    _crp_segs.forEach(function(s){if(s.type==='bend'&&s.mode==='factory'){var key=s.value+'|'+(s.size||tradeSize);elbowByDegSize[key]=(elbowByDegSize[key]||0)+1;}});
+    Object.keys(elbowByDegSize).sort().forEach(function(k){
+      var parts=k.split('|');var deg=parts[0];var sz=parseFloat(parts[1]);
+      elbowRows+='<tr><td style="padding:3px 0;color:var(--text);">'+condType+' '+crpSizeLabel(sz)+' '+deg+'° Factory Elbow</td>'
+        +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">'+elbowByDegSize[k]+' ea</td></tr>';
+    });
+  }
+  var runName=(document.getElementById('crp-name')||{value:''}).value||'';
+  var installCond=(document.getElementById('crp-install')||{value:''}).value||'';
+  var mountSurf=(document.getElementById('crp-mount')||{value:''}).value||'';
+  var installLabels={exposed:'Exposed',concealed:'Concealed',rooftop:'Rooftop',underground:'Underground Transition'};
+  var mountLabels={wall:'Wall',ceiling:'Ceiling',strut:'Strut / Unistrut',trapeze:'Trapeze'};
+  var pbRows=_crp_segs.filter(function(s){return s.type==='pull'&&s.pbSize;}).map(function(s,pi){
+    var ptLabel=s.pbType==='straight'?'Straight':s.pbType==='angle'?'Angle':'U-Pull';
+    return '<tr><td style="padding:3px 0;color:var(--text);">Pull Box '+(pi+1)+' <span style="font-size:10px;color:var(--sub);">('+ptLabel+' \u2014 min '+s.pbSize.toFixed(2)+'" side, \u00a7314.28)</span></td>'
+      +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">1 ea</td></tr>';
+  }).join('');
   sumEl.innerHTML=
     '<div style="background:var(--surface);border:1.5px solid var(--border);border-radius:10px;padding:12px;margin-top:4px;">'
+    +(runName?'<div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;">'+runName+'</div>':'')
+    +((installCond||mountSurf)?'<div style="font-size:10px;color:var(--sub);margin-bottom:8px;">'
+      +(installCond?installLabels[installCond]:'')+(installCond&&mountSurf?' \u00b7 ':'')+(mountSurf?mountLabels[mountSurf]:'')+' \u00b7 '+condType+' '+tradeSize+'"'
+      +'</div>':'')
     +'<div style="font-size:12px;font-weight:700;color:'+statusColor+';margin-bottom:8px;">'+statusMsg+'</div>'
     +(sections.filter(function(sc){return sc.segs.length;}).length>1
       ?'<table style="width:100%;font-size:12px;margin-bottom:10px;border-collapse:collapse;">'
@@ -10522,36 +10705,35 @@ function crpRender(){
           +'<th style="padding:2px 4px;text-align:left;color:var(--sub);font-weight:600;">Section</th>'
           +'<th style="padding:2px 4px;text-align:right;color:var(--sub);font-weight:600;">Straight</th>'
           +'<th style="padding:2px 4px;text-align:right;color:var(--sub);font-weight:600;">Bends</th>'
+          +'<th style="padding:2px 4px;text-align:center;color:var(--sub);font-weight:600;">OK?</th>'
         +'</tr></thead><tbody>'+secRows+'</tbody></table>':'')
     +'<div style="font-size:12px;color:var(--text);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap;">'
       +'<span><b>Total:</b> '+totalFt.toFixed(1)+' ft</span>'
-      +(totalBends?'<span><b>Bends:</b> '+totalBends+'°</span>':'')
+      +(totalBends?'<span><b>Bends:</b> '+totalBends+'\u00b0</span>':'')
       +(sections.length>1?'<span><b>Sections:</b> '+sections.length+'</span>':'')
     +'</div>'
     +'<div style="font-size:10px;font-weight:700;color:var(--sub);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:8px;border-top:1px solid var(--border);padding-top:10px;">Material Takeoff</div>'
     +'<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;">'
-      +'<tr><td style="padding:3px 0;color:var(--text);">'+condType+' '+tradeSize+'" Conduit <span style="font-size:10px;color:var(--sub);">(10 ft sticks)</span></td>'
-        +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">'+totalSticks+' stk</td></tr>'
+      +sticksRows
       +(bendMode==='field'&&bendKeys.length
         ?'<tr><td style="padding:3px 0;color:var(--text);">Field Bends <span style="font-size:10px;color:var(--sub);">('+bendSummary+')</span></td>'
           +'<td style="padding:3px 0;text-align:right;color:var(--sub);">on-site</td></tr>':'')
       +elbowRows
-      +'<tr><td style="padding:3px 0;color:var(--text);">Couplings <span style="font-size:10px;color:var(--sub);">stick-to-stick</span></td>'
-        +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">'+totalCouplings+' ea</td></tr>'
       +'<tr><td style="padding:3px 0;color:var(--text);">Connectors <span style="font-size:10px;color:var(--sub);">terminal &amp; pull-box entries</span></td>'
         +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">'+totalConnectors+' ea</td></tr>'
-      +'<tr><td style="padding:3px 0;color:var(--text);">Straps / Supports <button class="svc-ib" onclick="svcInfo(\'crp_supports\')" style="vertical-align:middle;">ⓘ</button>'
-          +'<span style="font-size:10px;color:var(--sub);"> max '+suppInterval+' ft ('+suppRef+')</span></td>'
+      +'<tr><td style="padding:3px 0;color:var(--text);">Straps / Supports <button class="svc-ib" onclick="svcInfo(\'crp_supports\')" style="vertical-align:middle;">\u24d8</button>'
+          +'<span style="font-size:10px;color:var(--sub);"> within 3 ft of boxes, then every '+suppInterval+' ft ('+suppRef+')</span></td>'
         +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">'+suppCount+' ea</td></tr>'
-      +(pullCount
-        ?'<tr><td style="padding:3px 0;color:var(--text);">Pull / Junction Boxes <button class="svc-ib" onclick="svcInfo(\'crp_pull_box\')" style="vertical-align:middle;">ⓘ</button></td>'
+      +pbRows
+      +(!pbRows&&pullCount
+        ?'<tr><td style="padding:3px 0;color:var(--text);">Pull / Junction Boxes <button class="svc-ib" onclick="svcInfo(\'crp_pull_box\')" style="vertical-align:middle;">\u24d8</button></td>'
           +'<td style="padding:3px 0;text-align:right;font-weight:700;color:var(--text);">'+pullCount+' ea</td></tr>':'')
     +'</table>'
-    +(bendMode==='factory'&&bendKeys.length?'<div style="font-size:10px;color:var(--sub);margin-bottom:8px;">Factory elbow dimensions vary by manufacturer and trade size — verify before ordering.</div>':'')
+    +(bendMode==='factory'&&bendKeys.length?'<div style="font-size:10px;color:var(--sub);margin-bottom:8px;">Factory elbow dimensions vary by manufacturer and trade size \u2014 verify before ordering.</div>':'')
     +'<div style="font-size:10px;color:var(--sub);border-top:1px solid var(--border);padding-top:6px;line-height:1.6;">'
-      +'Supports within 3 ft of every box/fitting per '+suppRef+'. '
-      +'Conductors 4 AWG and larger require pull boxes per §314.28. '
-      +'Add 5–10% conduit for waste on cuts.'
+      +'Supports within 3 ft of every box/fitting per '+suppRef+'. '
+      +'Conductors 4 AWG and larger require pull boxes per \u00a7314.28. '
+      +'Add 5\u201310% conduit for waste on cuts.'
     +'</div>'
     +'<div style="margin-top:10px;">'
       +'<button class="btn btn-calc" style="font-size:11px;width:100%;background:#f0c020;color:#000;" onclick="crpExport()">Export Takeoff</button>'
@@ -14564,6 +14746,28 @@ function bdHighlight(){
 
 // ── Receptacle Spacing (§210.52) ─────────────────────────────────────────────
 var _rcRoom = 'living';
+var _rcWallCount = 1;
+
+function rcAddWall() {
+  _rcWallCount++;
+  var list = document.getElementById('rc-walls-list');
+  var row = document.createElement('div');
+  row.className = 'rc-wall-row';
+  row.id = 'rc-wall-row-' + _rcWallCount;
+  row.innerHTML = '<div class="rc-wall-label">Wall ' + _rcWallCount + '</div><input class="fi rc-wall-input" type="number" min="0" step="0.5" placeholder="ft" oninput="rcCalc()"/>';
+  list.appendChild(row);
+  document.getElementById('rc-remove-wall-btn').style.display = '';
+  rcCalc();
+}
+
+function rcRemoveWall() {
+  if(_rcWallCount <= 1) return;
+  var row = document.getElementById('rc-wall-row-' + _rcWallCount);
+  if(row) row.parentNode.removeChild(row);
+  _rcWallCount--;
+  if(_rcWallCount <= 1) document.getElementById('rc-remove-wall-btn').style.display = 'none';
+  rcCalc();
+}
 function rcSelectRoom(room, btn) {
   _rcRoom = room;
   document.querySelectorAll('.rc-room-btn').forEach(function(b){b.classList.remove('rc-active');});
@@ -14574,6 +14778,18 @@ function rcSelectRoom(room, btn) {
   document.getElementById('rc-inputs-hallway').style.display = room==='hallway'   ? 'block' : 'none';
   document.getElementById('rc-inputs-static').style.display  = ['bathroom','garage','outdoor','basement'].indexOf(room)>=0 ? 'block' : 'none';
   document.getElementById('rc-err').textContent = '';
+  // Reset walls to 1 when switching to a wall-based room
+  if(['living','bedroom'].indexOf(room) >= 0) {
+    _rcWallCount = 1;
+    var list = document.getElementById('rc-walls-list');
+    // Remove all rows except first
+    while(list.children.length > 1) list.removeChild(list.lastChild);
+    // Clear first wall input
+    var firstInput = list.querySelector('.rc-wall-input');
+    if(firstInput) firstInput.value = '';
+    var rmBtn = document.getElementById('rc-remove-wall-btn');
+    if(rmBtn) rmBtn.style.display = 'none';
+  }
   rcCalc();
 }
 function rcCard(type, title, body, note) {
@@ -14596,8 +14812,8 @@ function rcCalc() {
   qr.innerHTML  = '';
 
   if(_rcRoom === 'living' || _rcRoom === 'bedroom') {
-    var walls = ['rc-w1','rc-w2','rc-w3','rc-w4'].map(function(id){
-      var v = parseFloat(document.getElementById(id).value);
+    var walls = Array.from(document.querySelectorAll('.rc-wall-input')).map(function(el){
+      var v = parseFloat(el.value);
       return isNaN(v) ? 0 : v;
     });
     var hasAny = walls.some(function(w){return w>0;});
@@ -15147,7 +15363,7 @@ function gfciRender() {
       <h3>8. Changes to This Policy</h3>
       We may update this Privacy Policy from time to time. Updates will be noted with a revised effective date in the app.
       <h3>9. Contact</h3>
-      Questions about this policy? Email us at <strong>support@circuitmatic.app</strong>
+      Questions about this policy? Email us at <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dba8aeababb4a9af9bb8b2a9b8aeb2afb6baafb2b8f5baabab">[email&#160;protected]</a></strong>
     </div>
     <button class="pp-close" onclick="closePP()">Close</button>
   </div>
@@ -15176,7 +15392,7 @@ function gfciRender() {
       <h3>8. Governing Law</h3>
       <p>These Terms of Use shall be governed by and construed in accordance with the laws of the Commonwealth of Massachusetts, without regard to its conflict of law provisions. Any disputes arising under these terms shall be resolved in the appropriate courts of that jurisdiction.</p>
       <h3>9. Contact</h3>
-      <p>For questions regarding these Terms of Use, please contact us at support@circuitmatic.app.</p>
+      <p>For questions regarding these Terms of Use, please contact us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="86f5f3f6f6e9f4f2c6e5eff4e5f3eff2ebe7f2efe5a8e7f6f6">[email&#160;protected]</a>.</p>
     </div>
     <button class="tou-close" onclick="closeTerms()">Close</button>
   </div>
@@ -15431,7 +15647,7 @@ function gfciRender() {
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── NEC 2026 Quiz ─────────────────────────────────────────────────
 var _qzBank=[
   // WORKING SPACE
@@ -16000,24 +16216,4 @@ function scanGeneratePDF(){
   // Try to load icon.png (same-origin), fall back to no logo
   iconImg.onload=function(){
     try{
-      var cv=document.createElement('canvas');
-      cv.width=iconImg.naturalWidth||64;
-      cv.height=iconImg.naturalHeight||64;
-      cv.getContext('2d').drawImage(iconImg,0,0);
-      iconData=cv.toDataURL('image/png');
-    }catch(e){ iconData=null; }
-    buildPDF();
-  };
-  iconImg.onerror=function(){ iconData=null; buildPDF(); };
-  iconImg.src='icon.png';
-}
-
-function scanDownload(blob,fname){
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');a.href=url;a.download=fname;a.click();
-  setTimeout(function(){URL.revokeObjectURL(url);},2000);
-}
-</script>
-
-</body>
-</html>
+  
