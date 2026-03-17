@@ -465,7 +465,7 @@ body.light-mode .svc-info-modal-body{color:#374151;}
     pointer-events: none;
   }
   .sel-wrap select { width: 100%; padding-right: 22px; cursor: pointer; }
-  .pf-hint { font-family: 'Roboto Mono', monospace; font-size: 10px; color: var(--muted); text-align: right; padding: 0 20px 2px; }
+  .pf-hint { font-family: 'Roboto Mono', monospace; font-size: 9px; color: var(--muted); }
   .divider { height: 1px; background: var(--border); margin: 8px 0; }
 
   /* ── Buttons ── */
@@ -1703,11 +1703,10 @@ if('serviceWorker' in navigator){
           <option value="three" selected>Three Phase</option>
         </select></div>
       </div>
-      <div class="field-row">
-        <div class="field-label">Power Factor</div>
+      <div class="field-row" style="align-items:center;">
+        <div class="field-label" style="display:flex;flex-direction:column;gap:2px;">Power Factor<span class="pf-hint" id="pf-hint" style="text-align:left;padding:0;font-size:9px;">AC only · 0 – 1</span></div>
         <input class="fi" id="f-pf" type="number" placeholder="0.9" min="0.01" max="1" step="0.01" value="0.9"/>
       </div>
-      <div class="pf-hint" id="pf-hint">AC only · 0 – 1</div>
       <div class="field-row">
         <div class="field-label">Conductor</div>
         <div class="sel-wrap"><select class="fi" id="f-conductor">
