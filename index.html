@@ -1080,7 +1080,7 @@ body.light-mode .notes-srch-inp{background:#ffffff;border-color:#d1d5db;color:#1
 .jc-menu-overlay.open{display:block;}
 .jc-menu-drawer{position:fixed;top:0;right:-290px;width:270px;height:100%;background:#0d1018;border-left:1px solid rgba(240,192,32,0.22);z-index:900;transition:right .26s cubic-bezier(.16,1,.3,1);overflow-y:auto;}
 .jc-menu-drawer.open{right:0;}
-.jc-menu-head{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 22px) 16px 14px;border-bottom:1px solid rgba(240,192,32,0.13);}
+.jc-menu-head{display:flex;align-items:flex-start;justify-content:space-between;padding:calc(env(safe-area-inset-top) + 22px) 16px 14px;border-bottom:1px solid rgba(240,192,32,0.13);}
 .jc-menu-logo{font-family:'Orbitron',sans-serif;font-size:15px;color:#f0c020;letter-spacing:.06em;}
 .jc-menu-close{background:none;border:none;color:#6b7280;font-size:18px;cursor:pointer;padding:4px;}
 .jc-menu-section{padding:10px 0 4px;}
@@ -15199,7 +15199,10 @@ function gfciRender() {
 <div class="jc-menu-overlay" id="jc-menu-overlay" onclick="closeMenu()"></div>
 <div class="jc-menu-drawer" id="jc-menu-drawer">
   <div class="jc-menu-head">
-    <span class="jc-menu-logo">CIRCUITMATIC</span>
+    <div style="display:flex;flex-direction:column;gap:3px;">
+      <span class="jc-menu-logo">CIRCUITMATIC</span>
+      <span style="font-size:10px;color:#ffffff;font-family:'Inter',sans-serif;letter-spacing:.2px;">Built by electricians, for electricians.</span>
+    </div>
     <button class="jc-menu-close" onclick="closeMenu()">✕</button>
   </div>
   <div class="jc-menu-section">
@@ -15215,7 +15218,7 @@ function gfciRender() {
     <div class="jc-menu-item" onclick="exportPunchAll();closeMenu()"><span class="jc-menu-icon">📤</span>Export Punch List</div>
   </div>
 
-  <div class="jc-menu-foot">Circuitmatic · Electrical Code<br>Design guidance only. Verify with AHJ before installation.<br><span style="color:#f0c020;font-weight:600;letter-spacing:.3px;">Built by an electrician, for electricians.</span></div>
+  <div class="jc-menu-foot">Circuitmatic · Electrical Code<br>Design guidance only. Verify with AHJ before installation.</div>
 </div>
 <div class="note-tpl-ov" id="note-tpl-ov" onclick="closeNoteTplSheet()">
   <div class="note-tpl-sheet" onclick="event.stopPropagation()">
