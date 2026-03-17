@@ -3906,12 +3906,12 @@ if('serviceWorker' in navigator){
       <button class="btn btn-reset" style="flex:1;font-size:11px;" onclick="resetPN()">Clear All</button>
     </div>
     <div class="err-msg" id="pn-err"></div>
-    <div style="padding:4px 14px 2px;">
-      <button class="btn btn-reset" style="width:100%;font-size:11px;" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593; Back to Top</button>
-    </div>
     <div class="btn-row">
       <button class="btn btn-calc" id="pn-calc-btn" onclick="calculatePN()">Calculate</button>
       <button class="btn btn-calc" id="pn-export-btn" onclick="pnCheckBlanksAndExport()" style="display:none;background:#f0c020;color:#000000;">Export Schedule</button>
+    </div>
+    <div style="padding:4px 14px 2px;">
+      <button class="btn btn-reset" style="width:100%;font-size:11px;" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593; Back to Top</button>
     </div>
     <div id="pn-phase-section"></div>
     <div id="pn-results-label" class="section-label" style="display:none;"></div>
